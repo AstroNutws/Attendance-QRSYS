@@ -3,186 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attendance QRSYS | Pro Dashboard</title>
+    <title>Attendance QRSYS | Official Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;800&display=swap" rel="stylesheet">
     <style>
         :root { 
             --maroon: #800000; 
-            --light-maroon: #a52a2a;
-            --dark-bg: #121212;
-            --card-bg: #1e1e1e;
-            --text-main: #e0e0e0;
-            --gold: #ffcc00;
+            --bright-maroon: #b30000;
+            --gold: #d4af37;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
 
         body { 
-            font-family: 'Inter', 'Segoe UI', sans-serif; 
-            background: var(--dark-bg); 
-            color: var(--text-main); 
+            font-family: 'Inter', sans-serif; 
+            background: radial-gradient(circle at top, #1a1a1a 0%, #0a0a0a 100%); 
+            color: #ffffff; 
             margin: 0; 
-            line-height: 1.6;
+            overflow-x: hidden;
         }
 
         header { 
-            background: linear-gradient(135deg, var(--maroon), #4d0000); 
-            padding: 80px 20px; 
-            text-align: center; 
-            clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to bottom, rgba(128, 0, 0, 0.4), transparent);
+            text-align: center;
+            animation: fadeIn 1.5s ease-out;
         }
 
-        h1 { font-size: 3rem; margin: 0; letter-spacing: -1px; color: white; }
-        .subtitle { font-size: 1.2rem; color: rgba(255,255,255,0.8); margin-top: 10px; }
+        h1 { 
+            font-size: clamp(3rem, 8vw, 5rem); 
+            font-weight: 800; 
+            margin: 0; 
+            background: linear-gradient(to right, #fff, var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -2px;
+        }
 
-        .container { max-width: 1100px; margin: -50px auto 50px; padding: 20px; }
+        .subtitle { font-size: 1.2rem; color: #888; margin-top: 10px; font-weight: 300; }
+
+        .container { 
+            max-width: 1100px; 
+            margin: -100px auto 100px; 
+            padding: 0 20px; 
+            animation: slideUp 1s ease-out;
+        }
 
         .choices { 
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
             gap: 30px; 
-            margin-bottom: 60px;
         }
 
         .card { 
-            background: var(--card-bg); 
-            border: 1px solid #333; 
-            border-radius: 20px; 
+            background: var(--glass); 
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px; 
             padding: 40px; 
             text-align: center; 
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .card:hover { 
-            transform: translateY(-15px); 
+            transform: translateY(-10px); 
             border-color: var(--maroon);
-            box-shadow: 0 20px 40px rgba(128, 0, 0, 0.3);
+            background: rgba(128, 0, 0, 0.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
-
-        .card.pc { border-top: 5px solid var(--gold); }
-        .card.mobile { border-top: 5px solid #666; }
 
         .btn { 
             display: inline-block; 
             background: var(--maroon); 
             color: white; 
-            padding: 15px 35px; 
+            padding: 16px 40px; 
             text-decoration: none; 
-            border-radius: 50px; 
+            border-radius: 12px; 
             font-weight: 700; 
-            margin-top: 25px; 
+            margin-top: 30px; 
             transition: 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            border: 1px solid var(--maroon);
         }
 
-        .btn:hover { background: var(--light-maroon); transform: scale(1.05); }
-
-        .tag { 
-            position: absolute; 
-            top: 20px; 
-            right: -30px; 
-            background: var(--gold); 
-            color: black; 
-            padding: 5px 40px; 
-            transform: rotate(45deg); 
-            font-size: 0.7rem; 
-            font-weight: bold; 
+        .btn:hover { 
+            background: var(--bright-maroon); 
+            box-shadow: 0 0 20px rgba(179, 0, 0, 0.4);
         }
 
-        /* Comparison Table */
         .info-section { 
-            background: var(--card-bg); 
-            border-radius: 20px; 
-            padding: 40px; 
-            margin-top: 40px;
-            border: 1px solid #333;
+            margin-top: 80px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
         }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #333; }
-        th { color: var(--maroon); text-transform: uppercase; font-size: 0.8rem; }
-        .check { color: #2ecc71; font-weight: bold; }
-        .cross { color: #e74c3c; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin-top: 30px; }
+        th, td { padding: 20px; text-align: left; border-bottom: 1px solid var(--glass-border); }
+        th { color: var(--gold); font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; }
+        td { font-size: 0.95rem; color: #ccc; }
+        .check { color: #00ff88; font-weight: bold; }
+        .cross { color: #ff4444; font-weight: bold; }
 
         .hash-box { 
-            font-family: monospace; 
+            font-family: 'monospace'; 
             font-size: 0.7rem; 
-            background: #000; 
-            padding: 10px; 
-            border-radius: 8px; 
-            margin-top: 20px; 
-            color: #888;
+            background: rgba(0,0,0,0.3); 
+            padding: 15px; 
+            border-radius: 10px; 
+            margin-top: 25px; 
+            color: #666;
             word-break: break-all;
+            text-align: left;
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
-        footer { text-align: center; padding: 40px; color: #555; font-size: 0.9rem; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+
+        footer { text-align: center; padding: 50px; color: #444; font-size: 0.8rem; letter-spacing: 1px; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>Attendance QRSYS</h1>
-    <p class="subtitle">Next-Gen Dynamic QR Management System</p>
+    <p class="subtitle">Next-Generation Logging & Tracking</p>
 </header>
 
 <div class="container">
     <div class="choices">
-        <div class="card pc">
-            <div class="tag">RECOMMENDED</div>
-            <h3 style="color:var(--gold)">Windows Desktop</h3>
-            <p>The core engine. Manage databases, export reports, and control system hardware.</p>
-            <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS_Installer.exe" class="btn">Get Pro Installer</a>
+        <div class="card">
+            <h3 style="color:var(--gold); margin-top:0;">Windows Edition</h3>
+            <p>Optimized for workstation terminals. Professional logging and viewing of attendance records.</p>
+            <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS_Installer.exe" class="btn">Download Desktop</a>
             <div class="hash-box">SHA256: 4a585e52e0a49679da04a96e5d9e54075e57b7e462bf09341ab54e9f1ac0ae01</div>
         </div>
 
-        <div class="card mobile">
+        <div class="card">
             <h3>Android Mobile</h3>
-            <p>Portable scanning node. Designed for quick check-ins and status viewing.</p>
-            <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn" style="background:#444">Download APK</a>
+            <p>Portable scanning interface for on-the-go check-ins. Optimized for quick mobile viewing.</p>
+            <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn" style="background:transparent; border: 1px solid #444;">Download APK</a>
             <div class="hash-box">SHA256: aeae2879d9cbda46e642de0b0a489fda7eedb91eb2293e65e077a3e87d4a2a06</div>
-            <p style="color:#e74c3c; font-size: 0.8rem; margin-top: 10px;">⚠️ Limited Features Version</p>
+            <p style="color:#ff4444; font-size: 0.7rem; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px;">Limited Features Version</p>
         </div>
     </div>
 
     <div class="info-section">
-        <h2 style="text-align: center; color: white;">Version Comparison</h2>
+        <h2 style="text-align: center; font-weight: 800; letter-spacing: -1px;">Capability Matrix</h2>
         <table>
             <thead>
                 <tr>
-                    <th>Feature</th>
-                    <th>Windows (Pro)</th>
-                    <th>Android (Lite)</th>
+                    <th>Feature Description</th>
+                    <th>Desktop</th>
+                    <th>Mobile</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>QR Code Generation</td>
-                    <td class="check">✔ Full Control</td>
-                    <td class="cross">✘ Not Available</td>
+                    <td>Real-time QR Event Scanning</td>
+                    <td class="check">Enabled</td>
+                    <td class="check">Enabled</td>
+                </tr>
+                <tr>
+                    <td>Record Saving & Commitment</td>
+                    <td class="check">Enabled</td>
+                    <td class="check">Enabled</td>
+                </tr>
+                <tr>
+                    <td>History Viewing</td>
+                    <td class="check">Enabled</td>
+                    <td class="check">Enabled</td>
+                </tr>
+                <tr>
+                    <td>PDF Import/Export</td>
+                    <td class="cross">Disabled</td>
+                    <td class="cross">Disabled</td>
                 </tr>
                 <tr>
                     <td>Database Management</td>
-                    <td class="check">✔ Local/Cloud</td>
-                    <td class="cross">✘ View Only</td>
-                </tr>
-                <tr>
-                    <td>Real-time Scanning</td>
-                    <td class="check">✔ Yes</td>
-                    <td class="check">✔ Yes</td>
-                </tr>
-                <tr>
-                    <td>Excel/PDF Exporting</td>
-                    <td class="check">✔ Yes</td>
-                    <td class="cross">✘ Not Available</td>
+                    <td class="cross">Disabled</td>
+                    <td class="cross">Disabled</td>
                 </tr>
             </tbody>
         </table>
+        <p style="text-align: center; font-size: 0.8rem; color: #555; margin-top: 30px;">
+            *Attendance QRSYS is built for efficiency. Administrative management is not included in these versions.
+        </p>
     </div>
 </div>
 
 <footer>
-    &copy; 2026 Attendance QRSYS | AstroNutws Engineering
+    DESIGNED BY Gab.Dev &bull; 2026 
 </footer>
 
 </body>
