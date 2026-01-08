@@ -67,6 +67,9 @@
             padding: 40px; 
             text-align: center; 
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .card:hover { 
@@ -138,18 +141,26 @@
 <div class="container">
     <div class="choices">
         <div class="card">
-            <h3 style="color:var(--gold); margin-top:0;">Windows Edition</h3>
-            <p>Optimized for workstation terminals. Professional logging and viewing of attendance records.</p>
-            <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS_Installer.exe" class="btn">Download Desktop</a>
-            <div class="hash-box">SHA256: 4a585e52e0a49679da04a96e5d9e54075e57b7e462bf09341ab54e9f1ac0ae01</div>
+            <div>
+                <h3 style="color:var(--gold); margin-top:0;">Windows Edition</h3>
+                <p>The standard interface for workstation terminals. Optimized for continuous logging and deep history viewing.</p>
+            </div>
+            <div>
+                <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS_Installer.exe" class="btn">Download Desktop</a>
+                <div class="hash-box">SHA256: 4a585e52e0a49679da04a96e5d9e54075e57b7e462bf09341ab54e9f1ac0ae01</div>
+            </div>
         </div>
 
         <div class="card">
-            <h3>Android Mobile</h3>
-            <p>Portable scanning interface for on-the-go check-ins. Optimized for quick mobile viewing.</p>
-            <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn" style="background:transparent; border: 1px solid #444;">Download APK</a>
-            <div class="hash-box">SHA256: aeae2879d9cbda46e642de0b0a489fda7eedb91eb2293e65e077a3e87d4a2a06</div>
-            <p style="color:#ff4444; font-size: 0.7rem; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px;">Limited Features Version</p>
+            <div>
+                <h3>Android Mobile</h3>
+                <p>A portable node for check-ins. Features QR generation for mobile use, though many desktop tools are omitted.</p>
+            </div>
+            <div>
+                <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn" style="background:transparent; border: 1px solid #444;">Download APK</a>
+                <div class="hash-box">SHA256: aeae2879d9cbda46e642de0b0a489fda7eedb91eb2293e65e077a3e87d4a2a06</div>
+                <p style="color:#ff4444; font-size: 0.7rem; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; font-weight:700;">Lacks Many Desktop Features</p>
+            </div>
         </div>
     </div>
 
@@ -158,7 +169,7 @@
         <table>
             <thead>
                 <tr>
-                    <th>Feature Description</th>
+                    <th>Core Capabilities</th>
                     <th>Desktop</th>
                     <th>Mobile</th>
                 </tr>
@@ -170,7 +181,7 @@
                     <td class="check">Enabled</td>
                 </tr>
                 <tr>
-                    <td>Record Saving & Commitment</td>
+                    <td>Record Saving & Local Logging</td>
                     <td class="check">Enabled</td>
                     <td class="check">Enabled</td>
                 </tr>
@@ -180,25 +191,20 @@
                     <td class="check">Enabled</td>
                 </tr>
                 <tr>
-                    <td>PDF Import/Export</td>
-                    <td class="cross">Disabled</td>
-                    <td class="cross">Disabled</td>
-                </tr>
-                <tr>
-                    <td>Database Management</td>
-                    <td class="cross">Disabled</td>
-                    <td class="cross">Disabled</td>
+                    <td>Independent QR Code Generation</td>
+                    <td class="cross">N/A</td>
+                    <td class="check">Enabled</td>
                 </tr>
             </tbody>
         </table>
         <p style="text-align: center; font-size: 0.8rem; color: #555; margin-top: 30px;">
-            *Attendance QRSYS is built for efficiency. Administrative management is not included in these versions.
+            *Mobile version is a lightweight utility. Most advanced tools are exclusive to the Windows Edition.
         </p>
     </div>
 </div>
 
 <footer>
-    DESIGNED BY Gab.Dev &bull; 2026 
+    DESIGNED BY ASTRONUTWS &bull; 2026 
 </footer>
 
 </body>
