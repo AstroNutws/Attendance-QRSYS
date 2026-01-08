@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QRSYS | Professional Infrastructure</title>
+    
+    <link rel="icon" type="image/x-icon" href="https://cdn-icons-png.flaticon.com/512/1162/1162456.png">
+    
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;600;800&family=Lexend:wght@900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -78,12 +81,14 @@
         }
 
         .mobile-card {
-            filter: grayscale(0.4);
+            filter: grayscale(0.6);
             border-color: rgba(255,255,255,0.05);
+            opacity: 0.8;
         }
 
         .mobile-card:hover {
             filter: grayscale(0);
+            opacity: 1;
             border-color: var(--final-gray);
             background: rgba(255, 255, 255, 0.01);
         }
@@ -148,6 +153,7 @@
 
         .status-container {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             gap: 10px;
@@ -155,6 +161,14 @@
             letter-spacing: 2px;
             font-weight: 800;
             color: var(--online);
+        }
+
+        .uptime-display {
+            font-size: 0.6rem;
+            color: #444;
+            letter-spacing: 2px;
+            margin-top: 5px;
+            font-family: monospace;
         }
 
         .status-dot {
@@ -220,24 +234,6 @@
             display: inline-block;
         }
 
-        .req-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            text-align: left;
-            margin-top: 20px;
-        }
-
-        .req-box {
-            background: rgba(255,255,255,0.02);
-            padding: 25px;
-            border-radius: 20px;
-            border: 1px solid var(--border);
-        }
-
-        .req-box h4 { font-size: 0.8rem; color: var(--primary); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
-        .req-box p { font-size: 0.9rem; color: #fff; line-height: 1.5; }
-
         .btn {
             display: block;
             width: 100%;
@@ -297,7 +293,6 @@
         @media (max-width: 900px) {
             .container { grid-template-columns: 1fr; }
             .full-width { grid-column: span 1; }
-            .req-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -346,8 +341,8 @@
 
     <div class="premium-card full-width" style="text-align: center; padding: 40px;">
         <div class="status-container">
-            <div class="status-dot"></div>
-            CORE DATABASE SYSTEM: OPERATIONAL
+            <div><div class="status-dot" style="display: inline-block;"></div> CORE DATABASE SYSTEM: OPERATIONAL</div>
+            <div id="uptime-counter" class="uptime-display">SYSTEM_UPTIME: 0D 0H 0M 0S</div>
         </div>
         <p style="color: #444; font-size: 0.65rem; margin-top: 10px; letter-spacing: 1px;">POSTGRESQL CLOUD INFRASTRUCTURE ACTIVE</p>
     </div>
@@ -359,7 +354,7 @@
             <li><span class="log-category">PC/LAPTOP (ACTIVE)</span> Security: Fixed 400 Bad Request errors via aka.ms redirect protocols.</li>
             <li><span class="log-category">PC/LAPTOP (ACTIVE)</span> UI: Corrected shortcut and uninstaller icon resolution for high DPI displays.</li>
             <li><span class="log-category">MOBILE (FINAL BUILD)</span> Finality: Version 1.0.0 is the definitive and final release for the Mobile platform.</li>
-            <li><span class="log-category">MOBILE (FINAL BUILD)</span> Stability: Verified real-time synchronization with CORE PostgreSQL. No further updates scheduled.</li>
+            <li><span class="log-category">MOBILE (FINAL BUILD)</span> Stability: Verified real-time synchronization with CORE PostgreSQL.</li>
         </ul>
     </div>
 
@@ -431,8 +426,24 @@
         });
         requestAnimationFrame(draw);
     }
+
+    function updateUptime() {
+        const startTime = new Date("2026-01-08T00:00:00");
+        setInterval(() => {
+            const now = new Date();
+            const diff = now - startTime;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const mins = Math.floor((diff / (1000 * 60)) % 60);
+            const secs = Math.floor((diff / 1000) % 60);
+            
+            document.getElementById('uptime-counter').innerText = 
+                `SYSTEM_UPTIME: ${days}D ${hours}H ${mins}M ${secs}S`;
+        }, 1000);
+    }
+
     window.addEventListener('resize', init);
-    init(); draw();
+    init(); draw(); updateUptime();
 
     async function sync() {
         try {
@@ -453,4 +464,3 @@
 </script>
 </body>
 </html>
-
