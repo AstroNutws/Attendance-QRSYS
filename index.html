@@ -103,7 +103,6 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            margin-bottom: 10px;
             font-size: 0.75rem;
             letter-spacing: 2px;
             font-weight: 800;
@@ -118,15 +117,6 @@
             box-shadow: 0 0 10px var(--online);
             animation: status-pulse 1.5s infinite;
         }
-
-        .latency-display {
-            margin-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            padding-top: 20px;
-        }
-
-        .latency-display h5 { color: #444; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
-        .latency-display p { font-family: 'Lexend', sans-serif; font-size: 2.5rem; color: #fff; }
 
         @keyframes status-pulse {
             0% { opacity: 1; transform: scale(1); }
@@ -178,7 +168,7 @@
             font-size: 0.7rem;
             text-transform: uppercase;
             margin-right: 10px;
-            min-width: 80px;
+            min-width: 140px;
             display: inline-block;
         }
 
@@ -239,8 +229,6 @@
             text-align: center;
         }
 
-        #sync-time { color: #555; font-size: 0.7rem; letter-spacing: 1px; }
-
         footer {
             padding: 100px 0;
             text-align: center;
@@ -289,14 +277,9 @@
     <div class="premium-card full-width" style="text-align: center; padding: 40px;">
         <div class="status-container">
             <div class="status-dot"></div>
-            CORE DATABASE SYSTEM: ONLINE
+            CORE DATABASE SYSTEM: OPERATIONAL
         </div>
-        <p id="sync-time">Initiating handshake...</p>
-        
-        <div class="latency-display">
-            <h5>Server Response Latency</h5>
-            <p id="latency">24ms</p>
-        </div>
+        <p style="color: #444; font-size: 0.65rem; margin-top: 10px; letter-spacing: 1px;">POSTGRESQL CLOUD INFRASTRUCTURE ACTIVE</p>
     </div>
 
     <div class="premium-card full-width" style="text-align: center;">
@@ -324,11 +307,11 @@
     <div class="premium-card full-width">
         <h3>RELEASE LOG</h3>
         <ul class="log-list">
-            <li><span class="log-category">PC Build</span> Infrastructure: Integrated auto download for .NET 10.0 Runtime dependencies.</li>
-            <li><span class="log-category">PC Build</span> Security: Fixed 400 Bad Request errors via aka.ms redirect protocols.</li>
-            <li><span class="log-category">PC Build</span> UI: Corrected shortcut and uninstaller icon resolution for high DPI displays.</li>
-            <li><span class="log-category">Mobile</span> Final Build: Version 1.0.0 Signed APK is the final stable mobile infrastructure release.</li>
-            <li><span class="log-category">Mobile</span> Sync: Verified real time synchronization with the CORE PostgreSQL database.</li>
+            <li><span class="log-category">PC/LAPTOP (ACTIVE)</span> Infrastructure: Integrated auto download for .NET 10.0 Runtime dependencies.</li>
+            <li><span class="log-category">PC/LAPTOP (ACTIVE)</span> Security: Fixed 400 Bad Request errors via aka.ms redirect protocols.</li>
+            <li><span class="log-category">PC/LAPTOP (ACTIVE)</span> UI: Corrected shortcut and uninstaller icon resolution for high DPI displays.</li>
+            <li><span class="log-category">MOBILE (FINAL BUILD)</span> Finality: Version 1.0.0 is the definitive and final release for the Mobile platform.</li>
+            <li><span class="log-category">MOBILE (FINAL BUILD)</span> Stability: Verified real-time synchronization with CORE PostgreSQL. No further updates scheduled.</li>
         </ul>
     </div>
 
@@ -416,15 +399,6 @@
 
             bad.innerHTML = `<span class="update-tag">VERSION ${d.tag_name} READY</span>`;
             api.innerHTML = `BUILD ${d.tag_name} // RELEASED ${new Date(d.published_at).toLocaleDateString()}`;
-
-            const now = new Date();
-            document.getElementById('sync-time').innerText = `Last Handshake: Today at ${now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
-            
-            setInterval(() => {
-                const lat = Math.floor(Math.random() * (40 - 20 + 1)) + 20;
-                document.getElementById('latency').innerText = `${lat}ms`;
-            }, 3000);
-
         } catch(e) {}
     }
     sync();
