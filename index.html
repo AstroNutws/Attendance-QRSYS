@@ -48,11 +48,16 @@
 
         .container {
             max-width: 1300px;
-            margin: 0 auto 100px;
+            margin: 0 auto 50px;
             padding: 0 40px;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 30px;
+        }
+
+        /* Full width for the updates and support sections */
+        .full-width {
+            grid-column: span 2;
         }
 
         .premium-card {
@@ -63,10 +68,11 @@
             padding: 70px 50px;
             transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
+            overflow: hidden;
         }
 
         .premium-card:hover {
-            transform: translateY(-15px) scale(1.02);
+            transform: translateY(-15px) scale(1.01);
             border-color: var(--primary);
             box-shadow: 0 40px 100px rgba(0,0,0,0.8);
             background: rgba(255, 0, 51, 0.02);
@@ -90,12 +96,13 @@
             100% { box-shadow: 0 0 0 0 rgba(255, 0, 51, 0); }
         }
 
-        h2 {
+        h2, h3 {
             font-family: 'Lexend', sans-serif;
-            font-size: 3.5rem;
-            margin-bottom: 30px;
             letter-spacing: -2px;
         }
+
+        h2 { font-size: 3.5rem; margin-bottom: 30px; }
+        h3 { font-size: 2rem; margin-bottom: 20px; color: var(--primary); }
 
         .feat-item {
             display: flex;
@@ -107,6 +114,23 @@
         }
 
         .feat-item b { color: #fff; font-weight: 400; }
+
+        /* Release Log List */
+        .log-list { list-style: none; margin-top: 10px; }
+        .log-list li {
+            padding: 10px 0;
+            color: #ccc;
+            font-size: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            display: flex;
+            align-items: center;
+        }
+        .log-list li::before {
+            content: "→";
+            color: var(--primary);
+            margin-right: 15px;
+            font-weight: bold;
+        }
 
         .btn {
             display: block;
@@ -131,6 +155,14 @@
         }
 
         .btn-alt { background: transparent; border: 1px solid var(--border); color: #fff; }
+        
+        /* Contact Button Styling */
+        .btn-contact {
+            background: transparent;
+            border: 1px dashed var(--primary);
+            color: var(--primary);
+            margin-top: 20px;
+        }
 
         #api-info {
             margin-top: 25px;
@@ -141,11 +173,16 @@
         }
 
         footer {
-            padding-bottom: 100px;
+            padding: 100px 0;
             text-align: center;
             opacity: 0.1;
             font-size: 0.6rem;
             letter-spacing: 10px;
+        }
+
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; }
+            .full-width { grid-column: span 1; }
         }
     </style>
 </head>
@@ -176,20 +213,34 @@
         <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn btn-alt">Download APK</a>
         <div id="api-info">Stable Build: 1.0.0</div>
     </div>
+
+    <div class="premium-card full-width">
+        <h3>RELEASE_LOG // <span id="ver-display">v1.1.0</span></h3>
+        <ul class="log-list">
+            <li>Infrastructure: Integrated auto-download for .NET 10.0 Runtime.</li>
+            <li>Security: Fixed 400 Bad Request errors via aka.ms redirect.</li>
+            <li>UX: Optimized silent background installation for Core dependencies.</li>
+            <li>UI: Fixed shortcut and uninstaller icon resolution issues.</li>
+        </ul>
+    </div>
+
+    <div class="premium-card full-width" style="text-align: center;">
+        <h3>SYSTEM_SUPPORT</h3>
+        <p style="color: #666; margin-bottom: 20px;">Direct uplink to developer for bug reports and infrastructure help.</p>
+        <a href="mailto:joshuagabrieldeleon820@gmail.com?subject=QRSYS%20CORE%20Support%20Request&body=ID:%20[YourName]%0D%0AISSUE:%20" class="btn btn-contact">Open Support Ticket</a>
+    </div>
 </div>
 
 <footer>QRSYS INFRASTRUCTURE</footer>
 
 <script>
+    /* Background Canvas Logic */
     const canvas = document.getElementById('bg-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
     let mouse = { x: null, y: null };
 
-    window.addEventListener('mousemove', (e) => {
-        mouse.x = e.x;
-        mouse.y = e.y;
-    });
+    window.addEventListener('mousemove', (e) => { mouse.x = e.x; mouse.y = e.y; });
 
     function init() {
         canvas.width = window.innerWidth;
@@ -252,13 +303,17 @@
             const win = document.getElementById('win-btn');
             const api = document.getElementById('api-info');
             const bad = document.getElementById('badge-loader');
+            const verDisplay = document.getElementById('ver-display');
 
             const file = d.assets.find(a => a.name.toLowerCase().includes('installer.exe'));
             if(file) win.href = file.browser_download_url;
 
+            verDisplay.innerText = d.tag_name;
             bad.innerHTML = `<span class="update-tag">VERSION ${d.tag_name} READY</span>`;
             api.innerHTML = `BUILD ${d.tag_name} // RELEASED ${new Date(d.published_at).toLocaleDateString()}`;
-        } catch(e) {}
+        } catch(e) {
+            console.error("Sync Failed", e);
+        }
     }
     sync();
 </script>
