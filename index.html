@@ -3,277 +3,289 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attendance QRSYS | Official Download Portal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Lexend+Deca:wght@300;500;800&display=swap" rel="stylesheet">
+    <title>Attendance QRSYS | Secure Access Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #ff0000;
-            --bg: #000000;
-            --card-bg: #0a0a0a;
-            --border: rgba(255, 255, 255, 0.1);
+            --primary: #ff0033;
+            --primary-glow: rgba(255, 0, 51, 0.3);
+            --bg: #050505;
+            --card: #0f0f0f;
+            --border: rgba(255, 255, 255, 0.08);
+            --text-gray: #888;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Outfit', sans-serif;
             background-color: var(--bg);
             color: white;
             line-height: 1.6;
-            overflow-x: hidden;
         }
 
-        .background-glow {
+        .hero-bg {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% -20%, #300000 0%, transparent 70%);
+            background: radial-gradient(circle at 50% 0%, #200000 0%, transparent 50%);
             z-index: -1;
         }
 
         header {
-            height: 70vh;
+            height: 80vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 20px;
+            padding: 0 20px;
         }
 
-        .badge {
-            background: rgba(255, 0, 0, 0.1);
-            color: #ff4d4d;
-            padding: 8px 20px;
-            border-radius: 100px;
-            font-size: 0.8rem;
-            font-weight: 600;
+        .connection-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 1px solid var(--border);
+            font-size: 0.75rem;
             letter-spacing: 2px;
             text-transform: uppercase;
-            border: 1px solid rgba(255, 0, 0, 0.2);
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            color: #ff4d4d;
         }
 
+        .dot { width: 8px; height: 8px; background: #ff4d4d; border-radius: 50%; box-shadow: 0 0 10px #ff4d4d; }
+
         h1 {
-            font-family: 'Lexend Deca', sans-serif;
-            font-size: clamp(2.5rem, 10vw, 6rem);
-            font-weight: 800;
-            letter-spacing: -3px;
-            margin-bottom: 20px;
-            background: linear-gradient(to bottom, #fff 50%, #888);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 12vw, 7rem);
+            font-weight: 700;
+            letter-spacing: -4px;
+            line-height: 0.9;
+            margin-bottom: 25px;
+            background: linear-gradient(180deg, #fff 0%, #555 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .subtitle {
-            color: #aaa;
-            font-size: 1.2rem;
-            max-width: 600px;
+            font-size: 1.25rem;
+            color: var(--text-gray);
+            max-width: 700px;
             font-weight: 300;
         }
 
-        .container {
-            max-width: 1200px;
+        .main-container {
+            max-width: 1300px;
             margin: -100px auto 100px;
-            padding: 0 20px;
+            padding: 0 25px;
         }
 
-        .grid {
+        .download-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
         }
 
-        .card {
-            background: var(--card-bg);
+        .premium-card {
+            background: var(--card);
             border: 1px solid var(--border);
-            border-radius: 30px;
-            padding: 50px;
-            transition: 0.4s cubic-bezier(0.2, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            border-radius: 40px;
+            padding: 60px;
+            position: relative;
+            transition: all 0.5s cubic-bezier(0.15, 1, 0.3, 1);
+            overflow: hidden;
         }
 
-        .card:hover {
-            transform: translateY(-10px);
+        .premium-card:hover {
+            transform: translateY(-15px);
             border-color: var(--primary);
-            box-shadow: 0 20px 50px rgba(255, 0, 0, 0.1);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
         }
 
-        .card h2 {
-            font-family: 'Lexend Deca', sans-serif;
-            font-size: 2.2rem;
-            margin-bottom: 15px;
-            font-weight: 500;
+        .label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            display: block;
         }
 
-        .card p {
-            color: #888;
+        .premium-card h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .premium-card p {
+            color: var(--text-gray);
+            font-size: 1.15rem;
             margin-bottom: 40px;
-            font-size: 1.1rem;
+            min-height: 80px;
         }
 
-        .btn {
+        .capabilities {
+            list-style: none;
+            margin-bottom: 50px;
+        }
+
+        .capabilities li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            color: #ddd;
+        }
+
+        .capabilities li::before {
+            content: "✓";
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .dl-btn {
             display: block;
             width: 100%;
-            padding: 22px;
-            border-radius: 15px;
-            text-decoration: none;
-            font-weight: 700;
+            padding: 25px;
+            background: white;
+            color: black;
             text-align: center;
-            transition: 0.3s;
+            text-decoration: none;
+            font-weight: 900;
+            border-radius: 20px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            transition: 0.3s;
         }
 
-        .btn-red {
+        .dl-btn:hover {
             background: var(--primary);
             color: white;
+            box-shadow: 0 10px 30px var(--primary-glow);
         }
 
-        .btn-red:hover {
-            background: #cc0000;
-            transform: scale(1.02);
-        }
-
-        .btn-outline {
+        .btn-alt {
+            background: transparent;
             border: 1px solid var(--border);
             color: white;
-            margin-top: 15px;
         }
 
-        .btn-outline:hover {
-            background: rgba(255,255,255,0.05);
-            border-color: white;
-        }
-
-        .tag-list {
-            margin-top: 30px;
-            padding-top: 30px;
-            border-top: 1px solid var(--border);
-        }
-
-        .tag {
-            display: inline-block;
-            font-size: 0.8rem;
-            color: #555;
-            margin-right: 15px;
-        }
-
-        .tag b { color: #ffcc00; }
-
-        .feature-box {
+        .system-specs {
             margin-top: 100px;
             background: rgba(255, 255, 255, 0.02);
-            padding: 60px;
-            border-radius: 40px;
-            text-align: center;
+            border-radius: 50px;
+            padding: 80px 40px;
             border: 1px solid var(--border);
         }
 
-        .feature-box h3 {
-            font-size: 2rem;
-            margin-bottom: 40px;
-            font-family: 'Lexend Deca', sans-serif;
-        }
-
-        .feature-grid {
+        .spec-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            text-align: center;
         }
 
-        .f-item {
-            padding: 20px;
+        .spec-item h4 {
+            color: #fff;
+            font-size: 1.25rem;
+            margin-bottom: 10px;
         }
 
-        .f-item h4 { color: #ff4d4d; margin-bottom: 10px; }
-        .f-item p { color: #666; font-size: 0.9rem; }
+        .spec-item p {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
 
         footer {
-            padding: 80px 20px;
+            padding: 100px 20px;
             text-align: center;
-            color: #333;
-            font-size: 0.9rem;
             border-top: 1px solid var(--border);
+            color: #444;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
         }
 
-        @media (max-width: 600px) {
-            h1 { font-size: 3rem; }
-            .container { margin-top: 0; }
+        @media (max-width: 900px) {
+            .download-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 4rem; }
         }
     </style>
 </head>
 <body>
 
-<div class="background-glow"></div>
+<div class="hero-bg"></div>
 
 <header>
-    <div class="badge">Official Release v1.0.0</div>
-    <h1>Attendance QRSYS</h1>
-    <p class="subtitle">The fastest way to track attendance using QR codes. No complicated setup, just powerful local performance.</p>
+    <div class="connection-badge">
+        <div class="dot"></div>
+        PostgreSQL Powered // Live DB Connection Required
+    </div>
+    <h1>QRSYS<br>ATTENDANCE</h1>
+    <p class="subtitle">A full-stack student and administrative management ecosystem. Track attendance, manage users, and generate secure QR IDs in real-time.</p>
 </header>
 
-<div class="container">
-    <div class="grid">
-        <div class="card">
-            <div>
-                <h2>Windows PC</h2>
-                <p>Use this for your main computer. Create QR codes, manage settings, and view the full attendance history.</p>
-            </div>
-            <div>
-                <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS_Installer.exe" class="btn btn-red">Download for Windows</a>
-                <div class="tag-list">
-                    <span class="tag">System: <b>PC / Laptop</b></span>
-                    <span class="tag">Includes: <b>QR Creator</b></span>
-                </div>
-            </div>
+<div class="main-container">
+    <div class="download-grid">
+        <div class="premium-card">
+            <span class="label">Primary Control Hub</span>
+            <h2>Windows Edition</h2>
+            <p>The complete master application for administrators and managers. Full system control in one place.</p>
+            <ul class="capabilities">
+                <li>Register & Manage Accounts</li>
+                <li>Administrator & Student Login</li>
+                <li>Dynamic QR Code Generation</li>
+                <li>Real-Time Live QR Scanning</li>
+                <li>Full Attendance Logs</li>
+            </ul>
+            <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS_Installer.exe" class="dl-btn">Download for PC</a>
         </div>
 
-        <div class="card">
-            <div>
-                <h2>Android Phone</h2>
-                <p>Use this for scanning on the go. A simple, fast app to check people in using your phone's camera.</p>
-            </div>
-            <div>
-                <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn btn-outline">Download for Android</a>
-                <div class="tag-list">
-                    <span class="tag">System: <b>Mobile / Tablet</b></span>
-                    <span class="tag">Includes: <b>QR Scanner</b></span>
-                </div>
-            </div>
+        <div class="premium-card">
+            <span class="label">Portable Scanner Node</span>
+            <h2>Android Utility</h2>
+            <p>Optimized for mobile field work. Turn any Android device into a high-speed attendance scanner.</p>
+            <ul class="capabilities">
+                <li>Student & Admin Authentication</li>
+                <li>High-Speed QR Scanning</li>
+                <li>Instant Database Sync</li>
+                <li>Mobile View of History</li>
+                <li>Lightweight Performance</li>
+            </ul>
+            <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="dl-btn btn-alt">Download for Android</a>
         </div>
     </div>
 
-    <div class="feature-box">
-        <h3>Why choose QRSYS?</h3>
-        <div class="feature-grid">
-            <div class="f-item">
-                <h4>Private</h4>
-                <p>Your data stays on your device.</p>
+    <div class="system-specs">
+        <div class="spec-grid">
+            <div class="spec-item">
+                <h4>Database Driven</h4>
+                <p>Requires an active PostgreSQL connection to store and sync data.</p>
             </div>
-            <div class="f-item">
-                <h4>Simple</h4>
-                <p>No account or login required.</p>
+            <div class="spec-item">
+                <h4>Secure Login</h4>
+                <p>Individual accounts for Students and Admins with encrypted access.</p>
             </div>
-            <div class="f-item">
-                <h4>Manual Updates</h4>
-                <p>We notify you, but you choose when to update.</p>
+            <div class="spec-item">
+                <h4>Live Notifications</h4>
+                <p>System alerts you when an update is available (Manual Install).</p>
             </div>
-            <div class="f-item">
-                <h4>No Cloud</h4>
-                <p>Works perfectly without internet.</p>
+            <div class="spec-item">
+                <h4>Global Sync</h4>
+                <p>Internet connection required for real-time attendance logging.</p>
             </div>
         </div>
     </div>
 </div>
 
 <footer>
-    Designed by Gabriel &bull; 2026 &bull; Professional Attendance Solutions
+    DEVELOPED BY GABRIEL &bull; 2026 &bull; ALL SYSTEMS SECURE
 </footer>
 
 </body>
