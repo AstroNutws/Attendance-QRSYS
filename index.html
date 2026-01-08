@@ -3,51 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attendance QRSYS | Download</title>
+    <title>Attendance QRSYS | Official Download</title>
     <style>
-        :root { --maroon: #800000; --dark-maroon: #4d0000; }
-        body { font-family: 'Segoe UI', sans-serif; background: #fdfdfd; color: #333; margin: 0; display: flex; flex-direction: column; align-items: center; }
-        header { background: var(--maroon); color: white; width: 100%; padding: 40px 0; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        .container { max-width: 800px; padding: 40px; text-align: center; }
-        h2 { color: var(--maroon); border-bottom: 2px solid var(--maroon); display: inline-block; padding-bottom: 5px; }
-        .choices { display: flex; gap: 20px; justify-content: center; margin-top: 30px; flex-wrap: wrap; }
-        .card { background: white; border: 1px solid #ddd; border-radius: 12px; padding: 25px; width: 280px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: transform 0.2s; }
-        .card:hover { transform: translateY(-5px); }
-        .btn { display: block; background: var(--maroon); color: white; padding: 12px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 15px; }
+        :root { --maroon: #800000; --dark-maroon: #4d0000; --gold: #ffd700; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #fdfdfd; color: #333; margin: 0; display: flex; flex-direction: column; align-items: center; }
+        header { background: var(--maroon); color: white; width: 100%; padding: 50px 0; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        .container { max-width: 900px; padding: 40px; text-align: center; }
+        h2 { color: var(--maroon); border-bottom: 2px solid var(--maroon); padding-bottom: 8px; margin-top: 40px; display: inline-block; }
+        .choices { display: flex; gap: 25px; justify-content: center; margin-top: 30px; flex-wrap: wrap; }
+        .card { background: white; border: 1px solid #ddd; border-radius: 15px; padding: 30px; width: 320px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); transition: 0.3s; position: relative; }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 12px 25px rgba(0,0,0,0.15); }
+        .btn { display: block; background: var(--maroon); color: white; padding: 15px; text-decoration: none; border-radius: 8px; font-weight: bold; margin-top: 20px; font-size: 1.1rem; }
         .btn:hover { background: var(--dark-maroon); }
-        .warning { font-size: 0.8rem; color: #666; font-style: italic; margin-top: 8px; }
-        .description { line-height: 1.6; color: #444; margin-bottom: 30px; }
+        .hash-box { background: #f1f1f1; padding: 10px; font-size: 0.7rem; border-radius: 5px; margin-top: 15px; word-break: break-all; color: #555; border: 1px dashed #ccc; text-align: left; }
+        .tag { background: var(--gold); color: black; font-size: 0.75rem; font-weight: bold; padding: 4px 10px; border-radius: 20px; position: absolute; top: -10px; right: 10px; }
+        .description { line-height: 1.8; font-size: 1.1rem; color: #555; }
+        footer { margin-top: 50px; padding: 20px; color: #999; font-size: 0.8rem; }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Attendance QRSYS</h1>
-        <p>Simple. Fast. Reliable QR Management.</p>
-    </header>
 
-    <div class="container">
-        <h2>About the App</h2>
-        <p class="description">
-            Attendance QRSYS is a high-performance solution designed to handle attendance tracking using dynamic QR codes. 
-            The system automates data logging, reduces manual errors, and provides real-time reports for hardware-bound environments.
-        </p>
+<header>
+    <h1>Attendance QRSYS</h1>
+    <p>Secure & Efficient QR-Based Attendance Management</p>
+</header>
 
-        <h2>Choose Your Platform</h2>
-        <div class="choices">
-            <div class="card">
-                <h3>Windows PC</h3>
-                <p>Full administrative features and local database management.</p>
-                <a href="PASTE_PC_RELEASE_LINK_HERE" class="btn">Download Installer</a>
-                <p class="warning">Requires .NET 10 Runtime</p>
+<div class="container">
+    <h2>About the System</h2>
+    <p class="description">
+        Attendance QRSYS is a professional solution for tracking attendance using dynamic QR codes. 
+        It automates data logging for hardware-bound environments, providing real-time accuracy and reducing manual errors.
+    </p>
+
+    <h2>Available Downloads</h2>
+    <div class="choices">
+        <div class="card">
+            <span class="tag">FULL VERSION</span>
+            <h3>Windows PC</h3>
+            <p>Database management, admin controls, and reporting tools.</p>
+            <a href="REPLACE_WITH_YOUR_PC_INSTALLER_LINK" class="btn">Download Installer</a>
+            <div class="hash-box">
+                <strong>SHA-256 Checksum:</strong><br>
+                4a585e52e0a49679da04a96e5d9e54075e57b7e462bf09341ab54e9f1ac0ae01
             </div>
+        </div>
 
-            <div class="card">
-                <h3>Android</h3>
-                <p>Mobile scanning and basic status viewing.</p>
-                <a href="PASTE_APK_RELEASE_LINK_HERE" class="btn">Download APK</a>
-                <p class="warning">(Limited Features Version)</p>
+        <div class="card">
+            <span class="tag" style="background:#ddd;">LIMITED</span>
+            <h3>Android Mobile</h3>
+            <p>Scanning-only version for mobile devices. Basic status viewing.</p>
+            <a href="REPLACE_WITH_YOUR_APK_LINK" class="btn">Download APK</a>
+            <div class="hash-box">
+                <strong>SHA-256 Checksum:</strong><br>
+                aeae2879d9cbda46e642de0b0a489fda7eedb91eb2293e65e077a3e87d4a2a06
             </div>
         </div>
     </div>
+</div>
+
+<footer>
+    &copy; 2026 Attendance QRSYS Project
+</footer>
+
 </body>
 </html>
