@@ -124,6 +124,19 @@
         h2 { font-family: var(--font-serif); font-size: 2.2rem; margin-bottom: 15px; color: var(--maroon); }
         h3 { font-family: var(--font-sans); font-size: 0.85rem; color: var(--text-muted); margin-bottom: 25px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
 
+        .badge {
+            display: inline-block;
+            background: var(--maroon);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
         .req-table {
             width: 100%;
             border-collapse: collapse;
@@ -204,8 +217,6 @@
 
         .log-text { font-size: 0.95rem; color: var(--text-dark); }
 
-        #badge-loader { margin-bottom: 15px; }
-
         @media (max-width: 850px) {
             .container { grid-template-columns: 1fr; }
             .span-full { grid-column: span 1; }
@@ -243,7 +254,7 @@
     </div>
 
     <div class="premium-card">
-        <span style="color: var(--maroon); font-size: 0.7rem; font-weight: 800; letter-spacing: 2px;">MOBILE GATEWAY</span>
+        <div class="badge">Final Build: v1.0.0</div>
         <h2>Mobile Client</h2>
         <table class="req-table">
             <tr><td class="req-label">OS Version</td><td class="req-value">Android 8.0+</td></tr>
@@ -366,7 +377,7 @@
             const file = d.assets.find(a => a.name.toLowerCase().includes('installer.exe'));
             if(file) win.href = file.browser_download_url;
 
-            bad.innerHTML = `<span style="background: var(--maroon); color: white; padding: 6px 14px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; letter-spacing: 1px;">CURRENT RELEASE: ${d.tag_name}</span>`;
+            bad.innerHTML = `<span class="badge">Current Release: ${d.tag_name}</span>`;
             api.innerHTML = `Registry Updated: ${new Date(d.published_at).toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'})}`;
         } catch(e) {
             document.getElementById('api-info').innerText = "REGISTRY SYNC UNAVAILABLE";
