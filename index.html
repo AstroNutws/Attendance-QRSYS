@@ -210,11 +210,11 @@
         <div class="feat-item">Database Link <b>PostgreSQL</b></div>
         <div class="feat-item">Device Support <b>PC / Laptop</b></div>
         <a href="#" id="win-btn" class="btn">Download Installer</a>
-        <div id="api-info" style="margin-top: 15px; font-family: var(--font-mono); font-size: 0.6rem; color: #444; text-align: center;">Handshaking...</div>
+        <div id="api-info" style="margin-top: 15px; font-family: var(--font-mono); font-size: 0.6rem; color: #444; text-align: center;">Syncing Assets...</div>
     </div>
 
     <div class="premium-card">
-        <span style="color: #666; font-size: 0.7rem; font-weight: 800; letter-spacing: 2px;">FINAL BUILD 1.0.0</span>
+        <span style="color: #666; font-size: 0.7rem; font-weight: 800; letter-spacing: 2px;">MOBILE DEPLOYMENT</span>
         <h2>Mobile</h2>
         <div class="feat-item">Camera Scanner <b>Included</b></div>
         <div class="feat-item">Live Sync <b>Active</b></div>
@@ -245,7 +245,7 @@
             </li>
             <li class="log-item">
                 <span class="log-tag">Mobile Final</span>
-                <span>Version 1.0.0 is the definitive release with PostgreSQL sync.</span>
+                <span>Cross-platform PostgreSQL synchronization validated.</span>
             </li>
         </ul>
     </div>
@@ -334,9 +334,11 @@
             const file = d.assets.find(a => a.name.toLowerCase().includes('installer.exe'));
             if(file) win.href = file.browser_download_url;
 
-            bad.innerHTML = `<span style="background: var(--primary); color: white; padding: 5px 15px; border-radius: 5px; font-size: 0.65rem; font-weight: 900;">NEW PC BUILD: ${d.tag_name}</span>`;
-            api.innerHTML = `BUILD ${d.tag_name} // RELEASED ${new Date(d.published_at).toLocaleDateString()}`;
-        } catch(e) {}
+            bad.innerHTML = `<span style="background: var(--primary); color: white; padding: 5px 15px; border-radius: 5px; font-size: 0.65rem; font-weight: 900;">LIVE VERSION: ${d.tag_name}</span>`;
+            api.innerHTML = `LATEST RELEASED ${new Date(d.published_at).toLocaleDateString()}`;
+        } catch(e) {
+            document.getElementById('api-info').innerText = "SYSTEM SYNC OFFLINE";
+        }
     }
 
     window.addEventListener('resize', init);
