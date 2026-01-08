@@ -3,28 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QRSYS | Professional Infrastructure</title>
-    <meta name="theme-color" content="#020202">
-    <link rel="icon" type="image/png" href="https://img.icons8.com/neon/96/shield.png">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;600;800&family=Lexend:wght@900&family=Space+Mono&display=swap" rel="stylesheet">
+    <title>QRSYS | Academic Infrastructure</title>
+    <meta name="theme-color" content="#800000">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/100/800000/university.png">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@600;800&family=Inter:wght@300;400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #ff0033;
-            --primary-glow: rgba(255, 0, 51, 0.3);
-            --bg: #050505;
-            --glass: rgba(15, 15, 15, 0.8);
-            --border: rgba(255, 255, 255, 0.08);
-            --online: #00ff66;
-            --font-main: 'Plus Jakarta Sans', sans-serif;
-            --font-mono: 'Space Mono', monospace;
+            --maroon: #800000;
+            --maroon-light: #a52a2a;
+            --cream: #fdfdfd;
+            --text-dark: #1a1a1a;
+            --text-muted: #666;
+            --border: #e5e5e5;
+            --font-serif: 'Crimson Pro', serif;
+            --font-sans: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: default; }
 
         body {
-            font-family: var(--font-main);
-            background-color: var(--bg);
-            color: white;
+            font-family: var(--font-sans);
+            background-color: var(--cream);
+            color: var(--text-dark);
             overflow-x: hidden;
             line-height: 1.6;
         }
@@ -33,14 +34,15 @@
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
+            opacity: 0.4;
         }
 
         nav {
             position: fixed;
             top: 0; width: 100%;
-            padding: 20px 40px;
-            backdrop-filter: blur(20px);
-            background: rgba(0,0,0,0.5);
+            padding: 20px 60px;
+            backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.8);
             border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
@@ -49,237 +51,246 @@
         }
 
         .nav-logo {
-            font-family: 'Lexend';
-            font-weight: 900;
-            letter-spacing: 2px;
-            font-size: 1.2rem;
-            color: #fff;
-        }
-
-        header {
-            padding: 160px 20px 60px;
-            text-align: center;
-        }
-
-        h1 {
-            font-family: 'Lexend', sans-serif;
-            font-size: clamp(4rem, 15vw, 10rem);
-            font-weight: 900;
-            letter-spacing: -6px;
-            line-height: 0.85;
-            background: linear-gradient(180deg, #fff 40%, #444 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto 100px;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-        }
-
-        .premium-card {
-            background: var(--glass);
-            backdrop-filter: blur(40px);
-            border: 1px solid var(--border);
-            border-radius: 30px;
-            padding: 50px;
-            transition: 0.4s ease;
-            position: relative;
-        }
-
-        .premium-card:hover {
-            border-color: var(--primary);
-            box-shadow: 0 20px 50px rgba(255, 0, 51, 0.1);
-        }
-
-        .span-full { grid-column: span 2; }
-
-        h2 { font-family: 'Lexend'; font-size: 2.8rem; margin-bottom: 20px; letter-spacing: -1px; }
-        h3 { font-family: 'Lexend'; font-size: 1.4rem; color: var(--primary); margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; }
-
-        .feat-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 18px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            font-size: 0.95rem;
-            color: #888;
-        }
-
-        .feat-item b { color: #fff; }
-
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 24px;
-            background: #fff;
-            color: #000;
-            text-decoration: none;
-            text-align: center;
+            font-family: var(--font-serif);
             font-weight: 800;
-            border-radius: 15px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: 0.3s;
-            margin-top: 30px;
-        }
-
-        .btn:hover {
-            background: var(--primary);
-            color: #fff;
-            box-shadow: 0 15px 30px var(--primary-glow);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: #fff;
+            font-size: 1.4rem;
+            color: var(--maroon);
+            letter-spacing: -0.5px;
         }
 
         .status-pill {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            padding: 8px 20px;
-            background: rgba(0, 255, 102, 0.05);
-            color: var(--online);
-            border-radius: 10px;
+            gap: 8px;
+            padding: 6px 16px;
+            background: #f0fff4;
+            color: #22543d;
+            border-radius: 50px;
             font-size: 0.75rem;
-            font-weight: 800;
-            border: 1px solid rgba(0, 255, 102, 0.2);
+            font-weight: 700;
+            border: 1px solid #c6f6d5;
+            text-transform: uppercase;
         }
 
-        .uptime-display {
-            font-family: var(--font-mono);
-            background: rgba(255,255,255,0.02);
-            padding: 30px;
-            border-radius: 20px;
-            font-size: 2rem;
-            color: var(--primary);
+        header {
+            padding: 180px 20px 80px;
             text-align: center;
-            border: 1px solid var(--border);
+            max-width: 900px;
+            margin: 0 auto;
         }
+
+        h1 {
+            font-family: var(--font-serif);
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            color: var(--maroon);
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto 100px;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .premium-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 45px;
+            transition: transform 0.3s cubic-bezier(0.2, 0, 0.2, 1), shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            position: relative;
+        }
+
+        .premium-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+        }
+
+        .span-full { grid-column: span 2; }
+
+        h2 { font-family: var(--font-serif); font-size: 2.2rem; margin-bottom: 15px; color: var(--maroon); }
+        h3 { font-family: var(--font-sans); font-size: 0.85rem; color: var(--text-muted); margin-bottom: 25px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
 
         .req-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
+            margin: 20px 0;
         }
 
         .req-table td {
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.03);
-            font-size: 0.9rem;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.95rem;
         }
 
-        .req-label { color: var(--primary); font-weight: 800; text-transform: uppercase; font-size: 0.7rem; width: 40%; }
-        .req-value { color: #fff; }
+        .req-label { color: var(--text-muted); font-weight: 500; width: 40%; }
+        .req-value { color: var(--text-dark); font-weight: 600; text-align: right; }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            background: var(--maroon);
+            color: #fff;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 600;
+            border-radius: 12px;
+            transition: 0.2s;
+            margin-top: 25px;
+            border: none;
+        }
+
+        .btn:hover {
+            background: var(--maroon-light);
+            box-shadow: 0 10px 20px rgba(128, 0, 0, 0.2);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--maroon);
+            color: var(--maroon);
+        }
+
+        .btn-outline:hover {
+            background: var(--maroon);
+            color: #fff;
+        }
+
+        .uptime-display {
+            font-family: var(--font-mono);
+            background: #f8f8f8;
+            padding: 40px;
+            border-radius: 15px;
+            font-size: 2.5rem;
+            color: var(--maroon);
+            text-align: center;
+            font-weight: 700;
+        }
 
         .log-list { list-style: none; }
         .log-item {
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.03);
-            display: flex;
+            padding: 20px 0;
+            border-bottom: 1px solid #f0f0f0;
+            display: grid;
+            grid-template-columns: 180px 1fr;
             gap: 20px;
-            font-size: 0.95rem;
-            color: #ccc;
+            align-items: center;
         }
 
         .log-tag {
-            color: var(--primary);
-            font-weight: 900;
+            background: #f0f0f0;
+            padding: 4px 12px;
+            border-radius: 6px;
+            color: var(--maroon);
+            font-weight: 700;
             font-size: 0.7rem;
-            min-width: 120px;
             text-transform: uppercase;
+            text-align: center;
         }
+
+        .log-text { font-size: 0.95rem; color: var(--text-dark); }
+
+        #badge-loader { margin-bottom: 15px; }
 
         @media (max-width: 850px) {
             .container { grid-template-columns: 1fr; }
             .span-full { grid-column: span 1; }
-            h1 { font-size: 5rem; }
+            nav { padding: 20px; }
+            .log-item { grid-template-columns: 1fr; gap: 8px; }
         }
     </style>
 </head>
 <body>
 
 <nav>
-    <div class="nav-logo">QRSYS CORE</div>
-    <div class="status-pill">SYSTEM ONLINE</div>
+    <div class="nav-logo">QRSYS / CORE</div>
+    <div class="status-pill">● System Operational</div>
 </nav>
 
 <canvas id="bg-canvas"></canvas>
 
 <header>
-    <h1>QRSYS<br>CORE</h1>
+    <h1>Secure Infrastructure for Modern Academia.</h1>
+    <p class="subtitle">A professional-grade attendance and synchronization engine designed for educational excellence.</p>
 </header>
 
 <div class="container">
     <div class="premium-card">
         <div id="badge-loader"></div>
-        <h2>Desktop</h2>
+        <h2>Desktop Node</h2>
         <table class="req-table">
-            <tr><td class="req-label">Architecture</td><td class="req-value">Windows x64 Required</td></tr>
-            <tr><td class="req-label">Optical</td><td class="req-value">Webcam / Integrated Cam</td></tr>
-            <tr><td class="req-label">Disk Space</td><td class="req-value">400MB (Post-Update)</td></tr>
-            <tr><td class="req-label">Connectivity</td><td class="req-value">Internet Mandatory</td></tr>
+            <tr><td class="req-label">Environment</td><td class="req-value">Windows x64</td></tr>
+            <tr><td class="req-label">Imaging</td><td class="req-value">UVC Camera Support</td></tr>
+            <tr><td class="req-label">Local Storage</td><td class="req-value">400MB Required</td></tr>
+            <tr><td class="req-label">Network</td><td class="req-value">Always Online</td></tr>
         </table>
-        <a href="#" id="win-btn" class="btn">Download Installer</a>
-        <div id="api-info" style="margin-top: 15px; font-family: var(--font-mono); font-size: 0.6rem; color: #444; text-align: center;">Syncing Assets...</div>
+        <a href="#" id="win-btn" class="btn">Initialize Installation</a>
+        <div id="api-info" style="margin-top: 20px; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); text-align: center;">Establishing handshake...</div>
     </div>
 
     <div class="premium-card">
-        <span style="color: #666; font-size: 0.7rem; font-weight: 800; letter-spacing: 2px;">MOBILE DEPLOYMENT</span>
-        <h2>Mobile</h2>
+        <span style="color: var(--maroon); font-size: 0.7rem; font-weight: 800; letter-spacing: 2px;">MOBILE GATEWAY</span>
+        <h2>Mobile Client</h2>
         <table class="req-table">
-            <tr><td class="req-label">OS</td><td class="req-value">Android 8.0+ Required</td></tr>
-            <tr><td class="req-label">Memory</td><td class="req-value">At least 2GB RAM</td></tr>
-            <tr><td class="req-label">Storage</td><td class="req-value">50MB Free Space</td></tr>
-            <tr><td class="req-label">Connectivity</td><td class="req-value">Internet Mandatory</td></tr>
+            <tr><td class="req-label">OS Version</td><td class="req-value">Android 8.0+</td></tr>
+            <tr><td class="req-label">Memory</td><td class="req-value">2GB RAM Min.</td></tr>
+            <tr><td class="req-label">Capacity</td><td class="req-value">50MB Available</td></tr>
+            <tr><td class="req-label">Network</td><td class="req-value">Secure Auth Required</td></tr>
         </table>
-        <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn btn-outline">Download APK</a>
+        <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn btn-outline">Download Package (.apk)</a>
     </div>
 
     <div class="premium-card span-full">
-        <h3>System Uptime</h3>
+        <h3>Institutional Network Uptime</h3>
         <div class="uptime-display" id="uptime-counter">00:00:00:00</div>
-        <p style="text-align: center; color: #444; font-size: 0.7rem; margin-top: 20px; letter-spacing: 3px;">CLOUD INFRASTRUCTURE STABLE</p>
+        <p style="text-align: center; color: var(--text-muted); font-size: 0.7rem; margin-top: 25px; letter-spacing: 3px; font-weight: 600;">CLOUD SYNC STATUS: VERIFIED</p>
     </div>
 
     <div class="premium-card span-full">
-        <h3>Release Logs</h3>
+        <h3>Version History & Governance</h3>
         <ul class="log-list">
             <li class="log-item">
                 <span class="log-tag">Desktop Build</span>
-                <span>Integrated auto download for .NET 10.0 Runtime dependencies.</span>
+                <span class="log-text">Automated provisioning for .NET 10.0 runtime dependencies.</span>
             </li>
             <li class="log-item">
-                <span class="log-tag">Security Update</span>
-                <span>Fixed 400 Bad Request errors via aka.ms redirect protocols.</span>
+                <span class="log-tag">Security</span>
+                <span class="log-text">Resolution of redirect handshake protocols via encrypted aka.ms channels.</span>
             </li>
             <li class="log-item">
-                <span class="log-tag">User Interface</span>
-                <span>Corrected shortcut and uninstaller icon resolution for high DPI displays.</span>
+                <span class="log-tag">Interface</span>
+                <span class="log-text">Refined iconography and DPI scaling for high-resolution auditorium displays.</span>
             </li>
             <li class="log-item">
-                <span class="log-tag">Mobile Final</span>
-                <span>Cross-platform PostgreSQL synchronization validated.</span>
+                <span class="log-tag">Database</span>
+                <span class="log-text">PostgreSQL synchronization logic validated for multi-tenant school environments.</span>
             </li>
         </ul>
     </div>
 
-    <div class="premium-card span-full" style="text-align: center;">
-        <h3>Technical Support</h3>
-        <p style="color: #666; margin-bottom: 20px;">Direct uplink to developer for bug reports and infrastructure help.</p>
-        <a href="mailto:joshuagabrieldeleon820@gmail.com" class="btn btn-outline" style="border-style: dashed; border-color: var(--primary); color: var(--primary);">Open Support Ticket</a>
+    <div class="premium-card span-full" style="text-align: center; border: 2px solid var(--maroon); background: #fffafb;">
+        <h2>Technical Registry</h2>
+        <p style="color: var(--text-muted); margin-bottom: 25px; max-width: 500px; margin-left: auto; margin-right: auto;">For administrative support or infrastructure reporting, contact the system developer.</p>
+        <a href="mailto:joshuagabrieldeleon820@gmail.com" class="btn" style="max-width: 300px; margin-left: auto; margin-right: auto;">Request Assistance</a>
     </div>
 </div>
 
-<footer style="text-align: center; padding: 100px; opacity: 0.2; font-size: 0.6rem; letter-spacing: 10px;">
-    QRSYS INFRASTRUCTURE 2026
+<footer style="text-align: center; padding: 100px; opacity: 0.4; font-size: 0.7rem; font-weight: 700; color: var(--maroon); letter-spacing: 4px; text-transform: uppercase;">
+    &copy; 2026 QRSYS Academic Infrastructure
 </footer>
 
 <script>
@@ -291,35 +302,35 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         particles = [];
-        for(let i=0; i<70; i++) {
+        for(let i=0; i<50; i++) {
             particles.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
-                vx: (Math.random() - 0.5) * 0.4,
-                vy: (Math.random() - 0.5) * 0.4
+                vx: (Math.random() - 0.5) * 0.3,
+                vy: (Math.random() - 0.5) * 0.3
             });
         }
     }
 
     function draw() {
-        ctx.fillStyle = 'rgba(5, 5, 5, 0.2)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         
         particles.forEach((p, i) => {
             p.x += p.vx; p.y += p.vy;
             if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
             if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
             
-            ctx.fillStyle = 'rgba(255, 0, 51, 0.5)';
+            ctx.fillStyle = '#80000022';
             ctx.beginPath();
-            ctx.arc(p.x, p.y, 1.5, 0, Math.PI*2);
+            ctx.arc(p.x, p.y, 2, 0, Math.PI*2);
             ctx.fill();
 
             for(let j=i+1; j<particles.length; j++) {
                 let p2 = particles[j];
                 let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
-                if(dist < 150) {
-                    ctx.strokeStyle = `rgba(255, 0, 51, ${0.1 - dist/1500})`;
+                if(dist < 200) {
+                    ctx.strokeStyle = `rgba(128, 0, 0, ${0.15 - dist/2000})`;
+                    ctx.lineWidth = 1;
                     ctx.beginPath();
                     ctx.moveTo(p.x, p.y);
                     ctx.lineTo(p2.x, p2.y);
@@ -340,7 +351,7 @@
             const mins = Math.floor((diff / (1000 * 60)) % 60);
             const secs = Math.floor((diff / 1000) % 60);
             document.getElementById('uptime-counter').innerText = 
-                `${days.toString().padStart(2, '0')}D ${hours.toString().padStart(2, '0')}H ${mins.toString().padStart(2, '0')}M ${secs.toString().padStart(2, '0')}S`;
+                `${days.toString().padStart(2, '0')}d ${hours.toString().padStart(2, '0')}h ${mins.toString().padStart(2, '0')}m ${secs.toString().padStart(2, '0')}s`;
         }, 1000);
     }
 
@@ -355,10 +366,10 @@
             const file = d.assets.find(a => a.name.toLowerCase().includes('installer.exe'));
             if(file) win.href = file.browser_download_url;
 
-            bad.innerHTML = `<span style="background: var(--primary); color: white; padding: 5px 15px; border-radius: 5px; font-size: 0.65rem; font-weight: 900;">LIVE VERSION: ${d.tag_name}</span>`;
-            api.innerHTML = `LATEST RELEASED ${new Date(d.published_at).toLocaleDateString()}`;
+            bad.innerHTML = `<span style="background: var(--maroon); color: white; padding: 6px 14px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; letter-spacing: 1px;">CURRENT RELEASE: ${d.tag_name}</span>`;
+            api.innerHTML = `Registry Updated: ${new Date(d.published_at).toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'})}`;
         } catch(e) {
-            document.getElementById('api-info').innerText = "SYSTEM SYNC OFFLINE";
+            document.getElementById('api-info').innerText = "REGISTRY SYNC UNAVAILABLE";
         }
     }
 
@@ -367,4 +378,3 @@
 </script>
 </body>
 </html>
-
