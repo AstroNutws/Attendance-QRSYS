@@ -3,323 +3,278 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ATTENDANCE QRSYS | ULTIMATE ARCHITECTURE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Outfit:wght@100;300;400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <title>Attendance QRSYS | Official Download Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Lexend+Deca:wght@300;500;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --accent: #ff0033;
-            --accent-glow: rgba(255, 0, 51, 0.5);
-            --gold: #ffcc00;
-            --bg: #030303;
-            --panel: rgba(15, 15, 15, 0.7);
-            --border: rgba(255, 255, 255, 0.05);
+            --primary: #ff0000;
+            --bg: #000000;
+            --card-bg: #0a0a0a;
+            --border: rgba(255, 255, 255, 0.1);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            cursor: none;
         }
 
         body {
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Inter', sans-serif;
             background-color: var(--bg);
             color: white;
+            line-height: 1.6;
             overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
         }
 
-        #custom-cursor {
-            width: 20px;
-            height: 20px;
-            background: var(--accent);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            mix-blend-mode: difference;
-            transition: transform 0.1s;
-        }
-
-        .hero-visual {
+        .background-glow {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: 
-                radial-gradient(circle at 10% 20%, rgba(255, 0, 51, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(255, 204, 0, 0.03) 0%, transparent 40%);
+            background: radial-gradient(circle at 50% -20%, #300000 0%, transparent 70%);
             z-index: -1;
-        }
-
-        .cyber-grid {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
-            background-size: 100px 100px;
-            z-index: -1;
-            perspective: 1000px;
-            transform: rotateX(60deg) scale(2);
-            transform-origin: top;
-            opacity: 0.2;
         }
 
         header {
-            height: 100vh;
+            height: 70vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 0 20px;
-            position: relative;
+            text-align: center;
+            padding: 20px;
         }
 
-        .header-meta {
-            font-family: 'JetBrains Mono', monospace;
+        .badge {
+            background: rgba(255, 0, 0, 0.1);
+            color: #ff4d4d;
+            padding: 8px 20px;
+            border-radius: 100px;
             font-size: 0.8rem;
-            color: var(--accent);
-            letter-spacing: 5px;
-            margin-bottom: 20px;
+            font-weight: 600;
+            letter-spacing: 2px;
             text-transform: uppercase;
+            border: 1px solid rgba(255, 0, 0, 0.2);
+            margin-bottom: 20px;
         }
 
         h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(3rem, 15vw, 8rem);
-            font-weight: 900;
-            letter-spacing: -5px;
-            line-height: 0.8;
-            text-transform: uppercase;
-            margin-bottom: 40px;
-            text-align: center;
-            background: linear-gradient(180deg, #fff 40%, #555 100%);
+            font-family: 'Lexend Deca', sans-serif;
+            font-size: clamp(2.5rem, 10vw, 6rem);
+            font-weight: 800;
+            letter-spacing: -3px;
+            margin-bottom: 20px;
+            background: linear-gradient(to bottom, #fff 50%, #888);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .terminal-box {
-            background: rgba(0,0,0,0.8);
-            border: 1px solid var(--border);
-            padding: 15px 30px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            color: #444;
-            border-radius: 5px;
-            margin-bottom: 50px;
-        }
-
-        .terminal-box span { color: var(--accent); }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 100px 40px;
-        }
-
-        .card-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 50px;
-        }
-
-        .premium-card {
-            background: var(--panel);
-            backdrop-filter: blur(40px);
-            border: 1px solid var(--border);
-            padding: 80px 60px;
-            border-radius: 0;
-            position: relative;
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .premium-card:hover {
-            transform: translateY(-15px) scale(1.02);
-            border-color: var(--accent);
-            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
-        }
-
-        .card-num {
-            position: absolute;
-            top: 40px; right: 40px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1rem;
-            color: var(--border);
-        }
-
-        .premium-card h2 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            letter-spacing: -2px;
-        }
-
-        .premium-card p {
+        .subtitle {
+            color: #aaa;
             font-size: 1.2rem;
-            color: #999;
-            margin-bottom: 50px;
-            line-height: 1.6;
+            max-width: 600px;
             font-weight: 300;
         }
 
-        .btn-glitch {
+        .container {
+            max-width: 1200px;
+            margin: -100px auto 100px;
+            padding: 0 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            padding: 50px;
+            transition: 0.4s cubic-bezier(0.2, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 50px rgba(255, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            font-family: 'Lexend Deca', sans-serif;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .card p {
+            color: #888;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        .btn {
             display: block;
             width: 100%;
-            padding: 30px;
-            background: white;
-            color: black;
-            text-align: center;
+            padding: 22px;
+            border-radius: 15px;
             text-decoration: none;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            font-size: 1rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            position: relative;
+            font-weight: 700;
+            text-align: center;
             transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .btn-glitch:hover {
-            background: var(--accent);
+        .btn-red {
+            background: var(--primary);
             color: white;
-            box-shadow: 0 0 40px var(--accent-glow);
         }
 
-        .btn-secondary {
-            background: transparent;
+        .btn-red:hover {
+            background: #cc0000;
+            transform: scale(1.02);
+        }
+
+        .btn-outline {
             border: 1px solid var(--border);
             color: white;
+            margin-top: 15px;
         }
 
-        .hash-display {
-            margin-top: 40px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            background: #000;
-            padding: 20px;
-            border: 1px solid rgba(255,255,255,0.02);
-            color: #555;
-            display: flex;
-            justify-content: space-between;
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: white;
         }
 
-        .hash-display b { color: var(--gold); }
-
-        .matrix-v2 {
-            margin-top: 200px;
+        .tag-list {
+            margin-top: 30px;
+            padding-top: 30px;
             border-top: 1px solid var(--border);
-            padding-top: 100px;
         }
 
-        .matrix-v2 h3 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 3rem;
+        .tag {
+            display: inline-block;
+            font-size: 0.8rem;
+            color: #555;
+            margin-right: 15px;
+        }
+
+        .tag b { color: #ffcc00; }
+
+        .feature-box {
+            margin-top: 100px;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 60px;
+            border-radius: 40px;
             text-align: center;
-            margin-bottom: 80px;
+            border: 1px solid var(--border);
         }
 
-        .spec-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 40px 0;
-            border-bottom: 1px solid var(--border);
+        .feature-box h3 {
+            font-size: 2rem;
+            margin-bottom: 40px;
+            font-family: 'Lexend Deca', sans-serif;
         }
 
-        .spec-label { font-size: 1.5rem; font-weight: 700; }
-        .spec-value { font-family: 'JetBrains Mono', monospace; color: var(--accent); }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .f-item {
+            padding: 20px;
+        }
+
+        .f-item h4 { color: #ff4d4d; margin-bottom: 10px; }
+        .f-item p { color: #666; font-size: 0.9rem; }
 
         footer {
-            padding: 150px 40px;
+            padding: 80px 20px;
             text-align: center;
-            opacity: 0.5;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            letter-spacing: 5px;
+            color: #333;
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
         }
 
-        @media (max-width: 1000px) {
-            .card-grid { grid-template-columns: 1fr; }
-            h1 { font-size: 4rem; }
+        @media (max-width: 600px) {
+            h1 { font-size: 3rem; }
+            .container { margin-top: 0; }
         }
     </style>
 </head>
 <body>
 
-<div id="custom-cursor"></div>
-<div class="hero-visual"></div>
-<div class="cyber-grid"></div>
+<div class="background-glow"></div>
 
 <header>
-    <div class="header-meta">System Deployment // 2026 Proto</div>
-    <h1>QRSYS<br>ELITE</h1>
-    <div class="terminal-box">
-        > STATUS: <span>STABLE</span> | UPDATES: <span>MANUAL_ONLY</span> | CLOUD: <span>DECOUPLED</span>
-    </div>
+    <div class="badge">Official Release v1.0.0</div>
+    <h1>Attendance QRSYS</h1>
+    <p class="subtitle">The fastest way to track attendance using QR codes. No complicated setup, just powerful local performance.</p>
 </header>
 
 <div class="container">
-    <div class="card-grid">
-        <div class="premium-card">
-            <div class="card-num">01</div>
-            <h2>CORE<br>TERMINAL</h2>
-            <p>Stationary power. High-velocity QR generation and deep-level local history tracking. Built for high-traffic environments.</p>
-            <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS_Installer.exe" class="btn-glitch">Initialize Installation</a>
-            <div class="hash-display">
-                <span>SHA-256</span>
-                <b>4a585e52...ae01</b>
+    <div class="grid">
+        <div class="card">
+            <div>
+                <h2>Windows PC</h2>
+                <p>Use this for your main computer. Create QR codes, manage settings, and view the full attendance history.</p>
+            </div>
+            <div>
+                <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS_Installer.exe" class="btn btn-red">Download for Windows</a>
+                <div class="tag-list">
+                    <span class="tag">System: <b>PC / Laptop</b></span>
+                    <span class="tag">Includes: <b>QR Creator</b></span>
+                </div>
             </div>
         </div>
 
-        <div class="premium-card">
-            <div class="card-num">02</div>
-            <h2>MOBILE<br>NODE</h2>
-            <p>The field utility. High-accuracy scanning engine with offline-first database synchronization. Reliable in zero-signal zones.</p>
-            <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn-glitch btn-secondary">Download APK</a>
-            <div class="hash-display">
-                <span>SHA-256</span>
-                <b>aeae2879...a066</b>
+        <div class="card">
+            <div>
+                <h2>Android Phone</h2>
+                <p>Use this for scanning on the go. A simple, fast app to check people in using your phone's camera.</p>
+            </div>
+            <div>
+                <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn btn-outline">Download for Android</a>
+                <div class="tag-list">
+                    <span class="tag">System: <b>Mobile / Tablet</b></span>
+                    <span class="tag">Includes: <b>QR Scanner</b></span>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="matrix-v2">
-        <h3>ARCHITECTURAL SPECS</h3>
-        
-        <div class="spec-row">
-            <span class="spec-label">QR ENCRYPTION</span>
-            <span class="spec-value">AES-256 LOCAL</span>
-        </div>
-        <div class="spec-row">
-            <span class="spec-label">DATA PRIVACY</span>
-            <span class="spec-value">100% AIR-GAPPED OPTION</span>
-        </div>
-        <div class="spec-row">
-            <span class="spec-label">UPDATE PROTOCOL</span>
-            <span class="spec-value">USER-TRIGGERED NOTIFICATIONS</span>
-        </div>
-        <div class="spec-row">
-            <span class="spec-label">CLOUD DEPENDENCY</span>
-            <span class="spec-value">ZERO // NONE</span>
+    <div class="feature-box">
+        <h3>Why choose QRSYS?</h3>
+        <div class="feature-grid">
+            <div class="f-item">
+                <h4>Private</h4>
+                <p>Your data stays on your device.</p>
+            </div>
+            <div class="f-item">
+                <h4>Simple</h4>
+                <p>No account or login required.</p>
+            </div>
+            <div class="f-item">
+                <h4>Manual Updates</h4>
+                <p>We notify you, but you choose when to update.</p>
+            </div>
+            <div class="f-item">
+                <h4>No Cloud</h4>
+                <p>Works perfectly without internet.</p>
+            </div>
         </div>
     </div>
 </div>
 
 <footer>
-    SYSTEM ENGINEERED BY GABRIEL // NO DATA LEAVES YOUR HARDWARE.
+    Designed by Gabriel &bull; 2026 &bull; Professional Attendance Solutions
 </footer>
-
-<script>
-    const cursor = document.getElementById('custom-cursor');
-    document.addEventListener('mousemove', (e) => {
-        cursor.style.left = e.clientX + 'px';
-        cursor.style.top = e.clientY + 'px';
-    });
-
-    // Subtle parallax
-    document.addEventListener('mousemove', (e) => {
-        const x = (window.innerWidth / 2 - e.pageX) / 50;
-        const y = (window.innerHeight / 2 - e.pageY) / 50;
-        document.querySelector('.cyber-grid').style.transform = `rotateX(60deg) scale(2) translateX(${x}px) translateY(${y}px)`;
-    });
-</script>
 
 </body>
 </html>
