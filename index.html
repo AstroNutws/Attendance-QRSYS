@@ -55,7 +55,6 @@
             gap: 30px;
         }
 
-        /* Full width for the updates and support sections */
         .full-width {
             grid-column: span 2;
         }
@@ -114,8 +113,8 @@
         }
 
         .feat-item b { color: #fff; font-weight: 400; }
+        .feat-item span.warn { color: #ff0033; font-weight: 800; font-size: 0.7rem; }
 
-        /* Release Log List */
         .log-list { list-style: none; margin-top: 10px; }
         .log-list li {
             padding: 10px 0;
@@ -131,6 +130,24 @@
             margin-right: 15px;
             font-weight: bold;
         }
+
+        .req-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .req-box {
+            background: rgba(255,255,255,0.02);
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .req-box h4 { font-size: 0.8rem; color: var(--primary); margin-bottom: 10px; text-transform: uppercase; }
+        .req-box p { font-size: 0.9rem; color: #fff; line-height: 1.4; }
 
         .btn {
             display: block;
@@ -156,7 +173,6 @@
 
         .btn-alt { background: transparent; border: 1px solid var(--border); color: #fff; }
         
-        /* Contact Button Styling */
         .btn-contact {
             background: transparent;
             border: 1px dashed var(--primary);
@@ -183,6 +199,7 @@
         @media (max-width: 900px) {
             .container { grid-template-columns: 1fr; }
             .full-width { grid-column: span 1; }
+            .req-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -200,7 +217,7 @@
         <h2>Desktop</h2>
         <div class="feat-item">QR Generation <b>Included</b></div>
         <div class="feat-item">PostgreSQL Link <b>Included</b></div>
-        <div class="feat-item">Admin Dashboard <b>Included</b></div>
+        <div class="feat-item">Camera Input <span class="warn">REQUIRED</span></div>
         <a href="#" id="win-btn" class="btn">Deploy Installer</a>
         <div id="api-info">Synchronizing...</div>
     </div>
@@ -212,6 +229,20 @@
         <div class="feat-item">Live Sync <b>Included</b></div>
         <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn btn-alt">Download APK</a>
         <div id="api-info">Stable Build: 1.0.0</div>
+    </div>
+
+    <div class="premium-card full-width" style="text-align: center;">
+        <h3>SYSTEM_REQUIREMENTS</h3>
+        <div class="req-grid">
+            <div class="req-box">
+                <h4>Optical Sensors</h4>
+                <p>PC builds require an external <b>USB Webcam</b>. Laptops must have an <b>Integrated Camera</b> active for real-time QR recognition.</p>
+            </div>
+            <div class="req-box">
+                <h4>Infrastructure</h4>
+                <p>Windows 10/11 (x64) Environment. High-speed uplink for PostgreSQL database synchronization.</p>
+            </div>
+        </div>
     </div>
 
     <div class="premium-card full-width">
@@ -234,7 +265,6 @@
 <footer>QRSYS INFRASTRUCTURE</footer>
 
 <script>
-    /* Background Canvas Logic */
     const canvas = document.getElementById('bg-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -311,9 +341,7 @@
             verDisplay.innerText = d.tag_name;
             bad.innerHTML = `<span class="update-tag">VERSION ${d.tag_name} READY</span>`;
             api.innerHTML = `BUILD ${d.tag_name} // RELEASED ${new Date(d.published_at).toLocaleDateString()}`;
-        } catch(e) {
-            console.error("Sync Failed", e);
-        }
+        } catch(e) {}
     }
     sync();
 </script>
