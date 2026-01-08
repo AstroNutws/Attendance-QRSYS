@@ -12,6 +12,7 @@
             --glass: rgba(255, 255, 255, 0.03);
             --border: rgba(255, 255, 255, 0.1);
             --online: #00ff66;
+            --final-gray: #444;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
@@ -76,6 +77,17 @@
             background: rgba(255, 0, 51, 0.02);
         }
 
+        .mobile-card {
+            filter: grayscale(0.4);
+            border-color: rgba(255,255,255,0.05);
+        }
+
+        .mobile-card:hover {
+            filter: grayscale(0);
+            border-color: var(--final-gray);
+            background: rgba(255, 255, 255, 0.01);
+        }
+
         .update-tag {
             background: var(--primary);
             color: white;
@@ -89,7 +101,7 @@
         }
 
         .final-tag {
-            background: #333;
+            background: var(--final-gray);
             color: #fff;
             font-size: 0.65rem;
             font-weight: 900;
@@ -97,7 +109,31 @@
             border-radius: 5px;
             display: inline-block;
             margin-bottom: 25px;
-            border: 1px solid var(--border);
+        }
+
+        .hw-bar {
+            margin-top: 20px;
+            padding: 12px 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+
+        .hw-label {
+            font-size: 0.6rem;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 800;
+        }
+
+        .hw-status {
+            font-size: 0.65rem;
+            color: var(--online);
+            font-weight: 900;
         }
 
         .secure-tag {
@@ -206,7 +242,7 @@
             display: block;
             width: 100%;
             padding: 26px;
-            margin-top: 50px;
+            margin-top: 30px;
             background: #fff;
             color: #000;
             text-decoration: none;
@@ -239,6 +275,7 @@
             margin-top: 10px;
             text-transform: uppercase;
             letter-spacing: 1px;
+            text-align: center;
         }
 
         #api-info {
@@ -279,20 +316,32 @@
         <div class="feat-item">QR Generation <b>Included</b></div>
         <div class="feat-item">PostgreSQL Link <b>Included</b></div>
         <div class="feat-item">Camera Input <span class="warn">REQUIRED</span></div>
+        
+        <div class="hw-bar">
+            <span class="hw-label">PC Sensors</span>
+            <span class="hw-status">COMPATIBLE</span>
+        </div>
+
         <a href="#" id="win-btn" class="btn">Deploy Installer</a>
         <span class="secure-tag">● SSL / TLS SECURE DEPLOYMENT</span>
         <div id="api-info">Synchronizing...</div>
     </div>
 
-    <div class="premium-card">
-        <div><span class="final-tag">FINAL BUILD</span></div>
+    <div class="premium-card mobile-card">
+        <div><span class="final-tag">STABLE / FINAL BUILD</span></div>
         <h2>Mobile</h2>
         <div class="feat-item">Camera Scanner <b>Included</b></div>
         <div class="feat-item">History Logs <b>Included</b></div>
         <div class="feat-item">Live Sync <b>Included</b></div>
+
+        <div class="hw-bar">
+            <span class="hw-label">Mobile Imaging</span>
+            <span class="hw-status" style="color: #666;">LEGACY OK</span>
+        </div>
+
         <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn btn-alt">Download APK</a>
         <span class="secure-tag">● ENCRYPTED DATA RELAY</span>
-        <div class="v-status">Current Version: 1.0.0 (Latest)</div>
+        <div class="v-status">Build: 1.0.0 (Definitive)</div>
     </div>
 
     <div class="premium-card full-width" style="text-align: center; padding: 40px;">
@@ -301,28 +350,6 @@
             CORE DATABASE SYSTEM: OPERATIONAL
         </div>
         <p style="color: #444; font-size: 0.65rem; margin-top: 10px; letter-spacing: 1px;">POSTGRESQL CLOUD INFRASTRUCTURE ACTIVE</p>
-    </div>
-
-    <div class="premium-card full-width" style="text-align: center;">
-        <h3>SYSTEM REQUIREMENTS</h3>
-        <div class="req-grid">
-            <div class="req-box">
-                <h4>Desktop Sensors</h4>
-                <p>PC builds require an external <b>USB Webcam</b>. Laptops must have an <b>Integrated Camera</b> active for real time QR recognition.</p>
-            </div>
-            <div class="req-box">
-                <h4>Desktop Infrastructure</h4>
-                <p>Windows 10 / 11 (x64) Environment. High speed uplink for PostgreSQL database synchronization.</p>
-            </div>
-            <div class="req-box">
-                <h4>Mobile Imaging</h4>
-                <p>Requires <b>Dual Lens</b> support. Both Front and Rear cameras must be <b>5MP or higher</b> for stable optical data capture.</p>
-            </div>
-            <div class="req-box">
-                <h4>Mobile Environment</h4>
-                <p>Optimized for <b>Android 8</b> and higher. Requires 2GB RAM minimum and 50MB available internal storage.</p>
-            </div>
-        </div>
     </div>
 
     <div class="premium-card full-width">
@@ -418,8 +445,8 @@
             const file = d.assets.find(a => a.name.toLowerCase().includes('installer.exe'));
             if(file) win.href = file.browser_download_url;
 
-            bad.innerHTML = `<span class="update-tag">NEW VERSION: ${d.tag_name}</span>`;
-            api.innerHTML = `LATEST PC BUILD ${d.tag_name} // RELEASED ${new Date(d.published_at).toLocaleDateString()}`;
+            bad.innerHTML = `<span class="update-tag">NEW PC BUILD: ${d.tag_name}</span>`;
+            api.innerHTML = `BUILD ${d.tag_name} // RELEASED ${new Date(d.published_at).toLocaleDateString()}`;
         } catch(e) {}
     }
     sync();
