@@ -3,66 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attendance QRSYS | Official Download</title>
+    <title>Attendance QRSYS | Pro Dashboard</title>
     <style>
-        :root { --maroon: #800000; --dark-maroon: #4d0000; --gold: #ffd700; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #fdfdfd; color: #333; margin: 0; display: flex; flex-direction: column; align-items: center; }
-        header { background: var(--maroon); color: white; width: 100%; padding: 50px 0; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-        .container { max-width: 900px; padding: 40px; text-align: center; }
-        h2 { color: var(--maroon); border-bottom: 2px solid var(--maroon); padding-bottom: 8px; margin-top: 40px; display: inline-block; }
-        .choices { display: flex; gap: 25px; justify-content: center; margin-top: 30px; flex-wrap: wrap; }
-        .card { background: white; border: 1px solid #ddd; border-radius: 15px; padding: 30px; width: 320px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); transition: 0.3s; position: relative; }
-        .card:hover { transform: translateY(-8px); box-shadow: 0 12px 25px rgba(0,0,0,0.15); }
-        .btn { display: block; background: var(--maroon); color: white; padding: 15px; text-decoration: none; border-radius: 8px; font-weight: bold; margin-top: 20px; font-size: 1.1rem; }
-        .btn:hover { background: var(--dark-maroon); }
-        .hash-box { background: #f1f1f1; padding: 10px; font-size: 0.7rem; border-radius: 5px; margin-top: 15px; word-break: break-all; color: #555; border: 1px dashed #ccc; text-align: left; }
-        .tag { background: var(--gold); color: black; font-size: 0.75rem; font-weight: bold; padding: 4px 10px; border-radius: 20px; position: absolute; top: -10px; right: 10px; }
-        .description { line-height: 1.8; font-size: 1.1rem; color: #555; }
-        footer { margin-top: 50px; padding: 20px; color: #999; font-size: 0.8rem; }
+        :root { 
+            --maroon: #800000; 
+            --light-maroon: #a52a2a;
+            --dark-bg: #121212;
+            --card-bg: #1e1e1e;
+            --text-main: #e0e0e0;
+            --gold: #ffcc00;
+        }
+
+        body { 
+            font-family: 'Inter', 'Segoe UI', sans-serif; 
+            background: var(--dark-bg); 
+            color: var(--text-main); 
+            margin: 0; 
+            line-height: 1.6;
+        }
+
+        header { 
+            background: linear-gradient(135deg, var(--maroon), #4d0000); 
+            padding: 80px 20px; 
+            text-align: center; 
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        h1 { font-size: 3rem; margin: 0; letter-spacing: -1px; color: white; }
+        .subtitle { font-size: 1.2rem; color: rgba(255,255,255,0.8); margin-top: 10px; }
+
+        .container { max-width: 1100px; margin: -50px auto 50px; padding: 20px; }
+
+        .choices { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            gap: 30px; 
+            margin-bottom: 60px;
+        }
+
+        .card { 
+            background: var(--card-bg); 
+            border: 1px solid #333; 
+            border-radius: 20px; 
+            padding: 40px; 
+            text-align: center; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover { 
+            transform: translateY(-15px); 
+            border-color: var(--maroon);
+            box-shadow: 0 20px 40px rgba(128, 0, 0, 0.3);
+        }
+
+        .card.pc { border-top: 5px solid var(--gold); }
+        .card.mobile { border-top: 5px solid #666; }
+
+        .btn { 
+            display: inline-block; 
+            background: var(--maroon); 
+            color: white; 
+            padding: 15px 35px; 
+            text-decoration: none; 
+            border-radius: 50px; 
+            font-weight: 700; 
+            margin-top: 25px; 
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover { background: var(--light-maroon); transform: scale(1.05); }
+
+        .tag { 
+            position: absolute; 
+            top: 20px; 
+            right: -30px; 
+            background: var(--gold); 
+            color: black; 
+            padding: 5px 40px; 
+            transform: rotate(45deg); 
+            font-size: 0.7rem; 
+            font-weight: bold; 
+        }
+
+        /* Comparison Table */
+        .info-section { 
+            background: var(--card-bg); 
+            border-radius: 20px; 
+            padding: 40px; 
+            margin-top: 40px;
+            border: 1px solid #333;
+        }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #333; }
+        th { color: var(--maroon); text-transform: uppercase; font-size: 0.8rem; }
+        .check { color: #2ecc71; font-weight: bold; }
+        .cross { color: #e74c3c; font-weight: bold; }
+
+        .hash-box { 
+            font-family: monospace; 
+            font-size: 0.7rem; 
+            background: #000; 
+            padding: 10px; 
+            border-radius: 8px; 
+            margin-top: 20px; 
+            color: #888;
+            word-break: break-all;
+        }
+
+        footer { text-align: center; padding: 40px; color: #555; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>Attendance QRSYS</h1>
-    <p>Secure & Efficient QR-Based Attendance Management</p>
+    <p class="subtitle">Next-Gen Dynamic QR Management System</p>
 </header>
 
 <div class="container">
-    <h2>About the System</h2>
-    <p class="description">
-        Attendance QRSYS is a professional solution for tracking attendance using dynamic QR codes. 
-        It automates data logging for hardware-bound environments, providing real-time accuracy and reducing manual errors.
-    </p>
-
-    <h2>Available Downloads</h2>
     <div class="choices">
-        <div class="card">
-            <span class="tag">FULL VERSION</span>
-            <h3>Windows PC</h3>
-            <p>Database management, admin controls, and reporting tools.</p>
-            <a href="REPLACE_WITH_YOUR_PC_INSTALLER_LINK" class="btn">Download Installer</a>
-            <div class="hash-box">
-                <strong>SHA-256 Checksum:</strong><br>
-                4a585e52e0a49679da04a96e5d9e54075e57b7e462bf09341ab54e9f1ac0ae01
-            </div>
+        <div class="card pc">
+            <div class="tag">RECOMMENDED</div>
+            <h3 style="color:var(--gold)">Windows Desktop</h3>
+            <p>The core engine. Manage databases, export reports, and control system hardware.</p>
+            <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS_Installer.exe" class="btn">Get Pro Installer</a>
+            <div class="hash-box">SHA256: 4a585e52e0a49679da04a96e5d9e54075e57b7e462bf09341ab54e9f1ac0ae01</div>
         </div>
 
-        <div class="card">
-            <span class="tag" style="background:#ddd;">LIMITED</span>
+        <div class="card mobile">
             <h3>Android Mobile</h3>
-            <p>Scanning-only version for mobile devices. Basic status viewing.</p>
-            <a href="REPLACE_WITH_YOUR_APK_LINK" class="btn">Download APK</a>
-            <div class="hash-box">
-                <strong>SHA-256 Checksum:</strong><br>
-                aeae2879d9cbda46e642de0b0a489fda7eedb91eb2293e65e077a3e87d4a2a06
-            </div>
+            <p>Portable scanning node. Designed for quick check-ins and status viewing.</p>
+            <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn" style="background:#444">Download APK</a>
+            <div class="hash-box">SHA256: aeae2879d9cbda46e642de0b0a489fda7eedb91eb2293e65e077a3e87d4a2a06</div>
+            <p style="color:#e74c3c; font-size: 0.8rem; margin-top: 10px;">⚠️ Limited Features Version</p>
         </div>
+    </div>
+
+    <div class="info-section">
+        <h2 style="text-align: center; color: white;">Version Comparison</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>Windows (Pro)</th>
+                    <th>Android (Lite)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>QR Code Generation</td>
+                    <td class="check">✔ Full Control</td>
+                    <td class="cross">✘ Not Available</td>
+                </tr>
+                <tr>
+                    <td>Database Management</td>
+                    <td class="check">✔ Local/Cloud</td>
+                    <td class="cross">✘ View Only</td>
+                </tr>
+                <tr>
+                    <td>Real-time Scanning</td>
+                    <td class="check">✔ Yes</td>
+                    <td class="check">✔ Yes</td>
+                </tr>
+                <tr>
+                    <td>Excel/PDF Exporting</td>
+                    <td class="check">✔ Yes</td>
+                    <td class="cross">✘ Not Available</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 
 <footer>
-    &copy; 2026 Attendance QRSYS Project
+    &copy; 2026 Attendance QRSYS | AstroNutws Engineering
 </footer>
 
 </body>
