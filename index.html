@@ -3,57 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ATTENDANCE QRSYS | ATTENDANCE LOG VIA QR CODE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syncopate:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <title>ATTENDANCE QRSYS | ULTIMATE ARCHITECTURE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Outfit:wght@100;300;400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #ff0000;
-            --primary-variant: #800000;
-            --accent: #ffd700;
-            --bg: #000000;
-            --card: rgba(10, 10, 10, 0.8);
-            --glass: rgba(255, 255, 255, 0.02);
-            --border: rgba(255, 255, 255, 0.1);
-            --font-head: 'Syncopate', sans-serif;
-            --font-main: 'Space Grotesk', sans-serif;
+            --accent: #ff0033;
+            --accent-glow: rgba(255, 0, 51, 0.5);
+            --gold: #ffcc00;
+            --bg: #030303;
+            --panel: rgba(15, 15, 15, 0.7);
+            --border: rgba(255, 255, 255, 0.05);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            cursor: crosshair;
+            cursor: none;
         }
 
         body {
-            font-family: var(--font-main);
+            font-family: 'Outfit', sans-serif;
             background-color: var(--bg);
             color: white;
             overflow-x: hidden;
-            background-image: 
-                linear-gradient(rgba(255, 0, 0, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 0, 0, 0.05) 1px, transparent 1px);
-            background-size: 50px 50px;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .glow-overlay {
+        #custom-cursor {
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s;
+        }
+
+        .hero-visual {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 50%, rgba(128, 0, 0, 0.1) 0%, transparent 80%);
-            pointer-events: none;
-            z-index: 1;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(255, 0, 51, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(255, 204, 0, 0.03) 0%, transparent 40%);
+            z-index: -1;
         }
 
-        .scanline {
-            width: 100%;
-            height: 100px;
-            z-index: 2;
-            background: linear-gradient(0deg, rgba(255, 0, 0, 0) 0%, rgba(255, 0, 0, 0.1) 50%, rgba(255, 0, 0, 0) 100%);
-            opacity: 0.1;
+        .cyber-grid {
             position: fixed;
-            bottom: 100%;
-            animation: scan 4s linear infinite;
-            pointer-events: none;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 100px 100px;
+            z-index: -1;
+            perspective: 1000px;
+            transform: rotateX(60deg) scale(2);
+            transform-origin: top;
+            opacity: 0.2;
         }
 
         header {
@@ -62,311 +69,257 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            text-align: center;
             padding: 0 20px;
             position: relative;
         }
 
-        .system-status {
+        .header-meta {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            color: var(--primary);
-            text-transform: uppercase;
-            letter-spacing: 4px;
+            font-size: 0.8rem;
+            color: var(--accent);
+            letter-spacing: 5px;
             margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            background: var(--primary);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--primary);
-            animation: pulse 1.5s infinite;
+            text-transform: uppercase;
         }
 
         h1 {
-            font-family: var(--font-head);
-            font-size: clamp(2rem, 10vw, 6rem);
-            line-height: 0.85;
-            letter-spacing: -2px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(3rem, 15vw, 8rem);
+            font-weight: 900;
+            letter-spacing: -5px;
+            line-height: 0.8;
             text-transform: uppercase;
-            margin-bottom: 30px;
-            background: linear-gradient(180deg, #fff 0%, #444 100%);
+            margin-bottom: 40px;
+            text-align: center;
+            background: linear-gradient(180deg, #fff 40%, #555 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .hero-description {
-            max-width: 700px;
-            font-size: 1.2rem;
-            font-weight: 300;
-            color: #888;
-            letter-spacing: 1px;
+        .terminal-box {
+            background: rgba(0,0,0,0.8);
+            border: 1px solid var(--border);
+            padding: 15px 30px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #444;
+            border-radius: 5px;
+            margin-bottom: 50px;
         }
+
+        .terminal-box span { color: var(--accent); }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 0 20px 200px;
-            position: relative;
-            z-index: 5;
+            padding: 100px 40px;
         }
 
-        .grid {
+        .card-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 40px;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
         }
 
-        .card {
-            background: var(--card);
+        .premium-card {
+            background: var(--panel);
+            backdrop-filter: blur(40px);
             border: 1px solid var(--border);
-            padding: 60px;
+            padding: 80px 60px;
             border-radius: 0;
             position: relative;
-            transition: 0.4s cubic-bezier(0.2, 0, 0.2, 1);
-            overflow: hidden;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .card::before {
-            content: "";
+        .premium-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            border-color: var(--accent);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+        }
+
+        .card-num {
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 2px;
-            background: var(--primary);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: 0.4s;
+            top: 40px; right: 40px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            color: var(--border);
         }
 
-        .card:hover {
-            border-color: var(--primary);
-            background: rgba(20, 0, 0, 0.4);
-            transform: translateY(-5px);
-        }
-
-        .card:hover::before { transform: scaleX(1); }
-
-        .card-tag {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            color: var(--accent);
+        .premium-card h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
             margin-bottom: 20px;
-            display: block;
+            letter-spacing: -2px;
         }
 
-        .card h2 {
-            font-family: var(--font-head);
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            letter-spacing: -1px;
-        }
-
-        .card p {
-            color: #aaa;
-            margin-bottom: 40px;
+        .premium-card p {
+            font-size: 1.2rem;
+            color: #999;
+            margin-bottom: 50px;
+            line-height: 1.6;
             font-weight: 300;
-            line-height: 1.8;
         }
 
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+        .btn-glitch {
+            display: block;
             width: 100%;
-            padding: 25px;
-            text-decoration: none;
-            text-transform: uppercase;
-            font-family: var(--font-head);
-            font-size: 0.9rem;
-            letter-spacing: 2px;
-            transition: 0.3s;
-            position: relative;
-        }
-
-        .btn-main {
-            background: var(--primary);
-            color: white;
-            font-weight: 700;
-        }
-
-        .btn-main:hover {
+            padding: 30px;
             background: white;
             color: black;
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.4);
+            text-align: center;
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 1rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            position: relative;
+            transition: 0.3s;
         }
 
-        .btn-alt {
+        .btn-glitch:hover {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 0 40px var(--accent-glow);
+        }
+
+        .btn-secondary {
+            background: transparent;
             border: 1px solid var(--border);
             color: white;
         }
 
-        .btn-alt:hover {
-            border-color: white;
-            background: rgba(255,255,255,0.05);
-        }
-
-        .hash-box {
-            margin-top: 30px;
-            background: #050505;
+        .hash-display {
+            margin-top: 40px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            background: #000;
             padding: 20px;
-            border-left: 2px solid var(--primary);
+            border: 1px solid rgba(255,255,255,0.02);
+            color: #555;
+            display: flex;
+            justify-content: space-between;
         }
 
-        .hash-title {
-            display: block;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.6rem;
-            color: #444;
-            margin-bottom: 5px;
+        .hash-display b { color: var(--gold); }
+
+        .matrix-v2 {
+            margin-top: 200px;
+            border-top: 1px solid var(--border);
+            padding-top: 100px;
         }
 
-        .hash-code {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            color: #666;
-            word-break: break-all;
-        }
-
-        .matrix {
-            margin-top: 150px;
-        }
-
-        .matrix h3 {
-            font-family: var(--font-head);
+        .matrix-v2 h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
             text-align: center;
-            font-size: 2rem;
             margin-bottom: 80px;
         }
 
-        .matrix-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .matrix-table th {
-            text-align: left;
-            padding: 30px;
-            font-family: var(--font-head);
-            font-size: 0.7rem;
-            color: var(--primary);
+        .spec-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 40px 0;
             border-bottom: 1px solid var(--border);
         }
 
-        .matrix-table td {
-            padding: 30px;
-            border-bottom: 1px solid var(--border);
-            color: #888;
-            font-size: 1.1rem;
-        }
-
-        .label-yes { color: #fff; font-weight: 700; }
-        .label-no { color: #333; }
+        .spec-label { font-size: 1.5rem; font-weight: 700; }
+        .spec-value { font-family: 'JetBrains Mono', monospace; color: var(--accent); }
 
         footer {
-            padding: 100px;
+            padding: 150px 40px;
             text-align: center;
-            border-top: 1px solid var(--border);
-            background: #050505;
+            opacity: 0.5;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 5px;
         }
 
-        .footer-logo {
-            font-family: var(--font-head);
-            font-size: 2rem;
-            margin-bottom: 20px;
-        }
-
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
-        @keyframes scan { from { bottom: 100%; } to { bottom: -20%; } }
-
-        @media (max-width: 800px) {
-            .grid { grid-template-columns: 1fr; }
-            h1 { font-size: 3rem; }
+        @media (max-width: 1000px) {
+            .card-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 4rem; }
         }
     </style>
 </head>
 <body>
 
-<div class="glow-overlay"></div>
-<div class="scanline"></div>
+<div id="custom-cursor"></div>
+<div class="hero-visual"></div>
+<div class="cyber-grid"></div>
 
 <header>
-    <div class="system-status">
-        <div class="status-dot"></div>
-        <span>Core System v1.0.0 Online // Local Protocols Only</span>
+    <div class="header-meta">System Deployment // 2026 Proto</div>
+    <h1>QRSYS<br>ELITE</h1>
+    <div class="terminal-box">
+        > STATUS: <span>STABLE</span> | UPDATES: <span>MANUAL_ONLY</span> | CLOUD: <span>DECOUPLED</span>
     </div>
-    <h1>ATTENDANCE<br>QRSYS</h1>
-    <p class="hero-description">Professional-grade logging infrastructure designed for Windows and Android. No cloud bloat. No auto-updates. Pure local performance.</p>
 </header>
 
 <div class="container">
-    <div class="grid">
-        <div class="card">
-            <span class="card-tag">NODE 01 // STATIONARY</span>
-            <h2>WINDOWS TERMINAL</h2>
-            <p>The core of the QRSYS architecture. Provides high-speed QR generation, full database management, and administrative history logs.</p>
-            <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS_Installer.exe" class="btn btn-main">Deploy Installer</a>
-            <div class="hash-box">
-                <span class="hash-title">VERIFICATION_SHA256</span>
-                <span class="hash-code">4a585e52e0a49679da04a96e5d9e54075e57b7e462bf09341ab54e9f1ac0ae01</span>
+    <div class="card-grid">
+        <div class="premium-card">
+            <div class="card-num">01</div>
+            <h2>CORE<br>TERMINAL</h2>
+            <p>Stationary power. High-velocity QR generation and deep-level local history tracking. Built for high-traffic environments.</p>
+            <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS_Installer.exe" class="btn-glitch">Initialize Installation</a>
+            <div class="hash-display">
+                <span>SHA-256</span>
+                <b>4a585e52...ae01</b>
             </div>
         </div>
 
-        <div class="card">
-            <span class="card-tag">NODE 02 // PORTABLE</span>
-            <h2>ANDROID UTILITY</h2>
-            <p>Field-ready companion application for portable event scanning and instant record validation via local storage.</p>
-            <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn btn-alt">Download APK</a>
-            <div class="hash-box">
-                <span class="hash-title">VERIFICATION_SHA256</span>
-                <span class="hash-code">aeae2879d9cbda46e642de0b0a489fda7eedb91eb2293e65e077a3e87d4a2a06</span>
+        <div class="premium-card">
+            <div class="card-num">02</div>
+            <h2>MOBILE<br>NODE</h2>
+            <p>The field utility. High-accuracy scanning engine with offline-first database synchronization. Reliable in zero-signal zones.</p>
+            <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn-glitch btn-secondary">Download APK</a>
+            <div class="hash-display">
+                <span>SHA-256</span>
+                <b>aeae2879...a066</b>
             </div>
         </div>
     </div>
 
-    <div class="matrix">
-        <h3>SYSTEM CAPABILITIES</h3>
-        <table class="matrix-table">
-            <thead>
-                <tr>
-                    <th>FUNCTION</th>
-                    <th>WINDOWS HUB</th>
-                    <th>MOBILE LITE</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>QR DECODING</td>
-                    <td class="label-yes">YES</td>
-                    <td class="label-yes">YES</td>
-                </tr>
-                <tr>
-                    <td>QR CREATION</td>
-                    <td class="label-yes">YES</td>
-                    <td class="label-no">NO</td>
-                </tr>
-                <tr>
-                    <td>HISTORY VIEWING</td>
-                    <td class="label-yes">YES</td>
-                    <td class="label-yes">YES</td>
-                </tr>
-                <tr>
-                    <td>DB EXPORT</td>
-                    <td class="label-yes">YES</td>
-                    <td class="label-no">NO</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="matrix-v2">
+        <h3>ARCHITECTURAL SPECS</h3>
+        
+        <div class="spec-row">
+            <span class="spec-label">QR ENCRYPTION</span>
+            <span class="spec-value">AES-256 LOCAL</span>
+        </div>
+        <div class="spec-row">
+            <span class="spec-label">DATA PRIVACY</span>
+            <span class="spec-value">100% AIR-GAPPED OPTION</span>
+        </div>
+        <div class="spec-row">
+            <span class="spec-label">UPDATE PROTOCOL</span>
+            <span class="spec-value">USER-TRIGGERED NOTIFICATIONS</span>
+        </div>
+        <div class="spec-row">
+            <span class="spec-label">CLOUD DEPENDENCY</span>
+            <span class="spec-value">ZERO // NONE</span>
+        </div>
     </div>
 </div>
 
 <footer>
-    <div class="footer-logo">QRSYS</div>
-    <p style="color:#333; letter-spacing: 2px;">UI BY GABRIEL&bull; 2026</p>
+    SYSTEM ENGINEERED BY GABRIEL // NO DATA LEAVES YOUR HARDWARE.
 </footer>
+
+<script>
+    const cursor = document.getElementById('custom-cursor');
+    document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+    });
+
+    // Subtle parallax
+    document.addEventListener('mousemove', (e) => {
+        const x = (window.innerWidth / 2 - e.pageX) / 50;
+        const y = (window.innerHeight / 2 - e.pageY) / 50;
+        document.querySelector('.cyber-grid').style.transform = `rotateX(60deg) scale(2) translateX(${x}px) translateY(${y}px)`;
+    });
+</script>
 
 </body>
 </html>
