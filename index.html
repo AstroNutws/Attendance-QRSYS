@@ -141,13 +141,13 @@
 
         .req-box {
             background: rgba(255,255,255,0.02);
-            padding: 20px;
+            padding: 25px;
             border-radius: 20px;
             border: 1px solid var(--border);
         }
 
-        .req-box h4 { font-size: 0.8rem; color: var(--primary); margin-bottom: 10px; text-transform: uppercase; }
-        .req-box p { font-size: 0.9rem; color: #fff; line-height: 1.4; }
+        .req-box h4 { font-size: 0.8rem; color: var(--primary); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+        .req-box p { font-size: 0.9rem; color: #fff; line-height: 1.5; }
 
         .btn {
             display: block;
@@ -235,12 +235,20 @@
         <h3>SYSTEM REQUIREMENTS</h3>
         <div class="req-grid">
             <div class="req-box">
-                <h4>Optical Sensors</h4>
-                <p>PC builds require an external <b>USB Webcam</b>. Laptops must have an <b>Integrated Camera</b> active for real-time QR recognition.</p>
+                <h4>Desktop Sensors</h4>
+                <p>PC builds require an external <b>USB Webcam</b>. Laptops must have an <b>Integrated Camera</b> active for real time QR recognition.</p>
             </div>
             <div class="req-box">
-                <h4>Infrastructure</h4>
-                <p>Windows 10/11 (x64) Environment. High-speed uplink for PostgreSQL database synchronization.</p>
+                <h4>Desktop Infrastructure</h4>
+                <p>Windows 10 / 11 (x64) Environment. High speed uplink for PostgreSQL database synchronization.</p>
+            </div>
+            <div class="req-box">
+                <h4>Mobile Imaging</h4>
+                <p>Requires <b>Rear Facing Camera</b> with auto focus. Minimum 5MP recommended for high speed data acquisition.</p>
+            </div>
+            <div class="req-box">
+                <h4>Mobile Environment</h4>
+                <p>Optimized for <b>Android 8</b> and higher. Requires 2GB RAM minimum and 50MB available internal storage.</p>
             </div>
         </div>
     </div>
@@ -248,7 +256,7 @@
     <div class="premium-card full-width">
         <h3>RELEASE LOG // <span id="ver-display">v1.1.0</span></h3>
         <ul class="log-list">
-            <li>Infrastructure: Integrated auto-download for .NET 10.0 Runtime.</li>
+            <li>Infrastructure: Integrated auto download for .NET 10.0 Runtime.</li>
             <li>Security: Fixed 400 Bad Request errors via aka.ms redirect.</li>
             <li>UX: Optimized silent background installation for Core dependencies.</li>
             <li>UI: Fixed shortcut and uninstaller icon resolution issues.</li>
@@ -347,4 +355,3 @@
 </script>
 </body>
 </html>
-
