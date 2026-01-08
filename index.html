@@ -88,6 +88,18 @@
             animation: pulse-glow 2s infinite;
         }
 
+        .final-tag {
+            background: #333;
+            color: #fff;
+            font-size: 0.65rem;
+            font-weight: 900;
+            padding: 5px 15px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+        }
+
         .secure-tag {
             color: var(--online);
             font-size: 0.6rem;
@@ -221,6 +233,14 @@
             margin-top: 20px;
         }
 
+        .v-status {
+            font-size: 0.6rem;
+            color: #555;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
         #api-info {
             margin-top: 25px;
             font-size: 0.7rem;
@@ -265,13 +285,14 @@
     </div>
 
     <div class="premium-card">
+        <div><span class="final-tag">FINAL BUILD</span></div>
         <h2>Mobile</h2>
         <div class="feat-item">Camera Scanner <b>Included</b></div>
         <div class="feat-item">History Logs <b>Included</b></div>
         <div class="feat-item">Live Sync <b>Included</b></div>
         <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn btn-alt">Download APK</a>
         <span class="secure-tag">● ENCRYPTED DATA RELAY</span>
-        <div id="api-info">Stable Build: 1.0.0</div>
+        <div class="v-status">Current Version: 1.0.0 (Latest)</div>
     </div>
 
     <div class="premium-card full-width" style="text-align: center; padding: 40px;">
@@ -397,8 +418,8 @@
             const file = d.assets.find(a => a.name.toLowerCase().includes('installer.exe'));
             if(file) win.href = file.browser_download_url;
 
-            bad.innerHTML = `<span class="update-tag">VERSION ${d.tag_name} READY</span>`;
-            api.innerHTML = `BUILD ${d.tag_name} // RELEASED ${new Date(d.published_at).toLocaleDateString()}`;
+            bad.innerHTML = `<span class="update-tag">NEW VERSION: ${d.tag_name}</span>`;
+            api.innerHTML = `LATEST PC BUILD ${d.tag_name} // RELEASED ${new Date(d.published_at).toLocaleDateString()}`;
         } catch(e) {}
     }
     sync();
