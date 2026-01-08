@@ -12,7 +12,7 @@
             --primary: #ff0033;
             --primary-glow: rgba(255, 0, 51, 0.3);
             --bg: #050505;
-            --glass: rgba(15, 15, 15, 0.7);
+            --glass: rgba(15, 15, 15, 0.8);
             --border: rgba(255, 255, 255, 0.08);
             --online: #00ff66;
             --font-main: 'Plus Jakarta Sans', sans-serif;
@@ -27,17 +27,6 @@
             color: white;
             overflow-x: hidden;
             line-height: 1.6;
-        }
-
-        body::before {
-            content: " ";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-            background-size: 100% 3px, 3px 100%;
-            z-index: 100;
-            pointer-events: none;
-            opacity: 0.3;
         }
 
         #bg-canvas {
@@ -68,35 +57,27 @@
         }
 
         header {
-            padding: 180px 20px 100px;
+            padding: 160px 20px 60px;
             text-align: center;
-            position: relative;
-        }
-
-        .glitch-wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         h1 {
             font-family: 'Lexend', sans-serif;
-            font-size: clamp(4rem, 15vw, 12rem);
+            font-size: clamp(4rem, 15vw, 10rem);
             font-weight: 900;
-            letter-spacing: -8px;
+            letter-spacing: -6px;
             line-height: 0.85;
-            background: linear-gradient(180deg, #fff 30%, #333 100%);
+            background: linear-gradient(180deg, #fff 40%, #444 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            position: relative;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto 100px;
-            padding: 0 40px;
+            padding: 0 20px;
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: 1fr 1fr;
             gap: 25px;
         }
 
@@ -104,64 +85,53 @@
             background: var(--glass);
             backdrop-filter: blur(40px);
             border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 40px;
-            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            border-radius: 30px;
+            padding: 50px;
+            transition: 0.4s ease;
             position: relative;
-            display: flex;
-            flex-direction: column;
         }
 
         .premium-card:hover {
-            transform: translateY(-10px);
             border-color: var(--primary);
-            box-shadow: 0 20px 40px rgba(255, 0, 51, 0.15);
+            box-shadow: 0 20px 50px rgba(255, 0, 51, 0.1);
         }
 
-        .card-icon {
-            width: 50px;
-            height: 50px;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 10px var(--primary));
-        }
+        .span-full { grid-column: span 2; }
 
-        .span-2 { grid-column: span 2; }
-        .span-3 { grid-column: span 3; }
-
-        h2 { font-family: 'Lexend'; font-size: 2.5rem; margin-bottom: 20px; letter-spacing: -1px; }
-        h3 { font-family: 'Lexend'; font-size: 1.2rem; text-transform: uppercase; color: var(--primary); margin-bottom: 20px; }
+        h2 { font-family: 'Lexend'; font-size: 2.8rem; margin-bottom: 20px; letter-spacing: -1px; }
+        h3 { font-family: 'Lexend'; font-size: 1.4rem; color: var(--primary); margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; }
 
         .feat-item {
             display: flex;
             justify-content: space-between;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.03);
-            font-size: 0.9rem;
-            color: #aaa;
+            padding: 18px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.95rem;
+            color: #888;
         }
 
         .feat-item b { color: #fff; }
 
         .btn {
-            margin-top: auto;
             display: block;
-            padding: 20px;
+            width: 100%;
+            padding: 24px;
             background: #fff;
             color: #000;
             text-decoration: none;
             text-align: center;
             font-weight: 800;
-            border-radius: 12px;
+            border-radius: 15px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             transition: 0.3s;
-            font-size: 0.8rem;
+            margin-top: 30px;
         }
 
         .btn:hover {
             background: var(--primary);
-            color: white;
-            box-shadow: 0 10px 20px var(--primary-glow);
+            color: #fff;
+            box-shadow: 0 15px 30px var(--primary-glow);
         }
 
         .btn-outline {
@@ -173,126 +143,122 @@
         .status-pill {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 6px 16px;
-            background: rgba(0, 255, 102, 0.1);
+            gap: 10px;
+            padding: 8px 20px;
+            background: rgba(0, 255, 102, 0.05);
             color: var(--online);
-            border-radius: 100px;
-            font-size: 0.7rem;
+            border-radius: 10px;
+            font-size: 0.75rem;
             font-weight: 800;
-            letter-spacing: 1px;
             border: 1px solid rgba(0, 255, 102, 0.2);
         }
 
-        .uptime-box {
+        .uptime-display {
             font-family: var(--font-mono);
-            background: rgba(0,0,0,0.4);
-            padding: 20px;
-            border-radius: 15px;
-            font-size: 1.2rem;
-            color: var(--primary);
-            border-left: 4px solid var(--primary);
-        }
-
-        .log-terminal {
-            background: rgba(0,0,0,0.3);
+            background: rgba(255,255,255,0.02);
             padding: 30px;
-            border-radius: 15px;
-            font-family: var(--font-mono);
-            font-size: 0.85rem;
-            max-height: 400px;
-            overflow-y: auto;
+            border-radius: 20px;
+            font-size: 2rem;
+            color: var(--primary);
+            text-align: center;
+            border: 1px solid var(--border);
         }
 
-        .log-entry {
-            margin-bottom: 12px;
+        .log-list { list-style: none; }
+        .log-item {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
             display: flex;
-            gap: 15px;
+            gap: 20px;
+            font-size: 0.95rem;
+            color: #ccc;
         }
 
-        .log-entry .time { color: #555; }
-        .log-entry .tag { color: var(--primary); font-weight: bold; }
-
-        @media (max-width: 1100px) {
-            .container { grid-template-columns: 1fr 1fr; }
-            .span-2 { grid-column: span 2; }
+        .log-tag {
+            color: var(--primary);
+            font-weight: 900;
+            font-size: 0.7rem;
+            min-width: 120px;
+            text-transform: uppercase;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 850px) {
             .container { grid-template-columns: 1fr; }
-            .span-2, .span-3 { grid-column: span 1; }
-            h1 { font-size: 5rem; letter-spacing: -3px; }
+            .span-full { grid-column: span 1; }
+            h1 { font-size: 5rem; }
         }
     </style>
 </head>
 <body>
 
 <nav>
-    <div class="nav-logo">QRSYS // CORE</div>
-    <div class="status-pill">
-        <span style="width: 8px; height: 8px; background: var(--online); border-radius: 50%;"></span>
-        MAIN_SYSTEM: ONLINE
-    </div>
+    <div class="nav-logo">QRSYS CORE</div>
+    <div class="status-pill">SYSTEM ONLINE</div>
 </nav>
 
 <canvas id="bg-canvas"></canvas>
 
 <header>
     <h1>QRSYS<br>CORE</h1>
-    <p style="color: #666; font-family: var(--font-mono); margin-top: 20px; letter-spacing: 4px;">INFRASTRUCTURE V1.0.0</p>
 </header>
 
 <div class="container">
     <div class="premium-card">
-        <img src="https://img.icons8.com/neon/96/monitor.png" class="card-icon" alt="Desktop">
         <div id="badge-loader"></div>
         <h2>Desktop</h2>
-        <div class="feat-item">System Arch <b>x64 / .NET 10</b></div>
-        <div class="feat-item">DB Engine <b>PostgreSQL</b></div>
-        <div class="feat-item">Webcam <b>Required</b></div>
-        <a href="#" id="win-btn" class="btn">Initialize Download</a>
+        <div class="feat-item">QR Generation <b>Included</b></div>
+        <div class="feat-item">Database Link <b>PostgreSQL</b></div>
+        <div class="feat-item">Device Support <b>PC / Laptop</b></div>
+        <a href="#" id="win-btn" class="btn">Download Installer</a>
+        <div id="api-info" style="margin-top: 15px; font-family: var(--font-mono); font-size: 0.6rem; color: #444; text-align: center;">Handshaking...</div>
     </div>
 
     <div class="premium-card">
-        <img src="https://img.icons8.com/neon/96/iphone.png" class="card-icon" alt="Mobile">
-        <span class="status-pill" style="color: #aaa; background: rgba(255,255,255,0.05); border-color: var(--border); width: fit-content; margin-bottom: 15px;">LEGACY STABLE</span>
+        <span style="color: #666; font-size: 0.7rem; font-weight: 800; letter-spacing: 2px;">FINAL BUILD 1.0.0</span>
         <h2>Mobile</h2>
-        <div class="feat-item">Android <b>9.0+ Verified</b></div>
-        <div class="feat-item">Sync <b>Real-time</b></div>
-        <div class="feat-item">Package <b>Signed APK</b></div>
-        <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn btn-outline">Fetch Bundle</a>
+        <div class="feat-item">Camera Scanner <b>Included</b></div>
+        <div class="feat-item">Live Sync <b>Active</b></div>
+        <div class="feat-item">History Logs <b>Included</b></div>
+        <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn btn-outline">Download APK</a>
     </div>
 
-    <div class="premium-card">
-        <h3>System Metrics</h3>
-        <div class="uptime-box" id="uptime-counter">00:00:00:00</div>
-        <p style="font-size: 0.6rem; color: #444; margin-top: 15px; text-transform: uppercase; letter-spacing: 2px;">Data Relay: Encrypted TLS 1.3</p>
-        <div style="margin-top: 20px;">
-            <div class="feat-item">Cloud Relay <b>Active</b></div>
-            <div class="feat-item">Packet Loss <b>0.00%</b></div>
-        </div>
+    <div class="premium-card span-full">
+        <h3>System Uptime</h3>
+        <div class="uptime-display" id="uptime-counter">00:00:00:00</div>
+        <p style="text-align: center; color: #444; font-size: 0.7rem; margin-top: 20px; letter-spacing: 3px;">CLOUD INFRASTRUCTURE STABLE</p>
     </div>
 
-    <div class="premium-card span-2">
-        <h3>Release Intelligence</h3>
-        <div class="log-terminal">
-            <div class="log-entry"><span class="time">[19:42:01]</span> <span class="tag">INFRA</span> Integrated .NET 10.0 Runtime dependency mapping.</div>
-            <div class="log-entry"><span class="time">[18:20:55]</span> <span class="tag">SECURE</span> Resolved TLS handshake exceptions in legacy handshake.</div>
-            <div class="log-entry"><span class="time">[14:11:02]</span> <span class="tag">UI/UX</span> High DPI asset scaling optimized for 4K displays.</div>
-            <div class="log-entry"><span class="time">[09:00:00]</span> <span class="tag">CORE</span> PostgreSQL Cloud Infrastructure validated.</div>
-        </div>
+    <div class="premium-card span-full">
+        <h3>Release Logs</h3>
+        <ul class="log-list">
+            <li class="log-item">
+                <span class="log-tag">Desktop Build</span>
+                <span>Integrated auto download for .NET 10.0 Runtime dependencies.</span>
+            </li>
+            <li class="log-item">
+                <span class="log-tag">Security Update</span>
+                <span>Fixed 400 Bad Request errors via aka.ms redirect protocols.</span>
+            </li>
+            <li class="log-item">
+                <span class="log-tag">User Interface</span>
+                <span>Corrected shortcut and uninstaller icon resolution for high DPI displays.</span>
+            </li>
+            <li class="log-item">
+                <span class="log-tag">Mobile Final</span>
+                <span>Version 1.0.0 is the definitive release with PostgreSQL sync.</span>
+            </li>
+        </ul>
     </div>
 
-    <div class="premium-card">
-        <h3>Developer Uplink</h3>
-        <p style="color: #666; font-size: 0.9rem; margin-bottom: 25px;">Submit system reports or request technical access keys.</p>
-        <a href="mailto:joshuagabrieldeleon820@gmail.com" class="btn btn-outline" style="border: 1px dashed var(--primary); color: var(--primary);">Contact Admin</a>
-        <div id="api-info" style="margin-top: 20px; font-family: var(--font-mono); font-size: 0.6rem; color: #333;">Handshaking with GitHub...</div>
+    <div class="premium-card span-full" style="text-align: center;">
+        <h3>Technical Support</h3>
+        <p style="color: #666; margin-bottom: 20px;">Direct uplink to developer for bug reports and infrastructure help.</p>
+        <a href="mailto:joshuagabrieldeleon820@gmail.com" class="btn btn-outline" style="border-style: dashed; border-color: var(--primary); color: var(--primary);">Open Support Ticket</a>
     </div>
 </div>
 
-<footer style="text-align: center; padding: 100px; opacity: 0.3; font-size: 0.7rem; letter-spacing: 15px;">
-    QRSYS_CORE_SYSTEM_2026
+<footer style="text-align: center; padding: 100px; opacity: 0.2; font-size: 0.6rem; letter-spacing: 10px;">
+    QRSYS INFRASTRUCTURE 2026
 </footer>
 
 <script>
@@ -304,13 +270,12 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         particles = [];
-        for(let i=0; i<80; i++) {
+        for(let i=0; i<70; i++) {
             particles.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
-                vx: (Math.random() - 0.5) * 0.3,
-                vy: (Math.random() - 0.5) * 0.3,
-                size: Math.random() * 2
+                vx: (Math.random() - 0.5) * 0.4,
+                vy: (Math.random() - 0.5) * 0.4
             });
         }
     }
@@ -326,15 +291,14 @@
             
             ctx.fillStyle = 'rgba(255, 0, 51, 0.5)';
             ctx.beginPath();
-            ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+            ctx.arc(p.x, p.y, 1.5, 0, Math.PI*2);
             ctx.fill();
 
             for(let j=i+1; j<particles.length; j++) {
                 let p2 = particles[j];
                 let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
-                if(dist < 180) {
-                    ctx.strokeStyle = `rgba(255, 0, 51, ${0.15 - dist/1200})`;
-                    ctx.lineWidth = 0.5;
+                if(dist < 150) {
+                    ctx.strokeStyle = `rgba(255, 0, 51, ${0.1 - dist/1500})`;
                     ctx.beginPath();
                     ctx.moveTo(p.x, p.y);
                     ctx.lineTo(p2.x, p2.y);
@@ -355,11 +319,11 @@
             const mins = Math.floor((diff / (1000 * 60)) % 60);
             const secs = Math.floor((diff / 1000) % 60);
             document.getElementById('uptime-counter').innerText = 
-                `${days.toString().padStart(2, '0')}:${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                `${days.toString().padStart(2, '0')}D ${hours.toString().padStart(2, '0')}H ${mins.toString().padStart(2, '0')}M ${secs.toString().padStart(2, '0')}S`;
         }, 1000);
     }
 
-    async function syncRelease() {
+    async function sync() {
         try {
             const r = await fetch('https://api.github.com/repos/AstroNutws/Attendance-QRSYS/releases/latest');
             const d = await r.json();
@@ -370,15 +334,13 @@
             const file = d.assets.find(a => a.name.toLowerCase().includes('installer.exe'));
             if(file) win.href = file.browser_download_url;
 
-            bad.innerHTML = `<span style="background: var(--primary); color: white; padding: 4px 12px; border-radius: 4px; font-size: 0.6rem; font-weight: 800;">LATEST: ${d.tag_name}</span>`;
-            api.innerHTML = `BUILD_${d.tag_name} // SYNC_SUCCESSFUL`;
-        } catch(e) {
-            document.getElementById('api-info').innerText = "SYNC_ERROR: OFFLINE_MODE";
-        }
+            bad.innerHTML = `<span style="background: var(--primary); color: white; padding: 5px 15px; border-radius: 5px; font-size: 0.65rem; font-weight: 900;">NEW PC BUILD: ${d.tag_name}</span>`;
+            api.innerHTML = `BUILD ${d.tag_name} // RELEASED ${new Date(d.published_at).toLocaleDateString()}`;
+        } catch(e) {}
     }
 
     window.addEventListener('resize', init);
-    init(); draw(); updateUptime(); syncRelease();
+    init(); draw(); updateUptime(); sync();
 </script>
 </body>
 </html>
