@@ -5,422 +5,339 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QRSYS | Professional Infrastructure</title>
     <meta name="theme-color" content="#020202">
-
     <link rel="icon" type="image/png" href="https://img.icons8.com/neon/96/shield.png">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;600;800&family=Lexend:wght@900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;600;800&family=Lexend:wght@900&family=Space+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #ff0033;
-            --bg: #020202;
-            --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.1);
+            --primary-glow: rgba(255, 0, 51, 0.3);
+            --bg: #050505;
+            --glass: rgba(15, 15, 15, 0.7);
+            --border: rgba(255, 255, 255, 0.08);
             --online: #00ff66;
-            --final-gray: #444;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --font-mono: 'Space Mono', monospace;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
 
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: var(--font-main);
             background-color: var(--bg);
             color: white;
             overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        body::before {
+            content: " ";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 3px, 3px 100%;
+            z-index: 100;
+            pointer-events: none;
+            opacity: 0.3;
         }
 
         #bg-canvas {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
-            background: radial-gradient(circle at center, #0a0000 0%, #000 100%);
+        }
+
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 20px 40px;
+            backdrop-filter: blur(20px);
+            background: rgba(0,0,0,0.5);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .nav-logo {
+            font-family: 'Lexend';
+            font-weight: 900;
+            letter-spacing: 2px;
+            font-size: 1.2rem;
+            color: #fff;
         }
 
         header {
-            padding: 120px 20px 60px;
+            padding: 180px 20px 100px;
             text-align: center;
+            position: relative;
+        }
+
+        .glitch-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         h1 {
             font-family: 'Lexend', sans-serif;
-            font-size: clamp(3.5rem, 12vw, 9rem);
+            font-size: clamp(4rem, 15vw, 12rem);
             font-weight: 900;
-            letter-spacing: -5px;
-            line-height: 0.8;
-            margin-bottom: 20px;
-            background: linear-gradient(180deg, #fff 40%, #444 100%);
+            letter-spacing: -8px;
+            line-height: 0.85;
+            background: linear-gradient(180deg, #fff 30%, #333 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            position: relative;
         }
 
         .container {
-            max-width: 1300px;
-            margin: 0 auto 50px;
+            max-width: 1400px;
+            margin: 0 auto 100px;
             padding: 0 40px;
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
         }
-
-        .full-width { grid-column: span 2; }
 
         .premium-card {
             background: var(--glass);
-            backdrop-filter: blur(50px);
+            backdrop-filter: blur(40px);
             border: 1px solid var(--border);
-            border-radius: 40px;
-            padding: 70px 50px;
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 24px;
+            padding: 40px;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
             position: relative;
-            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .premium-card:hover {
-            transform: translateY(-15px) scale(1.01);
+            transform: translateY(-10px);
             border-color: var(--primary);
-            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
-            background: rgba(255, 0, 51, 0.02);
+            box-shadow: 0 20px 40px rgba(255, 0, 51, 0.15);
         }
 
-        .mobile-card {
-            filter: grayscale(1);
-            border-color: rgba(255,255,255,0.02);
-            opacity: 0.6;
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 10px var(--primary));
         }
 
-        .mobile-card:hover {
-            filter: grayscale(0);
-            opacity: 1;
-            border-color: var(--final-gray);
-            background: rgba(255, 255, 255, 0.01);
-        }
+        .span-2 { grid-column: span 2; }
+        .span-3 { grid-column: span 3; }
 
-        .update-tag {
-            background: var(--primary);
-            color: white;
-            font-size: 0.65rem;
-            font-weight: 900;
-            padding: 5px 15px;
-            border-radius: 5px;
-            display: inline-block;
-            margin-bottom: 25px;
-            animation: pulse-glow 2s infinite;
-        }
-
-        .final-tag {
-            background: var(--final-gray);
-            color: #fff;
-            font-size: 0.65rem;
-            font-weight: 900;
-            padding: 5px 15px;
-            border-radius: 5px;
-            display: inline-block;
-            margin-bottom: 25px;
-        }
-
-        .hw-bar {
-            margin-top: 20px;
-            padding: 12px 20px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid rgba(255,255,255,0.03);
-        }
-
-        .hw-label {
-            font-size: 0.6rem;
-            color: #555;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 800;
-        }
-
-        .hw-status {
-            font-size: 0.65rem;
-            color: var(--online);
-            font-weight: 900;
-        }
-
-        .secure-tag {
-            color: var(--online);
-            font-size: 0.6rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            display: block;
-            margin-top: 15px;
-            font-weight: 800;
-        }
-
-        .status-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-            font-weight: 800;
-            color: var(--online);
-        }
-
-        .uptime-display {
-            font-size: 0.6rem;
-            color: #444;
-            letter-spacing: 2px;
-            margin-top: 5px;
-            font-family: monospace;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--online);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--online);
-            animation: status-pulse 1.5s infinite;
-        }
-
-        @keyframes status-pulse {
-            0% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(1.2); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-
-        @keyframes pulse-glow {
-            0% { box-shadow: 0 0 0 0 rgba(255, 0, 51, 0.4); }
-            70% { box-shadow: 0 0 0 15px rgba(255, 0, 51, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 0, 51, 0); }
-        }
-
-        h2, h3 { font-family: 'Lexend', sans-serif; letter-spacing: -2px; }
-        h2 { font-size: 3.5rem; margin-bottom: 30px; }
-        h3 { font-size: 2rem; margin-bottom: 20px; color: var(--primary); }
+        h2 { font-family: 'Lexend'; font-size: 2.5rem; margin-bottom: 20px; letter-spacing: -1px; }
+        h3 { font-family: 'Lexend'; font-size: 1.2rem; text-transform: uppercase; color: var(--primary); margin-bottom: 20px; }
 
         .feat-item {
             display: flex;
             justify-content: space-between;
-            padding: 18px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            font-size: 0.95rem;
-            color: #888;
-        }
-
-        .feat-item b { color: #fff; font-weight: 400; }
-        .feat-item span.warn { color: #ff0033; font-weight: 800; font-size: 0.7rem; }
-
-        .log-list { list-style: none; margin-top: 10px; }
-        .log-list li {
-            padding: 12px 0;
-            color: #ccc;
-            font-size: 1rem;
+            padding: 15px 0;
             border-bottom: 1px solid rgba(255,255,255,0.03);
-            display: flex;
-            align-items: flex-start;
-        }
-        .log-list li::before {
-            content: "→";
-            color: var(--primary);
-            margin-right: 15px;
-            font-weight: bold;
+            font-size: 0.9rem;
+            color: #aaa;
         }
 
-        .log-category {
-            color: var(--primary);
-            font-weight: 800;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            margin-right: 10px;
-            min-width: 140px;
-            display: inline-block;
-        }
+        .feat-item b { color: #fff; }
 
         .btn {
+            margin-top: auto;
             display: block;
-            width: 100%;
-            padding: 26px;
-            margin-top: 30px;
+            padding: 20px;
             background: #fff;
             color: #000;
             text-decoration: none;
             text-align: center;
             font-weight: 800;
-            border-radius: 20px;
+            border-radius: 12px;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             transition: 0.3s;
+            font-size: 0.8rem;
         }
 
         .btn:hover {
             background: var(--primary);
-            color: #fff;
-            box-shadow: 0 20px 40px rgba(255, 0, 51, 0.4);
+            color: white;
+            box-shadow: 0 10px 20px var(--primary-glow);
         }
 
-        .btn-alt { background: transparent; border: 1px solid var(--border); color: #fff; }
-        
-        .btn-contact {
+        .btn-outline {
             background: transparent;
-            border: 1px dashed var(--primary);
-            color: var(--primary);
-            margin-top: 20px;
+            border: 1px solid var(--border);
+            color: #fff;
         }
 
-        .v-status {
-            font-size: 0.6rem;
-            color: #555;
-            margin-top: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            text-align: center;
-        }
-
-        #api-info {
-            margin-top: 25px;
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            background: rgba(0, 255, 102, 0.1);
+            color: var(--online);
+            border-radius: 100px;
             font-size: 0.7rem;
-            color: #333;
-            font-family: monospace;
-            text-align: center;
+            font-weight: 800;
+            letter-spacing: 1px;
+            border: 1px solid rgba(0, 255, 102, 0.2);
         }
 
-        footer {
-            padding: 100px 0;
-            text-align: center;
-            opacity: 0.1;
-            font-size: 0.6rem;
-            letter-spacing: 10px;
+        .uptime-box {
+            font-family: var(--font-mono);
+            background: rgba(0,0,0,0.4);
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            color: var(--primary);
+            border-left: 4px solid var(--primary);
         }
 
-        @media (max-width: 900px) {
+        .log-terminal {
+            background: rgba(0,0,0,0.3);
+            padding: 30px;
+            border-radius: 15px;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .log-entry {
+            margin-bottom: 12px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .log-entry .time { color: #555; }
+        .log-entry .tag { color: var(--primary); font-weight: bold; }
+
+        @media (max-width: 1100px) {
+            .container { grid-template-columns: 1fr 1fr; }
+            .span-2 { grid-column: span 2; }
+        }
+
+        @media (max-width: 768px) {
             .container { grid-template-columns: 1fr; }
-            .full-width { grid-column: span 1; }
+            .span-2, .span-3 { grid-column: span 1; }
+            h1 { font-size: 5rem; letter-spacing: -3px; }
         }
     </style>
 </head>
 <body>
 
+<nav>
+    <div class="nav-logo">QRSYS // CORE</div>
+    <div class="status-pill">
+        <span style="width: 8px; height: 8px; background: var(--online); border-radius: 50%;"></span>
+        MAIN_SYSTEM: ONLINE
+    </div>
+</nav>
+
 <canvas id="bg-canvas"></canvas>
 
 <header>
     <h1>QRSYS<br>CORE</h1>
+    <p style="color: #666; font-family: var(--font-mono); margin-top: 20px; letter-spacing: 4px;">INFRASTRUCTURE V1.0.0</p>
 </header>
 
 <div class="container">
     <div class="premium-card">
+        <img src="https://img.icons8.com/neon/96/monitor.png" class="card-icon" alt="Desktop">
         <div id="badge-loader"></div>
         <h2>Desktop</h2>
-        <div class="feat-item">QR Generation <b>Included</b></div>
-        <div class="feat-item">PostgreSQL Link <b>Included</b></div>
-        <div class="feat-item">Camera Input <span class="warn">REQUIRED</span></div>
-        
-        <div class="hw-bar">
-            <span class="hw-label">PC/Laptop Webcam</span>
-            <span class="hw-status">STABLE</span>
-        </div>
-
-        <a href="#" id="win-btn" class="btn">Download Installer</a>
-        <span class="secure-tag">● SSL / TLS SECURE DEPLOYMENT</span>
-        <div id="api-info">Synchronizing...</div>
+        <div class="feat-item">System Arch <b>x64 / .NET 10</b></div>
+        <div class="feat-item">DB Engine <b>PostgreSQL</b></div>
+        <div class="feat-item">Webcam <b>Required</b></div>
+        <a href="#" id="win-btn" class="btn">Initialize Download</a>
     </div>
 
-    <div class="premium-card mobile-card">
-        <div><span class="final-tag">STABLE / FINAL BUILD</span></div>
+    <div class="premium-card">
+        <img src="https://img.icons8.com/neon/96/iphone.png" class="card-icon" alt="Mobile">
+        <span class="status-pill" style="color: #aaa; background: rgba(255,255,255,0.05); border-color: var(--border); width: fit-content; margin-bottom: 15px;">LEGACY STABLE</span>
         <h2>Mobile</h2>
-        <div class="feat-item">Camera Scanner <b>Included</b></div>
-        <div class="feat-item">History Logs <b>Included</b></div>
-        <div class="feat-item">Live Sync <b>Included</b></div>
+        <div class="feat-item">Android <b>9.0+ Verified</b></div>
+        <div class="feat-item">Sync <b>Real-time</b></div>
+        <div class="feat-item">Package <b>Signed APK</b></div>
+        <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn btn-outline">Fetch Bundle</a>
+    </div>
 
-        <div class="hw-bar">
-            <span class="hw-label">Mobile Camera</span>
-            <span class="hw-status" style="color: #666;">LEGACY OK</span>
+    <div class="premium-card">
+        <h3>System Metrics</h3>
+        <div class="uptime-box" id="uptime-counter">00:00:00:00</div>
+        <p style="font-size: 0.6rem; color: #444; margin-top: 15px; text-transform: uppercase; letter-spacing: 2px;">Data Relay: Encrypted TLS 1.3</p>
+        <div style="margin-top: 20px;">
+            <div class="feat-item">Cloud Relay <b>Active</b></div>
+            <div class="feat-item">Packet Loss <b>0.00%</b></div>
         </div>
-
-        <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn btn-alt">Download APK</a>
-        <span class="secure-tag">● ENCRYPTED DATA RELAY</span>
-        <div class="v-status">Build: 1.0.0 (Definitive)</div>
     </div>
 
-    <div class="premium-card full-width" style="text-align: center; padding: 40px;">
-        <div class="status-container">
-            <div><div class="status-dot" style="display: inline-block;"></div> CORE DATABASE SYSTEM: OPERATIONAL</div>
-            <div id="uptime-counter" class="uptime-display">SYSTEM_UPTIME: 0D 0H 0M 0S</div>
+    <div class="premium-card span-2">
+        <h3>Release Intelligence</h3>
+        <div class="log-terminal">
+            <div class="log-entry"><span class="time">[19:42:01]</span> <span class="tag">INFRA</span> Integrated .NET 10.0 Runtime dependency mapping.</div>
+            <div class="log-entry"><span class="time">[18:20:55]</span> <span class="tag">SECURE</span> Resolved TLS handshake exceptions in legacy handshake.</div>
+            <div class="log-entry"><span class="time">[14:11:02]</span> <span class="tag">UI/UX</span> High DPI asset scaling optimized for 4K displays.</div>
+            <div class="log-entry"><span class="time">[09:00:00]</span> <span class="tag">CORE</span> PostgreSQL Cloud Infrastructure validated.</div>
         </div>
-        <p style="color: #444; font-size: 0.65rem; margin-top: 10px; letter-spacing: 1px;">POSTGRESQL CLOUD INFRASTRUCTURE ACTIVE</p>
     </div>
 
-    <div class="premium-card full-width">
-        <h3>RELEASE LOG</h3>
-        <ul class="log-list">
-            <li><span class="log-category">PC/LAPTOP (ACTIVE)</span> Infrastructure: Integrated auto download for .NET 10.0 Runtime dependencies.</li>
-            <li><span class="log-category">PC/LAPTOP (ACTIVE)</span> Security: Fixed 400 Bad Request errors via aka.ms redirect protocols.</li>
-            <li><span class="log-category">PC/LAPTOP (ACTIVE)</span> UI: Corrected shortcut and uninstaller icon resolution for high DPI displays.</li>
-            <li><span class="log-category">MOBILE (FINAL BUILD)</span> Finality: Version 1.0.0 is the definitive release.</li>
-            <li><span class="log-category">MOBILE (FINAL BUILD)</span> Stability: Verified real-time synchronization with CORE PostgreSQL.</li>
-        </ul>
-    </div>
-
-    <div class="premium-card full-width" style="text-align: center;">
-        <h3>SYSTEM SUPPORT</h3>
-        <p style="color: #666; margin-bottom: 20px;">Direct uplink to developer for bug reports and infrastructure help.</p>
-        <a href="mailto:joshuagabrieldeleon820@gmail.com?subject=QRSYS%20CORE%20Support%20Request&body=ID:%20[YourName]%0D%0AISSUE:%20" class="btn btn-contact">Open Support Ticket</a>
+    <div class="premium-card">
+        <h3>Developer Uplink</h3>
+        <p style="color: #666; font-size: 0.9rem; margin-bottom: 25px;">Submit system reports or request technical access keys.</p>
+        <a href="mailto:joshuagabrieldeleon820@gmail.com" class="btn btn-outline" style="border: 1px dashed var(--primary); color: var(--primary);">Contact Admin</a>
+        <div id="api-info" style="margin-top: 20px; font-family: var(--font-mono); font-size: 0.6rem; color: #333;">Handshaking with GitHub...</div>
     </div>
 </div>
 
-<footer>QRSYS INFRASTRUCTURE</footer>
+<footer style="text-align: center; padding: 100px; opacity: 0.3; font-size: 0.7rem; letter-spacing: 15px;">
+    QRSYS_CORE_SYSTEM_2026
+</footer>
 
 <script>
     const canvas = document.getElementById('bg-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
-    let mouse = { x: null, y: null };
-
-    window.addEventListener('mousemove', (e) => { mouse.x = e.x; mouse.y = e.y; });
 
     function init() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         particles = [];
-        for(let i=0; i<100; i++) {
+        for(let i=0; i<80; i++) {
             particles.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
-                vx: (Math.random() - 0.5) * 0.5,
-                vy: (Math.random() - 0.5) * 0.5
+                vx: (Math.random() - 0.5) * 0.3,
+                vy: (Math.random() - 0.5) * 0.3,
+                size: Math.random() * 2
             });
         }
     }
 
     function draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = 'rgba(255, 0, 51, 0.5)';
-        ctx.strokeStyle = 'rgba(255, 0, 51, 0.08)';
+        ctx.fillStyle = 'rgba(5, 5, 5, 0.2)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
         particles.forEach((p, i) => {
             p.x += p.vx; p.y += p.vy;
             if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
             if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
             
+            ctx.fillStyle = 'rgba(255, 0, 51, 0.5)';
             ctx.beginPath();
-            ctx.arc(p.x, p.y, 1.5, 0, Math.PI*2);
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
             ctx.fill();
 
             for(let j=i+1; j<particles.length; j++) {
                 let p2 = particles[j];
                 let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
-                if(dist < 150) {
+                if(dist < 180) {
+                    ctx.strokeStyle = `rgba(255, 0, 51, ${0.15 - dist/1200})`;
+                    ctx.lineWidth = 0.5;
                     ctx.beginPath();
                     ctx.moveTo(p.x, p.y);
                     ctx.lineTo(p2.x, p2.y);
-                    ctx.stroke();
-                }
-            }
-
-            if (mouse.x) {
-                let mDist = Math.hypot(p.x - mouse.x, p.y - mouse.y);
-                if (mDist < 200) {
-                    ctx.strokeStyle = 'rgba(255, 0, 51, 0.3)';
-                    ctx.beginPath();
-                    ctx.moveTo(p.x, p.y);
-                    ctx.lineTo(mouse.x, mouse.y);
                     ctx.stroke();
                 }
             }
@@ -437,16 +354,12 @@
             const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
             const mins = Math.floor((diff / (1000 * 60)) % 60);
             const secs = Math.floor((diff / 1000) % 60);
-            
             document.getElementById('uptime-counter').innerText = 
-                `SYSTEM_UPTIME: ${days}D ${hours}H ${mins}M ${secs}S`;
+                `${days.toString().padStart(2, '0')}:${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         }, 1000);
     }
 
-    window.addEventListener('resize', init);
-    init(); draw(); updateUptime();
-
-    async function sync() {
+    async function syncRelease() {
         try {
             const r = await fetch('https://api.github.com/repos/AstroNutws/Attendance-QRSYS/releases/latest');
             const d = await r.json();
@@ -457,11 +370,15 @@
             const file = d.assets.find(a => a.name.toLowerCase().includes('installer.exe'));
             if(file) win.href = file.browser_download_url;
 
-            bad.innerHTML = `<span class="update-tag">NEW PC BUILD: ${d.tag_name}</span>`;
-            api.innerHTML = `BUILD ${d.tag_name} // RELEASED ${new Date(d.published_at).toLocaleDateString()}`;
-        } catch(e) {}
+            bad.innerHTML = `<span style="background: var(--primary); color: white; padding: 4px 12px; border-radius: 4px; font-size: 0.6rem; font-weight: 800;">LATEST: ${d.tag_name}</span>`;
+            api.innerHTML = `BUILD_${d.tag_name} // SYNC_SUCCESSFUL`;
+        } catch(e) {
+            document.getElementById('api-info').innerText = "SYNC_ERROR: OFFLINE_MODE";
+        }
     }
-    sync();
+
+    window.addEventListener('resize', init);
+    init(); draw(); updateUptime(); syncRelease();
 </script>
 </body>
 </html>
