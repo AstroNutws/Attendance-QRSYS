@@ -3,278 +3,283 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QRSYS CORE | Enterprise Attendance</title>
+    <title>QRSYS | Neural Attendance Infrastructure</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;600;800&family=Lexend:wght@300;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #ff0033;
-            --bg: #030303;
-            --glass: rgba(255, 255, 255, 0.02);
-            --border: rgba(255, 255, 255, 0.08);
+            --bg: #020202;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: default; }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg);
             color: white;
-            line-height: 1.6;
             overflow-x: hidden;
         }
 
-        .ambient-glow {
+        #bg-canvas {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% -20%, #1a0505 0%, transparent 50%);
             z-index: -1;
+            background: radial-gradient(circle at center, #0a0000 0%, #000 100%);
         }
 
         nav {
-            padding: 40px;
+            padding: 30px;
             display: flex;
-            justify-content: center;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .status-pill {
-            display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.03);
-            padding: 8px 16px;
-            border-radius: 100px;
-            border: 1px solid var(--border);
-            font-size: 0.65rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            background: #00ff88;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #00ff88;
+        .sys-badge {
+            background: rgba(255, 0, 51, 0.1);
+            color: var(--primary);
+            padding: 8px 20px;
+            border-radius: 100px;
+            font-size: 0.6rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+            border: 1px solid rgba(255, 0, 51, 0.2);
         }
 
         header {
-            padding: 100px 20px;
+            padding: 120px 20px 80px;
             text-align: center;
         }
 
         h1 {
             font-family: 'Lexend', sans-serif;
-            font-size: clamp(3.5rem, 12vw, 8rem);
+            font-size: clamp(4rem, 15vw, 10rem);
             font-weight: 900;
-            letter-spacing: -4px;
-            line-height: 0.85;
-            background: linear-gradient(to bottom, #fff 50%, #666);
+            letter-spacing: -6px;
+            line-height: 0.8;
+            margin-bottom: 20px;
+            background: linear-gradient(180deg, #fff 30%, #444 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 30px;
         }
 
-        .hero-desc {
-            max-width: 600px;
-            margin: 0 auto;
-            color: #888;
-            font-weight: 200;
-            font-size: 1.1rem;
-        }
-
-        .main-container {
+        .container {
             max-width: 1300px;
             margin: 0 auto 100px;
             padding: 0 40px;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 40px;
+            gap: 30px;
         }
 
         .premium-card {
-            background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 100%);
+            background: var(--glass);
+            backdrop-filter: blur(50px);
             border: 1px solid var(--border);
-            border-radius: 40px;
-            padding: 60px;
-            transition: 0.5s cubic-bezier(0.2, 1, 0.3, 1);
+            border-radius: 50px;
+            padding: 70px;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
             overflow: hidden;
         }
 
-        .premium-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-10px);
-            background: rgba(255, 0, 51, 0.02);
+        .premium-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 0, 51, 0.05));
+            opacity: 0;
+            transition: 0.6s;
         }
 
-        .update-badge {
+        .premium-card:hover {
+            transform: translateY(-20px) scale(1.02);
+            border-color: var(--primary);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.7);
+        }
+
+        .premium-card:hover::before { opacity: 1; }
+
+        .update-tag {
             background: var(--primary);
             color: white;
-            font-size: 0.6rem;
+            font-size: 0.65rem;
             font-weight: 900;
-            padding: 6px 14px;
-            border-radius: 100px;
+            padding: 5px 15px;
+            border-radius: 5px;
             display: inline-block;
-            margin-bottom: 24px;
-            letter-spacing: 1px;
-            animation: breathe 3s infinite;
+            margin-bottom: 25px;
+            animation: pulse-glow 2s infinite;
         }
 
-        @keyframes breathe {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.8; }
-        }
-
-        .platform-label {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            color: #555;
-            margin-bottom: 10px;
-            display: block;
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(255, 0, 51, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 0, 51, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 0, 51, 0); }
         }
 
         h2 {
             font-family: 'Lexend', sans-serif;
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin-bottom: 30px;
-            letter-spacing: -2px;
         }
 
-        .feature-stack {
-            margin-bottom: 50px;
-        }
-
-        .f-row {
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.03);
+        .feat-item {
             display: flex;
             justify-content: space-between;
+            padding: 18px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
             font-size: 0.9rem;
-            color: #ccc;
+            color: #888;
         }
 
-        .f-row span { color: #555; font-weight: 800; font-size: 0.7rem; }
+        .feat-item b { color: #fff; font-weight: 400; }
 
-        .download-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 24px;
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 26px;
+            margin-top: 50px;
             background: #fff;
             color: #000;
-            border-radius: 18px;
             text-decoration: none;
+            text-align: center;
             font-weight: 800;
+            border-radius: 20px;
             text-transform: uppercase;
             letter-spacing: 2px;
-            font-size: 0.85rem;
             transition: 0.3s;
         }
 
-        .download-btn:hover {
+        .btn:hover {
             background: var(--primary);
             color: #fff;
-            box-shadow: 0 15px 30px rgba(255, 0, 51, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(255, 0, 51, 0.4);
         }
 
-        .btn-secondary {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: #fff;
-        }
+        .btn-alt { background: transparent; border: 1px solid var(--border); color: #fff; }
 
-        #api-data {
-            margin-top: 20px;
-            font-size: 0.65rem;
+        #api-info {
+            margin-top: 25px;
+            font-size: 0.7rem;
             color: #444;
             font-family: monospace;
-            text-transform: uppercase;
+            text-align: center;
         }
 
         footer {
-            padding: 100px;
+            padding-bottom: 100px;
             text-align: center;
-            font-size: 0.7rem;
-            color: #333;
-            letter-spacing: 5px;
-        }
-
-        @media (max-width: 900px) {
-            .main-container { grid-template-columns: 1fr; }
+            opacity: 0.2;
+            font-size: 0.6rem;
+            letter-spacing: 10px;
         }
     </style>
 </head>
 <body>
 
-<div class="ambient-glow"></div>
+<canvas id="bg-canvas"></canvas>
 
 <nav>
-    <div class="status-pill">
-        <div class="status-dot"></div>
-        System Status: Operational
-    </div>
+    <div class="sys-badge">INFRASTRUCTURE V1.1.0</div>
+    <div class="sys-badge">DB STATUS: CONNECTED</div>
 </nav>
 
 <header>
-    <h1>QRSYS CORE</h1>
-    <p class="hero-desc">High-performance attendance infrastructure for modern institutions. Secure QR protocols backed by PostgreSQL architecture.</p>
+    <h1>QRSYS<br>ELITE</h1>
 </header>
 
-<div class="main-container">
+<div class="container">
     <div class="premium-card">
-        <div id="badge-target"></div>
-        <span class="platform-label">Management Suite</span>
+        <div id="badge-loader"></div>
+        <span style="font-size:0.7rem; color:var(--primary); letter-spacing:4px; font-weight:800;">WORKSPACE</span>
         <h2>Workstation</h2>
-        <div class="feature-stack">
-            <div class="f-row">QR Scanning <span>Real-time</span></div>
-            <div class="f-row">PostgreSQL <span>Direct Link</span></div>
-            <div class="f-row">Admin Panel <span>Encrypted</span></div>
-            <div class="f-row">User Management <span>Active</span></div>
-        </div>
-        <a href="#" id="desktop-download" class="download-btn">Download Installer</a>
-        <div id="api-log">Connecting to GitHub...</div>
+        <div class="feat-item">QR Protocol <b>v4-HighSpeed</b></div>
+        <div class="feat-item">Data Engine <b>PostgreSQL</b></div>
+        <div class="feat-item">Encryption <b>AES-256</b></div>
+        <a href="#" id="win-btn" class="btn">Deploy Installer</a>
+        <div id="api-info">Synchronizing with GitHub...</div>
     </div>
 
     <div class="premium-card">
-        <span class="platform-label">Portable Scanner</span>
-        <h2>Mobile Ver</h2>
-        <div class="feature-stack">
-            <div class="f-row">Camera Link <span>HD Scan</span></div>
-            <div class="f-row">Cloud Sync <span>Instant</span></div>
-            <div class="f-row">Security <span>Key-Auth</span></div>
-            <div class="f-row">Interface <span>Optimized</span></div>
-        </div>
-        <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="download-btn btn-secondary">Download APK</a>
-        <div id="api-log">Stable Build: v1.0.0</div>
+        <span style="font-size:0.7rem; color:#555; letter-spacing:4px; font-weight:800;">MOBILE NODE</span>
+        <h2>Android</h2>
+        <div class="feat-item">Scanner Link <b>Direct-Sync</b></div>
+        <div class="feat-item">Latency <b>< 40ms</b></div>
+        <div class="feat-item">Build <b>Stable-Signed</b></div>
+        <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn btn-alt">Download APK</a>
+        <div id="api-info">Stable Distribution: 1.0.0</div>
     </div>
 </div>
 
-<footer>&copy; 2026 QRSYS INFRASTRUCTURE // DESIGNED FOR PERFORMANCE</footer>
+<footer>QRSYS CORE SYSTEM</footer>
 
 <script>
-    async function initSync() {
-        const repo = 'AstroNutws/Attendance-QRSYS';
-        try {
-            const r = await fetch(`https://api.github.com/repos/${repo}/releases/latest`);
-            const d = await r.json();
-            
-            const btn = document.getElementById('desktop-download');
-            const log = document.getElementById('api-log');
-            const badge = document.getElementById('badge-target');
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
 
-            const asset = d.assets.find(a => a.name.toLowerCase().includes('installer.exe'));
-            if(asset) btn.href = asset.browser_download_url;
-
-            badge.innerHTML = `<span class="update-badge">LATEST: ${d.tag_name}</span>`;
-            log.innerHTML = `Build ID: ${d.tag_name} // Published: ${new Date(d.published_at).toLocaleDateString()}`;
-        } catch (e) {
-            document.getElementById('api-log').innerText = "System in Offline Mode";
+    function init() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        particles = [];
+        for(let i=0; i<100; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5
+            });
         }
     }
-    initSync();
+
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'rgba(255, 0, 51, 0.5)';
+        ctx.strokeStyle = 'rgba(255, 0, 51, 0.05)';
+        particles.forEach((p, i) => {
+            p.x += p.vx; p.y += p.vy;
+            if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
+            if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 1, 0, Math.PI*2);
+            ctx.fill();
+            for(let j=i+1; j<particles.length; j++) {
+                let p2 = particles[j];
+                let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                if(dist < 150) {
+                    ctx.beginPath();
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(p2.x, p2.y);
+                    ctx.stroke();
+                }
+            }
+        });
+        requestAnimationFrame(draw);
+    }
+    window.addEventListener('resize', init);
+    init(); draw();
+
+    async function sync() {
+        try {
+            const r = await fetch('https://api.github.com/repos/AstroNutws/Attendance-QRSYS/releases/latest');
+            const d = await r.json();
+            const win = document.getElementById('win-btn');
+            const api = document.getElementById('api-info');
+            const bad = document.getElementById('badge-loader');
+
+            const file = d.assets.find(a => a.name.toLowerCase().includes('installer.exe'));
+            if(file) win.href = file.browser_download_url;
+
+            bad.innerHTML = `<span class="update-tag">NEW BUILD: ${d.tag_name}</span>`;
+            api.innerHTML = `BUILD VERSION ${d.tag_name} // RELEASED ${new Date(d.published_at).toLocaleDateString()}`;
+        } catch(e) {}
+    }
+    sync();
 </script>
 </body>
 </html>
