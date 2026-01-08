@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QRSYS | Pure QR Infrastructure</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;800&family=Lexend:wght@900&display=swap" rel="stylesheet">
+    <title>QRSYS CORE | Enterprise Attendance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;600;800&family=Lexend:wght@300;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #ff0033;
-            --bg: #000000;
-            --card: #0a0a0a;
-            --border: #1a1a1a;
+            --bg: #030303;
+            --glass: rgba(255, 255, 255, 0.02);
+            --border: rgba(255, 255, 255, 0.08);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: default; }
@@ -19,199 +19,262 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg);
             color: white;
-            line-height: 1.5;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .ambient-glow {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% -20%, #1a0505 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        nav {
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .status-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 8px 16px;
+            border-radius: 100px;
+            border: 1px solid var(--border);
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: #00ff88;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00ff88;
         }
 
         header {
-            padding: 120px 20px 60px;
+            padding: 100px 20px;
             text-align: center;
-        }
-
-        .tagline {
-            color: var(--primary);
-            font-size: 0.7rem;
-            font-weight: 800;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
         }
 
         h1 {
             font-family: 'Lexend', sans-serif;
-            font-size: clamp(3rem, 10vw, 7rem);
-            line-height: 0.9;
-            margin-bottom: 20px;
+            font-size: clamp(3.5rem, 12vw, 8rem);
+            font-weight: 900;
+            letter-spacing: -4px;
+            line-height: 0.85;
+            background: linear-gradient(to bottom, #fff 50%, #666);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
         }
 
-        .container {
-            max-width: 1200px;
+        .hero-desc {
+            max-width: 600px;
+            margin: 0 auto;
+            color: #888;
+            font-weight: 200;
+            font-size: 1.1rem;
+        }
+
+        .main-container {
+            max-width: 1300px;
             margin: 0 auto 100px;
-            padding: 0 20px;
-        }
-
-        .grid {
+            padding: 0 40px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 20px;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
         }
 
-        .card {
-            background: var(--card);
+        .premium-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 100%);
             border: 1px solid var(--border);
-            padding: 50px;
-            border-radius: 20px;
-            transition: 0.3s;
+            border-radius: 40px;
+            padding: 60px;
+            transition: 0.5s cubic-bezier(0.2, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
         }
 
-        .card:hover {
+        .premium-card:hover {
             border-color: var(--primary);
-            background: #0d0d0d;
+            transform: translateY(-10px);
+            background: rgba(255, 0, 51, 0.02);
         }
 
         .update-badge {
-            display: inline-block;
             background: var(--primary);
             color: white;
-            padding: 4px 10px;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             font-weight: 900;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            animation: pulse 2s infinite;
+            padding: 6px 14px;
+            border-radius: 100px;
+            display: inline-block;
+            margin-bottom: 24px;
+            letter-spacing: 1px;
+            animation: breathe 3s infinite;
         }
 
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+
+        .platform-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: #555;
+            margin-bottom: 10px;
+            display: block;
         }
 
         h2 {
             font-family: 'Lexend', sans-serif;
-            font-size: 2.5rem;
-            margin-bottom: 20px;
+            font-size: 3rem;
+            margin-bottom: 30px;
+            letter-spacing: -2px;
         }
 
-        .features {
-            list-style: none;
-            margin-bottom: 40px;
-            color: #666;
+        .feature-stack {
+            margin-bottom: 50px;
+        }
+
+        .f-row {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            display: flex;
+            justify-content: space-between;
             font-size: 0.9rem;
+            color: #ccc;
         }
 
-        .features li {
-            margin-bottom: 10px;
+        .f-row span { color: #555; font-weight: 800; font-size: 0.7rem; }
+
+        .download-btn {
             display: flex;
             align-items: center;
-        }
-
-        .features li::before {
-            content: "—";
-            margin-right: 10px;
-            color: var(--primary);
-        }
-
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 20px;
-            background: white;
-            color: black;
-            text-align: center;
+            justify-content: center;
+            padding: 24px;
+            background: #fff;
+            color: #000;
+            border-radius: 18px;
             text-decoration: none;
             font-weight: 800;
-            font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 2px;
-            border-radius: 10px;
-            transition: 0.2s;
+            font-size: 0.85rem;
+            transition: 0.3s;
         }
 
-        .btn:hover {
+        .download-btn:hover {
             background: var(--primary);
-            color: white;
+            color: #fff;
+            box-shadow: 0 15px 30px rgba(255, 0, 51, 0.3);
         }
 
-        .btn-dim {
+        .btn-secondary {
             background: transparent;
             border: 1px solid var(--border);
-            color: white;
+            color: #fff;
         }
 
-        #build-info {
+        #api-data {
             margin-top: 20px;
-            font-size: 0.7rem;
-            color: #333;
+            font-size: 0.65rem;
+            color: #444;
             font-family: monospace;
+            text-transform: uppercase;
         }
 
         footer {
-            padding: 60px;
+            padding: 100px;
             text-align: center;
-            font-size: 0.6rem;
-            color: #222;
-            letter-spacing: 3px;
+            font-size: 0.7rem;
+            color: #333;
+            letter-spacing: 5px;
+        }
+
+        @media (max-width: 900px) {
+            .main-container { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
+<div class="ambient-glow"></div>
+
+<nav>
+    <div class="status-pill">
+        <div class="status-dot"></div>
+        System Status: Operational
+    </div>
+</nav>
+
 <header>
-    <p class="tagline">Encrypted QR Attendance</p>
     <h1>QRSYS CORE</h1>
+    <p class="hero-desc">High-performance attendance infrastructure for modern institutions. Secure QR protocols backed by PostgreSQL architecture.</p>
 </header>
 
-<div class="container">
-    <div class="grid">
-        <div class="card">
-            <div id="badge-area"></div>
-            <h2>DESKTOP</h2>
-            <ul class="features">
-                <li>Instant QR Scan Processing</li>
-                <li>PostgreSQL Data Management</li>
-                <li>Secure Admin Credentials</li>
-                <li>Live Activity Monitor</li>
-            </ul>
-            <a href="#" id="download-btn" class="btn">Initialize Download</a>
-            <div id="build-info">Connecting to server...</div>
+<div class="main-container">
+    <div class="premium-card">
+        <div id="badge-target"></div>
+        <span class="platform-label">Management Suite</span>
+        <h2>Workstation</h2>
+        <div class="feature-stack">
+            <div class="f-row">QR Scanning <span>Real-time</span></div>
+            <div class="f-row">PostgreSQL <span>Direct Link</span></div>
+            <div class="f-row">Admin Panel <span>Encrypted</span></div>
+            <div class="f-row">User Management <span>Active</span></div>
         </div>
+        <a href="#" id="desktop-download" class="download-btn">Download Installer</a>
+        <div id="api-log">Connecting to GitHub...</div>
+    </div>
 
-        <div class="card">
-            <h2>MOBILE</h2>
-            <ul class="features">
-                <li>Portable QR Scanner</li>
-                <li>Real-time Database Sync</li>
-                <li>Encrypted Student Access</li>
-                <li>Minimal Data Usage</li>
-            </ul>
-            <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn btn-dim">Download APK</a>
-            <div id="build-info">Build: v1.0.0 Stable</div>
+    <div class="premium-card">
+        <span class="platform-label">Portable Scanner</span>
+        <h2>Mobile Ver</h2>
+        <div class="feature-stack">
+            <div class="f-row">Camera Link <span>HD Scan</span></div>
+            <div class="f-row">Cloud Sync <span>Instant</span></div>
+            <div class="f-row">Security <span>Key-Auth</span></div>
+            <div class="f-row">Interface <span>Optimized</span></div>
         </div>
+        <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="download-btn btn-secondary">Download APK</a>
+        <div id="api-log">Stable Build: v1.0.0</div>
     </div>
 </div>
 
-<footer>&copy; 2026 QRSYS INFRASTRUCTURE</footer>
+<footer>&copy; 2026 QRSYS INFRASTRUCTURE // DESIGNED FOR PERFORMANCE</footer>
 
 <script>
-    async function syncSystem() {
+    async function initSync() {
         const repo = 'AstroNutws/Attendance-QRSYS';
         try {
             const r = await fetch(`https://api.github.com/repos/${repo}/releases/latest`);
             const d = await r.json();
-            const btn = document.getElementById('download-btn');
-            const info = document.getElementById('build-info');
-            const badge = document.getElementById('badge-area');
+            
+            const btn = document.getElementById('desktop-download');
+            const log = document.getElementById('api-log');
+            const badge = document.getElementById('badge-target');
 
             const asset = d.assets.find(a => a.name.toLowerCase().includes('installer.exe'));
             if(asset) btn.href = asset.browser_download_url;
 
-            badge.innerHTML = `<span class="update-badge">NEW VERSION: ${d.tag_name}</span>`;
-            info.innerHTML = `LATEST: ${d.tag_name} | ${new Date(d.published_at).toLocaleDateString()}`;
+            badge.innerHTML = `<span class="update-badge">LATEST: ${d.tag_name}</span>`;
+            log.innerHTML = `Build ID: ${d.tag_name} // Published: ${new Date(d.published_at).toLocaleDateString()}`;
         } catch (e) {
-            document.getElementById('build-info').innerText = "Offline Mode Active";
+            document.getElementById('api-log').innerText = "System in Offline Mode";
         }
     }
-    syncSystem();
+    initSync();
 </script>
 </body>
 </html>
