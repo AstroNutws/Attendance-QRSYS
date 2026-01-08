@@ -164,6 +164,21 @@
             border: 1px solid var(--border);
         }
 
+        .req-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .req-table td {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            font-size: 0.9rem;
+        }
+
+        .req-label { color: var(--primary); font-weight: 800; text-transform: uppercase; font-size: 0.7rem; width: 40%; }
+        .req-value { color: #fff; }
+
         .log-list { list-style: none; }
         .log-item {
             padding: 15px 0;
@@ -206,9 +221,12 @@
     <div class="premium-card">
         <div id="badge-loader"></div>
         <h2>Desktop</h2>
-        <div class="feat-item">QR Generation <b>Included</b></div>
-        <div class="feat-item">Database Link <b>PostgreSQL</b></div>
-        <div class="feat-item">Device Support <b>PC / Laptop</b></div>
+        <table class="req-table">
+            <tr><td class="req-label">Architecture</td><td class="req-value">Windows x64 Required</td></tr>
+            <tr><td class="req-label">Optical</td><td class="req-value">Webcam / Integrated Cam</td></tr>
+            <tr><td class="req-label">Disk Space</td><td class="req-value">400MB (Post-Update)</td></tr>
+            <tr><td class="req-label">Connectivity</td><td class="req-value">Internet Mandatory</td></tr>
+        </table>
         <a href="#" id="win-btn" class="btn">Download Installer</a>
         <div id="api-info" style="margin-top: 15px; font-family: var(--font-mono); font-size: 0.6rem; color: #444; text-align: center;">Syncing Assets...</div>
     </div>
@@ -216,9 +234,12 @@
     <div class="premium-card">
         <span style="color: #666; font-size: 0.7rem; font-weight: 800; letter-spacing: 2px;">MOBILE DEPLOYMENT</span>
         <h2>Mobile</h2>
-        <div class="feat-item">Camera Scanner <b>Included</b></div>
-        <div class="feat-item">Live Sync <b>Active</b></div>
-        <div class="feat-item">History Logs <b>Included</b></div>
+        <table class="req-table">
+            <tr><td class="req-label">OS</td><td class="req-value">Android 8.0+ Required</td></tr>
+            <tr><td class="req-label">Memory</td><td class="req-value">At least 2GB RAM</td></tr>
+            <tr><td class="req-label">Storage</td><td class="req-value">50MB Free Space</td></tr>
+            <tr><td class="req-label">Connectivity</td><td class="req-value">Internet Mandatory</td></tr>
+        </table>
         <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn btn-outline">Download APK</a>
     </div>
 
