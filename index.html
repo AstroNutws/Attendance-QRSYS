@@ -22,21 +22,32 @@
             --status-bg-ok: #f0fff4;
             --status-err: #822727;
             --status-bg-err: #fff5f5;
-            --bg-color: #fdfdfd;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: default; }
         body {
             font-family: var(--font-sans);
-            background-color: var(--bg-color);
+            background-color: var(--cream);
             color: var(--text-dark);
             overflow-x: hidden;
             line-height: 1.6;
-            transition: background-color 0.8s ease;
+            transition: filter 0.5s ease;
         }
-        body.db-paused {
-            --bg-color: #fff1f1;
-            --maroon: #5a0000;
+        #maintenance-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(128, 0, 0, 0.95);
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            backdrop-filter: blur(10px);
         }
+        #maintenance-overlay h2 { font-size: 3rem; margin-bottom: 10px; color: white; }
+        #maintenance-overlay p { font-size: 1.2rem; opacity: 0.9; max-width: 500px; }
         #bg-canvas {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -60,7 +71,6 @@
             font-weight: 800;
             font-size: 1.4rem;
             color: var(--maroon);
-            letter-spacing: -0.5px;
         }
         .status-pill {
             display: inline-flex;
@@ -74,18 +84,11 @@
             font-weight: 700;
             border: 1px solid #c6f6d5;
             text-transform: uppercase;
-            transition: all 0.3s ease;
         }
         .status-pill.error {
             background: var(--status-bg-err);
             color: var(--status-err);
             border-color: #feb2b2;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.7; }
-            100% { opacity: 1; }
         }
         header {
             padding: 180px 20px 80px;
@@ -97,15 +100,8 @@
             font-family: var(--font-serif);
             font-size: clamp(3rem, 8vw, 5.5rem);
             font-weight: 800;
-            line-height: 1.1;
             color: var(--maroon);
             margin-bottom: 20px;
-        }
-        .subtitle {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            max-width: 600px;
-            margin: 0 auto;
         }
         .container {
             max-width: 1100px;
@@ -120,41 +116,19 @@
             border: 1px solid var(--border);
             border-radius: 20px;
             padding: 45px;
-            transition: all 0.3s cubic-bezier(0.2, 0, 0.2, 1);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
             position: relative;
         }
-        .premium-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
-        }
         .span-full { grid-column: span 2; }
-        h2 { font-family: var(--font-serif); font-size: 2.2rem; margin-bottom: 15px; color: var(--maroon); }
-        h3 { font-family: var(--font-sans); font-size: 0.85rem; color: var(--text-muted); margin-bottom: 25px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
-        .badge {
-            display: inline-block;
-            background: var(--maroon);
-            color: white;
-            padding: 6px 14px;
-            border-radius: 4px;
-            font-size: 0.7rem;
+        .uptime-display {
+            font-family: var(--font-mono);
+            background: #f8f8f8;
+            padding: 40px;
+            border-radius: 15px;
+            font-size: 2.8rem;
+            color: var(--maroon);
+            text-align: center;
             font-weight: 700;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-            text-transform: uppercase;
         }
-        .req-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        .req-table td {
-            padding: 12px 0;
-            border-bottom: 1px solid #f0f0f0;
-            font-size: 0.95rem;
-        }
-        .req-label { color: var(--text-muted); font-weight: 500; width: 40%; }
-        .req-value { color: var(--text-dark); font-weight: 600; text-align: right; }
         .btn {
             display: block;
             width: 100%;
@@ -165,131 +139,114 @@
             text-align: center;
             font-weight: 600;
             border-radius: 12px;
-            transition: 0.2s;
             margin-top: 25px;
-            border: none;
         }
-        .btn:hover {
-            background: var(--maroon-light);
-            box-shadow: 0 10px 20px rgba(128, 0, 0, 0.2);
+        .log-container {
+            margin-top: 30px;
+            background: #fafafa;
+            border-radius: 12px;
+            padding: 20px;
+            max-height: 250px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
         }
-        .btn.disabled {
-            background: #ccc;
-            pointer-events: none;
-            opacity: 0.6;
-        }
-        .uptime-display {
+        .log-entry {
             font-family: var(--font-mono);
-            background: #f8f8f8;
-            padding: 40px;
-            border-radius: 15px;
-            font-size: 2.8rem;
-            color: var(--maroon);
-            text-align: center;
-            font-weight: 700;
-            letter-spacing: -1px;
+            font-size: 0.85rem;
+            padding: 8px 0;
+            border-bottom: 1px dashed #ddd;
+            display: flex;
+            gap: 15px;
         }
-        .log-list { list-style: none; }
-        .log-item {
-            padding: 20px 0;
-            border-bottom: 1px solid #f0f0f0;
-            display: grid;
-            grid-template-columns: 180px 1fr;
-            gap: 20px;
-            align-items: center;
-        }
-        .log-tag {
-            background: #f0f0f0;
-            padding: 4px 12px;
-            border-radius: 6px;
-            color: var(--maroon);
-            font-weight: 700;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            text-align: center;
-        }
+        .log-time { color: var(--text-muted); min-width: 80px; }
+        .log-msg-ok { color: var(--status-ok); font-weight: 600; }
+        .log-msg-err { color: var(--status-err); font-weight: 600; }
         @media (max-width: 850px) {
             .container { grid-template-columns: 1fr; }
             .span-full { grid-column: span 1; }
             nav { padding: 20px; }
-            .log-item { grid-template-columns: 1fr; gap: 8px; }
         }
     </style>
 </head>
 <body>
+
+<div id="maintenance-overlay">
+    <h2>System Paused</h2>
+    <p>The central database is currently offline for maintenance. Access will be restored automatically once the infrastructure is resumed.</p>
+</div>
+
 <nav>
     <div class="nav-logo">QRSYS</div>
-    <div id="db-status" class="status-pill">● PINGING INFRASTRUCTURE...</div>
+    <div id="db-status" class="status-pill">● Connecting...</div>
 </nav>
+
 <canvas id="bg-canvas"></canvas>
+
 <header>
     <h1>Secure Infrastructure for Modern Attendance Logging.</h1>
-    <p class="subtitle">A professional-grade attendance and synchronization engine designed for educational excellence.</p>
 </header>
+
 <div class="container">
-    <div class="premium-card" id="desktop-card">
-        <div id="badge-loader"></div>
-        <h2>Desktop Version</h2>
-        <table class="req-table">
-            <tr><td class="req-label">Environment</td><td class="req-value">Windows x64</td></tr>
-            <tr><td class="req-label">Imaging</td><td class="req-value">Camera Support</td></tr>
-            <tr><td class="req-label">Local Storage</td><td class="req-value">400MB Required</td></tr>
-            <tr><td class="req-label">Network</td><td class="req-value">Always Online</td></tr>
-        </table>
-        <a href="#" id="win-btn" class="btn">Initialize Installation</a>
-        <div id="api-info" style="margin-top: 20px; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); text-align: center;">Establishing handshake...</div>
-    </div>
     <div class="premium-card">
-        <div class="badge">Final Build: v1.0.0</div>
-        <h2>Mobile Client</h2>
-        <table class="req-table">
-            <tr><td class="req-label">OS Version</td><td class="req-value">Android 8.0+</td></tr>
-            <tr><td class="req-label">Memory</td><td class="req-value">2GB RAM Min.</td></tr>
-            <tr><td class="req-label">Capacity</td><td class="req-value">50MB Available</td></tr>
-            <tr><td class="req-label">Network</td><td class="req-value">Secure Auth Required</td></tr>
-        </table>
-        <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn btn-outline">Download Package (.apk)</a>
+        <h3>Reliability Rating</h3>
+        <div id="reliability-score" style="font-size: 3rem; font-weight: 800; color: var(--maroon);">100%</div>
+        <p style="color: var(--text-muted); font-size: 0.8rem;">Live session stability tracking</p>
+        <a href="#" id="win-btn" class="btn">Initialize Installation</a>
     </div>
+
+    <div class="premium-card">
+        <h3>Mobile Client</h3>
+        <p>Final Release v1.0.0 is now available for deployment.</p>
+        <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn">Download APK</a>
+    </div>
+
     <div class="premium-card span-full">
-        <h3>Institutional Network Uptime</h3>
+        <h3>System Uptime</h3>
         <div class="uptime-display" id="uptime-counter">00:00:00:00</div>
-        <p style="text-align: center; color: var(--text-muted); font-size: 0.7rem; margin-top: 25px; letter-spacing: 3px; font-weight: 600;">CLOUD SYNC STATUS: <span id="sync-text">VERIFYING...</span></p>
-    </div>
-    <div class="premium-card span-full">
-        <h3>Version History & Governance</h3>
-        <ul class="log-list">
-            <li class="log-item">
-                <span class="log-tag">Desktop Build</span>
-                <span class="log-text">Automated provisioning for .NET 10.0 runtime dependencies.</span>
-            </li>
-            <li class="log-item">
-                <span class="log-tag">Security</span>
-                <span class="log-text">Resolution of redirect handshake protocols via encrypted aka.ms channels.</span>
-            </li>
-            <li class="log-item">
-                <span class="log-tag">Interface</span>
-                <span class="log-text">Refined iconography and DPI scaling for high-resolution auditorium displays.</span>
-            </li>
-            <li class="log-item">
-                <span class="log-tag">Mobile Final</span>
-                <span class="log-text">Cross-platform PostgreSQL synchronization validated for secure educational data exchange.</span>
-            </li>
-        </ul>
-    </div>
-    <div class="premium-card span-full" style="text-align: center; border: 2px solid var(--maroon); background: #fffafb;">
-        <h2>Technical Registry</h2>
-        <p style="color: var(--text-muted); margin-bottom: 25px; max-width: 500px; margin-left: auto; margin-right: auto;">For administrative support or infrastructure reporting, contact the system developer.</p>
-        <a href="mailto:joshuagabrieldeleon820@gmail.com" class="btn" style="max-width: 300px; margin-left: auto; margin-right: auto;">Request Assistance</a>
+        <div class="log-container" id="event-logs">
+            <div class="log-entry"><span class="log-time">System</span><span class="log-msg-ok">Starting monitoring engine...</span></div>
+        </div>
     </div>
 </div>
-<footer style="text-align: center; padding: 100px; opacity: 0.4; font-size: 0.7rem; font-weight: 700; color: var(--maroon); letter-spacing: 4px; text-transform: uppercase;">
-    &copy; 2026 QRSYS Academic Infrastructure
-</footer>
+
 <script>
+    const PROJECT_REF = 'gojtoeovryhcnqcwdixl';
     const canvas = document.getElementById('bg-canvas');
     const ctx = canvas.getContext('2d');
+    const uptimeEl = document.getElementById('uptime-counter');
+    const statusEl = document.getElementById('db-status');
+    const overlay = document.getElementById('maintenance-overlay');
+    const logContainer = document.getElementById('event-logs');
+    const reliabilityEl = document.getElementById('reliability-score');
+    
     let particles = [];
     let isPaused = false;
+    let totalChecks = 0;
+    let failedChecks = 0;
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(freq, type) {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.5);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.5);
+    }
+
+    function addLog(message, isError) {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const div = document.createElement('div');
+        div.className = 'log-entry';
+        div.innerHTML = `<span class="log-time">${timeStr}</span><span class="${isError ? 'log-msg-err' : 'log-msg-ok'}">${message}</span>`;
+        logContainer.prepend(div);
+    }
+
     function init() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -303,6 +260,7 @@
             });
         }
     }
+
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         particles.forEach((p, i) => {
@@ -313,86 +271,58 @@
             ctx.beginPath();
             ctx.arc(p.x, p.y, 2, 0, Math.PI*2);
             ctx.fill();
-            for(let j=i+1; j<particles.length; j++) {
-                let p2 = particles[j];
-                let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
-                if(dist < 200) {
-                    ctx.strokeStyle = isPaused ? `rgba(130, 39, 39, ${0.15 - dist/2000})` : `rgba(128, 0, 0, ${0.15 - dist/2000})`;
-                    ctx.lineWidth = 1;
-                    ctx.beginPath();
-                    ctx.moveTo(p.x, p.y);
-                    ctx.lineTo(p2.x, p2.y);
-                    ctx.stroke();
-                }
-            }
         });
         requestAnimationFrame(draw);
     }
+
     function updateUptime() {
-        const startTime = new Date("2026-01-08T00:00:00");
+        const start = new Date("2026-01-08T00:00:00");
         setInterval(() => {
-            if(isPaused) {
-                document.getElementById('uptime-counter').innerText = "INTERRUPTED";
-                return;
-            }
-            const now = new Date();
-            const diff = now - startTime;
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-            const mins = Math.floor((diff / (1000 * 60)) % 60);
-            const secs = Math.floor((diff / 1000) % 60);
-            document.getElementById('uptime-counter').innerText = 
-                `${days.toString().padStart(2, '0')}d ${hours.toString().padStart(2, '0')}h ${mins.toString().padStart(2, '0')}m ${secs.toString().padStart(2, '0')}s`;
+            if(isPaused) return;
+            const diff = new Date() - start;
+            const d = Math.floor(diff / 86400000);
+            const h = Math.floor((diff / 3600000) % 24);
+            const m = Math.floor((diff / 60000) % 60);
+            const s = Math.floor((diff / 1000) % 60);
+            uptimeEl.innerText = `${d}d ${h}h ${m}m ${s}s`;
         }, 1000);
     }
-    async function checkMySupabase() {
-        const PROJECT_REF = 'gojtoeovryhcnqcwdixl'; 
-        const statusPill = document.getElementById('db-status');
-        const syncLabel = document.getElementById('sync-text');
-        const winBtn = document.getElementById('win-btn');
+
+    async function checkStatus() {
+        totalChecks++;
         try {
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 4000);
-            const res = await fetch(`https://${PROJECT_REF}.supabase.co/rest/v1/`, {
-                method: 'GET',
-                signal: controller.signal
-            });
-            clearTimeout(timeoutId);
-            isPaused = false;
-            document.body.classList.remove('db-paused');
-            statusPill.innerText = '● Database Online';
-            statusPill.classList.remove('error');
-            syncLabel.innerText = 'OPERATIONAL (100% UPTIME)';
-            syncLabel.style.color = '#22543d';
-            winBtn.classList.remove('disabled');
+            const ctrl = new AbortController();
+            setTimeout(() => ctrl.abort(), 4000);
+            await fetch(`https://${PROJECT_REF}.supabase.co/rest/v1/`, { signal: ctrl.signal });
+            
+            if(isPaused) {
+                isPaused = false;
+                overlay.style.display = 'none';
+                statusEl.innerText = '● Online';
+                statusEl.classList.remove('error');
+                addLog('The system is fixed. Everything is working normally.', false);
+                playSound(880, 'sine');
+            }
         } catch (e) {
-            isPaused = true;
-            document.body.classList.add('db-paused');
-            statusPill.innerText = '● Database Paused';
-            statusPill.classList.add('error');
-            syncLabel.innerText = 'DOWNTIME DETECTED';
-            syncLabel.style.color = '#822727';
-            winBtn.classList.add('disabled');
+            failedChecks++;
+            if(!isPaused) {
+                isPaused = true;
+                overlay.style.display = 'flex';
+                statusEl.innerText = '● Paused';
+                statusEl.classList.add('error');
+                uptimeEl.innerText = 'INTERRUPTED';
+                addLog('Connection lost. The system is now waiting for the database.', true);
+                playSound(220, 'sawtooth');
+            }
         }
+        const score = Math.max(0, 100 - (failedChecks / totalChecks * 100)).toFixed(1);
+        reliabilityEl.innerText = score + '%';
     }
-    async function sync() {
-        try {
-            const r = await fetch('https://api.github.com/repos/AstroNutws/Attendance-QRSYS/releases/latest');
-            const d = await r.json();
-            const win = document.getElementById('win-btn');
-            const api = document.getElementById('api-info');
-            const bad = document.getElementById('badge-loader');
-            const file = d.assets.find(a => a.name.toLowerCase().includes('installer.exe'));
-            if(file) win.href = file.browser_download_url;
-            bad.innerHTML = `<span class="badge">Current Release: ${d.tag_name}</span>`;
-            api.innerHTML = `Registry Updated: ${new Date(d.published_at).toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'})}`;
-        } catch(e) {
-            document.getElementById('api-info').innerText = "REGISTRY SYNC UNAVAILABLE";
-        }
-    }
+
     window.addEventListener('resize', init);
-    init(); draw(); updateUptime(); sync(); checkMySupabase();
-    setInterval(checkMySupabase, 20000);
+    init(); draw(); updateUptime();
+    checkStatus();
+    setInterval(checkStatus, 15000);
 </script>
 </body>
 </html>
