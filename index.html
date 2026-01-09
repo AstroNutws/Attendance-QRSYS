@@ -368,7 +368,8 @@
 
     async function sync() {
         try {
-            const r = await fetch('https://api.github.com/repos/AstroNutws/Attendance-QRSYS/releases/latest');
+            const cacheBuster = new Date().getTime();
+            const r = await fetch(`https://api.github.com/repos/AstroNutws/Attendance-QRSYS/releases/latest?t=${cacheBuster}`);
             const d = await r.json();
             const win = document.getElementById('win-btn');
             const api = document.getElementById('api-info');
@@ -377,8 +378,12 @@
             const file = d.assets.find(a => a.name.toLowerCase().includes('installer.exe'));
             if(file) win.href = file.browser_download_url;
 
+            const publishedDate = new Date(d.published_at);
+            const options = { month: 'long', day: 'numeric', year: 'numeric' };
+            const formattedDate = publishedDate.toLocaleDateString('en-US', options);
+
             bad.innerHTML = `<span class="badge">Current Release: ${d.tag_name}</span>`;
-            api.innerHTML = `Registry Updated: ${new Date(d.published_at).toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'})}`;
+            api.innerHTML = `Registry Updated: ${formattedDate}`;
         } catch(e) {
             document.getElementById('api-info').innerText = "REGISTRY SYNC UNAVAILABLE";
         }
@@ -389,4 +394,3 @@
 </script>
 </body>
 </html>
-
