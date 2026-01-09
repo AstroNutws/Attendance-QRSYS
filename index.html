@@ -500,7 +500,7 @@
             const ctrl = new AbortController();
             setTimeout(() => ctrl.abort(), 4000);
             
-            const response = await fetch(`https://${PROJECT_REF}.supabase.co/rest/v1/user?select=count`, { 
+            const response = await fetch(`https://${PROJECT_REF}.supabase.co/rest/v1/users?select=count`, { 
                 signal: ctrl.signal,
                 headers: { 'Prefer': 'count=exact' }
             });
@@ -517,7 +517,7 @@
                 registryEl.classList.add('counter-animate');
                 
                 if (lastCount !== -1) {
-                    addLog(`New entry detected. Registry updated to ${currentCount}.`, false);
+                    addLog(`New entry detected in users table. Registry updated to ${currentCount}.`, false);
                     playSound(660, 'sine');
                 }
                 lastCount = currentCount;
