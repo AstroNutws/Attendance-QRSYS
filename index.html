@@ -115,7 +115,7 @@
         }
 
         header {
-            padding: 180px 20px 80px;
+            padding: 180px 20px 60px;
             text-align: center;
             max-width: 900px;
             margin: 0 auto;
@@ -134,7 +134,22 @@
             font-size: 1.1rem;
             color: var(--text-muted);
             max-width: 600px;
-            margin: 0 auto;
+            margin: 0 auto 20px;
+        }
+
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #f0f4ff;
+            color: #2c5282;
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            border: 1px solid #bee3f8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .container {
@@ -151,7 +166,7 @@
             border: 1px solid var(--border);
             border-radius: 20px;
             padding: 45px;
-            transition: transform 0.3s cubic-bezier(0.2, 0, 0.2, 1), shadow 0.3s ease;
+            transition: transform 0.3s cubic-bezier(0.2, 0, 0.2, 1), box-shadow 0.3s ease;
             box-shadow: 0 4px 6px rgba(0,0,0,0.02);
             position: relative;
         }
@@ -166,6 +181,39 @@
         h2 { font-family: var(--font-serif); font-size: 2.2rem; margin-bottom: 15px; color: var(--maroon); }
         h3 { font-family: var(--font-sans); font-size: 0.85rem; color: var(--text-muted); margin-bottom: 25px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
 
+        .stat-value {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--maroon);
+            line-height: 1;
+        }
+
+        .stat-sub {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 5px;
+            margin-bottom: 20px;
+        }
+
+        .sync-stamp {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            color: var(--maroon);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @keyframes pulse-highlight {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); color: var(--maroon-light); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse-trigger {
+            animation: pulse-highlight 0.5s ease-in-out;
+        }
+
         .badge {
             display: inline-block;
             background: var(--maroon);
@@ -178,21 +226,6 @@
             margin-bottom: 15px;
             text-transform: uppercase;
         }
-
-        .req-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-
-        .req-table td {
-            padding: 12px 0;
-            border-bottom: 1px solid #f0f0f0;
-            font-size: 0.95rem;
-        }
-
-        .req-label { color: var(--text-muted); font-weight: 500; width: 40%; }
-        .req-value { color: var(--text-dark); font-weight: 600; text-align: right; }
 
         .btn {
             display: block;
@@ -212,17 +245,6 @@
         .btn:hover {
             background: var(--maroon-light);
             box-shadow: 0 10px 20px rgba(128, 0, 0, 0.2);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--maroon);
-            color: var(--maroon);
-        }
-
-        .btn-outline:hover {
-            background: var(--maroon);
-            color: #fff;
         }
 
         .uptime-display {
@@ -259,34 +281,10 @@
         .log-msg-ok { color: var(--status-ok); font-weight: 600; }
         .log-msg-err { color: var(--status-err); font-weight: 600; }
 
-        .log-list { list-style: none; }
-        .log-item {
-            padding: 20px 0;
-            border-bottom: 1px solid #f0f0f0;
-            display: grid;
-            grid-template-columns: 180px 1fr;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .log-tag {
-            background: #f0f0f0;
-            padding: 4px 12px;
-            border-radius: 6px;
-            color: var(--maroon);
-            font-weight: 700;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            text-align: center;
-        }
-
-        .log-text { font-size: 0.95rem; color: var(--text-dark); }
-
         @media (max-width: 850px) {
             .container { grid-template-columns: 1fr; }
             .span-full { grid-column: span 1; }
             nav { padding: 20px; }
-            .log-item { grid-template-columns: 1fr; gap: 8px; }
         }
     </style>
 </head>
@@ -294,7 +292,7 @@
 
 <div id="maintenance-overlay">
     <h2>System Paused</h2>
-    <p>The central database is currently offline for maintenance. Access will be restored automatically once the infrastructure is resumed.</p>
+    <p>The central QrSys database is currently offline. Handshake protocols have been suspended until the infrastructure is resumed.</p>
     <button class="retry-btn" onclick="checkStatus()">Retry Connection Now</button>
 </div>
 
@@ -308,35 +306,30 @@
 <header>
     <h1>Secure Infrastructure for Modern Attendance Logging.</h1>
     <p class="subtitle">A professional-grade attendance and synchronization engine designed for educational excellence.</p>
+    <div class="security-badge">
+        <img src="https://img.icons8.com/ios-filled/20/2c5282/shield.png" alt="shield">
+        AES-256 Encrypted Handshake
+    </div>
 </header>
 
 <div class="container">
     <div class="premium-card">
-        <h3>Session Reliability</h3>
-        <div id="reliability-score" style="font-size: 3.5rem; font-weight: 800; color: var(--maroon);">100%</div>
-        <p style="color: var(--text-muted); font-size: 0.85rem;">Live stability performance tracking</p>
+        <h3>System Readiness</h3>
+        <div id="reliability-score" class="stat-value">100%</div>
+        <p class="stat-sub">Live link integrity with QrSys database</p>
         <div id="badge-loader"></div>
-        <h2>Desktop Version</h2>
-        <table class="req-table">
-            <tr><td class="req-label">Environment</td><td class="req-value">Windows x64</td></tr>
-            <tr><td class="req-label">Imaging</td><td class="req-value">Camera Support</td></tr>
-            <tr><td class="req-label">Local Storage</td><td class="req-value">400MB Required</td></tr>
-            <tr><td class="req-label">Network</td><td class="req-value">Always Online</td></tr>
-        </table>
+        <h2>Desktop Station</h2>
         <a href="#" id="win-btn" class="btn">Initialize Installation</a>
         <div id="api-info" style="margin-top: 20px; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); text-align: center;">Establishing handshake...</div>
     </div>
 
     <div class="premium-card">
-        <div class="badge">Final Build: v1.0.0</div>
+        <h3>Database Registry</h3>
+        <div id="db-count" class="stat-value">...</div>
+        <p class="stat-sub">Total Registered Students in 'user' table</p>
+        <div id="last-sync" class="sync-stamp">Last Sync: --:--:--</div>
         <h2>Mobile Client</h2>
-        <table class="req-table">
-            <tr><td class="req-label">OS Version</td><td class="req-value">Android 8.0+</td></tr>
-            <tr><td class="req-label">Memory</td><td class="req-value">2GB RAM Min.</td></tr>
-            <tr><td class="req-label">Capacity</td><td class="req-value">50MB Available</td></tr>
-            <tr><td class="req-label">Network</td><td class="req-value">Secure Auth Required</td></tr>
-        </table>
-        <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn btn-outline">Download Package (.apk)</a>
+        <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn" style="background:transparent; border: 2px solid var(--maroon); color: var(--maroon);">Download APK</a>
     </div>
 
     <div class="premium-card span-full">
@@ -345,36 +338,8 @@
         <p style="text-align: center; color: var(--text-muted); font-size: 0.7rem; margin-top: 25px; letter-spacing: 3px; font-weight: 600;">CLOUD SYNC STATUS: <span id="sync-text">VERIFYING...</span></p>
         
         <div class="log-container" id="event-logs">
-            <div class="log-entry"><span class="log-time">SYSTEM</span><span class="log-msg-ok">Initializing monitoring engine...</span></div>
+            <div class="log-entry"><span class="log-time">SYSTEM</span><span class="log-msg-ok">Initializing QrSys monitoring engine...</span></div>
         </div>
-    </div>
-
-    <div class="premium-card span-full">
-        <h3>Version History & Governance</h3>
-        <ul class="log-list">
-            <li class="log-item">
-                <span class="log-tag">Desktop Build</span>
-                <span class="log-text">Automated provisioning for .NET 10.0 runtime dependencies.</span>
-            </li>
-            <li class="log-item">
-                <span class="log-tag">Security</span>
-                <span class="log-text">Resolution of redirect handshake protocols via encrypted aka.ms channels.</span>
-            </li>
-            <li class="log-item">
-                <span class="log-tag">Interface</span>
-                <span class="log-text">Refined iconography and DPI scaling for high-resolution auditorium displays.</span>
-            </li>
-            <li class="log-item">
-                <span class="log-tag">Mobile Final</span>
-                <span class="log-text">Cross-platform PostgreSQL synchronization validated for secure educational data exchange.</span>
-            </li>
-        </ul>
-    </div>
-
-    <div class="premium-card span-full" style="text-align: center; border: 2px solid var(--maroon); background: #fffafb;">
-        <h2>Technical Registry</h2>
-        <p style="color: var(--text-muted); margin-bottom: 25px; max-width: 500px; margin-left: auto; margin-right: auto;">For administrative support or infrastructure reporting, contact the system developer.</p>
-        <a href="mailto:joshuagabrieldeleon820@gmail.com" class="btn" style="max-width: 300px; margin-left: auto; margin-right: auto;">Request Assistance</a>
     </div>
 </div>
 
@@ -392,6 +357,8 @@
     const overlay = document.getElementById('maintenance-overlay');
     const logContainer = document.getElementById('event-logs');
     const reliabilityEl = document.getElementById('reliability-score');
+    const dbCountEl = document.getElementById('db-count');
+    const syncStampEl = document.getElementById('last-sync');
     
     let particles = [];
     let isPaused = false;
@@ -400,6 +367,7 @@
 
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     function playSound(freq, type) {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = type;
@@ -419,6 +387,12 @@
         div.className = 'log-entry';
         div.innerHTML = `<span class="log-time">${timeStr}</span><span class="${isError ? 'log-msg-err' : 'log-msg-ok'}">${message}</span>`;
         logContainer.prepend(div);
+    }
+
+    function animatePulse(element) {
+        element.classList.remove('pulse-trigger');
+        void element.offsetWidth;
+        element.classList.add('pulse-trigger');
     }
 
     function init() {
@@ -483,17 +457,32 @@
         try {
             const ctrl = new AbortController();
             setTimeout(() => ctrl.abort(), 4000);
-            await fetch(`https://${PROJECT_REF}.supabase.co/rest/v1/`, { signal: ctrl.signal });
             
-            if(isPaused || totalChecks === 1) {
-                isPaused = false;
-                overlay.style.display = 'none';
-                statusEl.innerText = '● System Operational';
-                statusEl.classList.remove('error');
-                syncText.innerText = 'OPERATIONAL';
-                syncText.style.color = '#22543d';
-                addLog('The system is fixed. Everything is working normally.', false);
-                if(totalChecks > 1) playSound(880, 'sine');
+            const res = await fetch(`https://${PROJECT_REF}.supabase.co/rest/v1/user?select=count`, { 
+                headers: { "Prefer": "count=exact" },
+                signal: ctrl.signal 
+            });
+            
+            if(res.ok) {
+                const count = res.headers.get("content-range")?.split("/")[1] || "0";
+                dbCountEl.innerText = parseInt(count).toLocaleString();
+                
+                const now = new Date();
+                syncStampEl.innerText = `Last Sync: ${now.toLocaleTimeString([], { hour12: false })}`;
+                
+                animatePulse(dbCountEl);
+                animatePulse(reliabilityEl);
+
+                if(isPaused || totalChecks === 1) {
+                    isPaused = false;
+                    overlay.style.display = 'none';
+                    statusEl.innerText = '● System Operational';
+                    statusEl.classList.remove('error');
+                    syncText.innerText = 'OPERATIONAL';
+                    syncText.style.color = '#22543d';
+                    addLog('SUCCESS: QrSys database is fully synced and stable.', false);
+                    if(totalChecks > 1) playSound(880, 'sine');
+                }
             }
         } catch (e) {
             failedChecks++;
@@ -504,7 +493,7 @@
                 statusEl.classList.add('error');
                 syncText.innerText = 'OFFLINE';
                 syncText.style.color = '#822727';
-                addLog('Connection lost. The system is now waiting for the database.', true);
+                addLog('ALERT: Connection lost. QrSys is waiting for database response.', true);
                 playSound(220, 'sawtooth');
             }
         }
@@ -531,7 +520,7 @@
     window.addEventListener('resize', init);
     init(); draw(); updateUptime(); sync();
     checkStatus();
-    setInterval(checkStatus, 15000);
+    setInterval(checkStatus, 10000);
 </script>
 </body>
 </html>
