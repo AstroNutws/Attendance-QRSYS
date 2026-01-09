@@ -260,29 +260,6 @@
         .log-msg-ok { color: var(--status-ok); font-weight: 600; }
         .log-msg-err { color: var(--status-err); font-weight: 600; }
 
-        .log-list { list-style: none; }
-        .log-item {
-            padding: 20px 0;
-            border-bottom: 1px solid #f0f0f0;
-            display: grid;
-            grid-template-columns: 180px 1fr;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .log-tag {
-            background: #f0f0f0;
-            padding: 4px 12px;
-            border-radius: 6px;
-            color: var(--maroon);
-            font-weight: 700;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            text-align: center;
-        }
-
-        .log-text { font-size: 0.95rem; color: var(--text-dark); }
-
         .counter-animate {
             animation: pulse-maroon 0.5s ease-out;
         }
@@ -297,7 +274,6 @@
             .container { grid-template-columns: 1fr; }
             .span-full { grid-column: span 1; }
             nav { padding: 20px; }
-            .log-item { grid-template-columns: 1fr; gap: 8px; }
         }
     </style>
 </head>
@@ -317,25 +293,27 @@
 <canvas id="bg-canvas"></canvas>
 
 <header>
-    <h1>Seamless Attendance. Total Visibility.</h1>
-    <p class="subtitle">A high-performance QR ecosystem designed for teachers to log attendance in seconds and students to track their progress in real-time.</p>
+    <h1>Secure Infrastructure for Modern Attendance Logging.</h1>
+    <p class="subtitle">A professional-grade attendance and synchronization engine designed for educational excellence.</p>
 </header>
 
 <div class="container">
     <div class="premium-card">
-        <h3>Network Stability</h3>
-        <div id="reliability-score" style="font-size: 3.5rem; font-weight: 800; color: var(--maroon);">100%</div>
-        <p style="color: var(--text-muted); font-size: 0.85rem;">Live teacher-to-student sync rate</p>
-        <div id="badge-loader"></div>
+        <h3>System Status</h3>
+        <div id="reliability-score" style="font-size: 3rem; font-weight: 800; color: #22543d;">24/7 Support</div>
+        <p style="color: var(--text-muted); font-size: 0.85rem;">Dedicated administrator availability</p>
+        <div id="badge-loader" style="margin-top: 15px;">
+            <span class="badge" style="background: #22543d;">STATUS: ACTIVE</span>
+        </div>
         <h2>Teacher Console</h2>
         <table class="req-table">
             <tr><td class="req-label">Platform</td><td class="req-value">Windows x64</td></tr>
             <tr><td class="req-label">Hardware</td><td class="req-value">Camera / Scanner</td></tr>
             <tr><td class="req-label">Primary Goal</td><td class="req-value">Rapid Logging</td></tr>
-            <tr><td class="req-label">Export</td><td class="req-value">CSV & PDF Support</td></tr>
+            <tr><td class="req-label">Build Version</td><td class="req-value">v1.1.0</td></tr>
         </table>
         <a href="#" id="win-btn" class="btn">Initialize Installation</a>
-        <div id="api-info" style="margin-top: 20px; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); text-align: center;">Establishing handshake...</div>
+        <div id="api-info" style="margin-top: 20px; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); text-align: center;">Registry Updated: January 8, 2026</div>
     </div>
 
     <div class="premium-card">
@@ -353,6 +331,13 @@
         <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn btn-outline">Download Package (.apk)</a>
     </div>
 
+    <div class="premium-card span-full" style="text-align: center;">
+        <h3>Communications</h3>
+        <h2>Support & Inquiries</h2>
+        <p style="color: var(--text-muted); max-width: 500px; margin: 0 auto 10px;">Encountering sync issues or registry errors?</p>
+        <a href="mailto:admin@qrsys.edu?subject=System%20Support%20Inquiry" class="btn" style="max-width: 320px; margin: 20px auto 0;">Email System Administrator</a>
+    </div>
+
     <div class="premium-card span-full">
         <h3>System Live Uptime</h3>
         <div class="uptime-display" id="uptime-counter">00:00:00:00</div>
@@ -361,28 +346,6 @@
         <div class="log-container" id="event-logs">
             <div class="log-entry"><span class="log-time">SYSTEM</span><span class="log-msg-ok">Initializing monitoring engine...</span></div>
         </div>
-    </div>
-
-    <div class="premium-card span-full">
-        <h3>Institutional Value & Governance</h3>
-        <ul class="log-list">
-            <li class="log-item">
-                <span class="log-tag">QR Logic</span>
-                <span class="log-text">Teachers use encrypted QR tokens to prevent "buddy-scanning" and ensure student presence.</span>
-            </li>
-            <li class="log-item">
-                <span class="log-tag">Automation</span>
-                <span class="log-text">Manual record-keeping is replaced by automated PostgreSQL synchronization across all devices.</span>
-            </li>
-            <li class="log-item">
-                <span class="log-tag">Student App</span>
-                <span class="log-text">A dedicated mobile portal allows students to monitor their own attendance record without teacher assistance.</span>
-            </li>
-            <li class="log-item">
-                <span class="log-tag">Reporting</span>
-                <span class="log-text">Comprehensive reporting tools for faculty to generate end-of-semester data with a single click.</span>
-            </li>
-        </ul>
     </div>
 </div>
 
@@ -399,26 +362,14 @@
     const syncText = document.getElementById('sync-text');
     const overlay = document.getElementById('maintenance-overlay');
     const logContainer = document.getElementById('event-logs');
-    const reliabilityEl = document.getElementById('reliability-score');
     const registryEl = document.getElementById('db-registry-count');
     
     let particles = [];
     let isPaused = false;
-    let totalChecks = 0;
-    let failedChecks = 0;
     let lastCount = -1;
 
     function closeOverlay() {
         overlay.style.display = 'none';
-    }
-
-    function addLog(message, isError) {
-        const now = new Date();
-        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        const div = document.createElement('div');
-        div.className = 'log-entry';
-        div.innerHTML = `<span class="log-time">${timeStr}</span><span class="${isError ? 'log-msg-err' : 'log-msg-ok'}">${message}</span>`;
-        logContainer.prepend(div);
     }
 
     function init() {
@@ -475,44 +426,34 @@
     }
 
     async function checkStatus() {
-        totalChecks++;
         try {
             const ctrl = new AbortController();
             setTimeout(() => ctrl.abort(), 3000);
-            
             const response = await fetch(`https://${PROJECT_REF}.supabase.co/rest/v1/users?select=count`, { 
                 signal: ctrl.signal,
                 headers: { 'Prefer': 'count=exact' }
             });
-            
             if(!response.ok) throw new Error("Key Required");
-
             const countHeader = response.headers.get('content-range');
             const currentCount = countHeader ? parseInt(countHeader.split('/')[1]) : 0;
-
             if (currentCount !== lastCount) {
                 registryEl.innerText = currentCount;
                 registryEl.classList.add('counter-animate');
                 setTimeout(() => registryEl.classList.remove('counter-animate'), 500);
                 lastCount = currentCount;
             }
-
             statusEl.innerText = '● System Operational';
             statusEl.classList.remove('error');
             syncText.innerText = 'OPERATIONAL';
             syncText.style.color = '#22543d';
             isPaused = false;
-
         } catch (e) {
-            failedChecks++;
             statusEl.innerText = '● Live Stats Offline';
             statusEl.classList.add('error');
             syncText.innerText = 'SYNC ERROR';
             syncText.style.color = '#822727';
             isPaused = true;
         }
-        const score = Math.max(0, 100 - (failedChecks / totalChecks * 100)).toFixed(1);
-        reliabilityEl.innerText = score + '%';
     }
 
     async function sync() {
@@ -520,15 +461,9 @@
             const r = await fetch('https://api.github.com/repos/AstroNutws/Attendance-QRSYS/releases/latest');
             const d = await r.json();
             const win = document.getElementById('win-btn');
-            const api = document.getElementById('api-info');
-            const bad = document.getElementById('badge-loader');
             const file = d.assets.find(a => a.name.toLowerCase().includes('installer.exe'));
             if(file) win.href = file.browser_download_url;
-            bad.innerHTML = `<span class="badge">Current Release: ${d.tag_name}</span>`;
-            api.innerHTML = `Registry Updated: ${new Date(d.published_at).toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'})}`;
-        } catch(e) {
-            document.getElementById('api-info').innerText = "GITHUB REGISTRY SYNC UNAVAILABLE";
-        }
+        } catch(e) {}
     }
 
     window.addEventListener('resize', init);
