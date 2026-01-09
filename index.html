@@ -133,7 +133,7 @@
         .subtitle {
             font-size: 1.1rem;
             color: var(--text-muted);
-            max-width: 600px;
+            max-width: 650px;
             margin: 0 auto;
         }
 
@@ -317,22 +317,22 @@
 <canvas id="bg-canvas"></canvas>
 
 <header>
-    <h1>Secure Infrastructure for Modern Attendance Logging.</h1>
-    <p class="subtitle">A professional-grade attendance and synchronization engine designed for educational excellence.</p>
+    <h1>Seamless Attendance. Total Visibility.</h1>
+    <p class="subtitle">A high-performance QR ecosystem designed for teachers to log attendance in seconds and students to track their progress in real-time.</p>
 </header>
 
 <div class="container">
     <div class="premium-card">
-        <h3>Session Reliability</h3>
+        <h3>Network Stability</h3>
         <div id="reliability-score" style="font-size: 3.5rem; font-weight: 800; color: var(--maroon);">100%</div>
-        <p style="color: var(--text-muted); font-size: 0.85rem;">Live stability performance tracking</p>
+        <p style="color: var(--text-muted); font-size: 0.85rem;">Live teacher-to-student sync rate</p>
         <div id="badge-loader"></div>
-        <h2>Desktop Version</h2>
+        <h2>Teacher Console</h2>
         <table class="req-table">
-            <tr><td class="req-label">Environment</td><td class="req-value">Windows x64</td></tr>
-            <tr><td class="req-label">Imaging</td><td class="req-value">Camera Support</td></tr>
-            <tr><td class="req-label">Local Storage</td><td class="req-value">400MB Required</td></tr>
-            <tr><td class="req-label">Network</td><td class="req-value">Always Online</td></tr>
+            <tr><td class="req-label">Platform</td><td class="req-value">Windows x64</td></tr>
+            <tr><td class="req-label">Hardware</td><td class="req-value">Camera / Scanner</td></tr>
+            <tr><td class="req-label">Primary Goal</td><td class="req-value">Rapid Logging</td></tr>
+            <tr><td class="req-label">Export</td><td class="req-value">CSV & PDF Support</td></tr>
         </table>
         <a href="#" id="win-btn" class="btn">Initialize Installation</a>
         <div id="api-info" style="margin-top: 20px; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); text-align: center;">Establishing handshake...</div>
@@ -341,14 +341,14 @@
     <div class="premium-card">
         <h3>Database Registry</h3>
         <div id="db-registry-count" style="font-size: 3.5rem; font-weight: 800; color: var(--maroon);">0</div>
-        <p style="color: var(--text-muted); font-size: 0.85rem;">Total verified records in cloud</p>
+        <p style="color: var(--text-muted); font-size: 0.85rem;">Total attendance logs processed</p>
         <div class="badge" style="margin-top: 15px;">Final Build: v1.0.0</div>
-        <h2>Mobile Client</h2>
+        <h2>Student Client</h2>
         <table class="req-table">
-            <tr><td class="req-label">OS Version</td><td class="req-value">Android 8.0+</td></tr>
-            <tr><td class="req-label">Memory</td><td class="req-value">2GB RAM Min.</td></tr>
-            <tr><td class="req-label">Capacity</td><td class="req-value">50MB Available</td></tr>
-            <tr><td class="req-label">Network</td><td class="req-value">Secure Auth Required</td></tr>
+            <tr><td class="req-label">Environment</td><td class="req-value">Android 8.0+</td></tr>
+            <tr><td class="req-label">Visibility</td><td class="req-value">Full History</td></tr>
+            <tr><td class="req-label">Availability</td><td class="req-value">Anytime, Anywhere</td></tr>
+            <tr><td class="req-label">Security</td><td class="req-value">Verified Student ID</td></tr>
         </table>
         <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/AttendanceQRSYS.-.Signed.apk" class="btn btn-outline">Download Package (.apk)</a>
     </div>
@@ -361,6 +361,28 @@
         <div class="log-container" id="event-logs">
             <div class="log-entry"><span class="log-time">SYSTEM</span><span class="log-msg-ok">Initializing monitoring engine...</span></div>
         </div>
+    </div>
+
+    <div class="premium-card span-full">
+        <h3>Institutional Value & Governance</h3>
+        <ul class="log-list">
+            <li class="log-item">
+                <span class="log-tag">QR Logic</span>
+                <span class="log-text">Teachers use encrypted QR tokens to prevent "buddy-scanning" and ensure student presence.</span>
+            </li>
+            <li class="log-item">
+                <span class="log-tag">Automation</span>
+                <span class="log-text">Manual record-keeping is replaced by automated PostgreSQL synchronization across all devices.</span>
+            </li>
+            <li class="log-item">
+                <span class="log-tag">Student App</span>
+                <span class="log-text">A dedicated mobile portal allows students to monitor their own attendance record without teacher assistance.</span>
+            </li>
+            <li class="log-item">
+                <span class="log-tag">Reporting</span>
+                <span class="log-text">Comprehensive reporting tools for faculty to generate end-of-semester data with a single click.</span>
+            </li>
+        </ul>
     </div>
 </div>
 
@@ -488,7 +510,6 @@
             syncText.innerText = 'SYNC ERROR';
             syncText.style.color = '#822727';
             isPaused = true;
-            // Removed the intrusive overlay logic here so users can still see the page
         }
         const score = Math.max(0, 100 - (failedChecks / totalChecks * 100)).toFixed(1);
         reliabilityEl.innerText = score + '%';
