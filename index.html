@@ -15,9 +15,21 @@
             --text-dark: #1a1a1a;
             --text-muted: #666;
             --border: #e5e5e5;
+            --card-bg: #ffffff;
+            --nav-bg: rgba(255, 255, 255, 0.8);
             --font-serif: 'Crimson Pro', serif;
             --font-sans: 'Inter', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="dark"] {
+            --cream: #0a0a0a;
+            --text-dark: #f5f5f5;
+            --text-muted: #a0a0a0;
+            --border: #222222;
+            --card-bg: #141414;
+            --nav-bg: rgba(10, 10, 10, 0.8);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: default; }
@@ -28,6 +40,7 @@
             color: var(--text-dark);
             overflow-x: hidden;
             line-height: 1.6;
+            transition: background-color var(--transition), color var(--transition);
         }
 
         #bg-canvas {
@@ -40,14 +53,15 @@
         nav {
             position: fixed;
             top: 0; width: 100%;
-            padding: 20px 60px;
+            padding: 15px 60px;
             backdrop-filter: blur(15px);
-            background: rgba(255, 255, 255, 0.8);
+            background: var(--nav-bg);
             border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
+            transition: background var(--transition), border var(--transition);
         }
 
         .nav-logo {
@@ -58,18 +72,29 @@
             letter-spacing: -0.5px;
         }
 
-        .status-pill {
-            display: inline-flex;
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border);
+            padding: 8px 12px;
+            border-radius: 8px;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
             align-items: center;
             gap: 8px;
-            padding: 6px 16px;
-            background: #f0fff4;
-            color: #22543d;
-            border-radius: 50px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            border: 1px solid #c6f6d5;
-            text-transform: uppercase;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background: var(--border);
         }
 
         header {
@@ -105,11 +130,11 @@
         }
 
         .premium-card {
-            background: #fff;
+            background: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: 20px;
             padding: 45px;
-            transition: transform 0.3s cubic-bezier(0.2, 0, 0.2, 1), box-shadow 0.3s ease;
+            transition: transform 0.3s cubic-bezier(0.2, 0, 0.2, 1), box-shadow 0.3s ease, background var(--transition), border var(--transition);
             box-shadow: 0 4px 6px rgba(0,0,0,0.02);
             position: relative;
         }
@@ -137,8 +162,6 @@
             text-transform: uppercase;
         }
 
-        .badge-success { background: #22543d; }
-
         .req-table {
             width: 100%;
             border-collapse: collapse;
@@ -147,7 +170,7 @@
 
         .req-table td {
             padding: 12px 0;
-            border-bottom: 1px solid #f0f0f0;
+            border-bottom: 1px solid var(--border);
             font-size: 0.95rem;
         }
 
@@ -194,19 +217,20 @@
 
         .uptime-display {
             font-family: var(--font-mono);
-            background: #f8f8f8;
+            background: var(--cream);
             padding: 40px;
             border-radius: 15px;
             font-size: 2.5rem;
             color: var(--maroon);
             text-align: center;
             font-weight: 700;
+            border: 1px solid var(--border);
         }
 
         .log-list { list-style: none; }
         .log-item {
             padding: 20px 0;
-            border-bottom: 1px solid #f0f0f0;
+            border-bottom: 1px solid var(--border);
             display: grid;
             grid-template-columns: 180px 1fr;
             gap: 20px;
@@ -214,7 +238,7 @@
         }
 
         .log-tag {
-            background: #f0f0f0;
+            background: var(--border);
             padding: 4px 12px;
             border-radius: 6px;
             color: var(--maroon);
@@ -224,12 +248,10 @@
             text-align: center;
         }
 
-        .log-text { font-size: 0.95rem; color: var(--text-dark); }
-
         @media (max-width: 850px) {
             .container { grid-template-columns: 1fr; }
             .span-full { grid-column: span 1; }
-            nav { padding: 20px; }
+            nav { padding: 15px 20px; }
             .log-item { grid-template-columns: 1fr; gap: 8px; }
         }
     </style>
@@ -238,7 +260,11 @@
 
 <nav>
     <div class="nav-logo">QRSYS</div>
-    <div class="status-pill">● System Operational</div>
+    <div class="nav-controls">
+        <button class="theme-toggle" id="theme-switcher">
+            <span id="theme-icon">🌙</span> Dark Mode
+        </button>
+    </div>
 </nav>
 
 <canvas id="bg-canvas"></canvas>
@@ -251,11 +277,11 @@
 <div class="container">
     <div class="premium-card">
         <div id="badge-loader"></div>
-        <h2>Desktop/Laptop Version</h2>
+        <h2>Desktop Version</h2>
         <table class="req-table">
             <tr><td class="req-label">Environment</td><td class="req-value">Windows x64/32</td></tr>
             <tr><td class="req-label">Imaging</td><td class="req-value">Webcam Support</td></tr>
-            <tr><td class="req-label">Local Storage</td><td class="req-value">400MB Required</td></tr>
+            <tr><td class="req-label">Storage</td><td class="req-value">400MB Required</td></tr>
             <tr><td class="req-label">Network</td><td class="req-value">Lan/Wi-Fi</td></tr>
         </table>
         <a href="#" id="win-btn" class="btn">Download Installer</a>
@@ -263,7 +289,7 @@
     </div>
 
     <div class="premium-card">
-        <div class="badge badge-success">Stable Mobile Build</div>
+        <div class="badge" style="background: #22543d;">Stable Mobile Build</div>
         <h2>Mobile Client</h2>
         <table class="req-table">
             <tr><td class="req-label">OS Version</td><td class="req-value">Android 8.0+</td></tr>
@@ -295,15 +321,15 @@
     </div>
 
     <div class="premium-card span-full">
-        <h3>Version History</h3>
+        <h3>Update Log</h3>
         <ul class="log-list">
             <li class="log-item"><span class="log-tag">Desktop</span><span class="log-text">Automated updater integrated.</span></li>
             <li class="log-item"><span class="log-tag">Bug Fixes</span><span class="log-text">Fixed portal login synchronization.</span></li>
-            <li class="log-item"><span class="log-tag">Interface</span><span class="log-text">Updated color palette and audio indicators.</span></li>
+            <li class="log-item"><span class="log-tag">Interface</span><span class="log-text">Added Dark Mode support.</span></li>
         </ul>
     </div>
 
-    <div class="premium-card span-full" style="text-align: center; border: 2px solid var(--maroon); background: #fffafb;">
+    <div class="premium-card span-full" style="text-align: center; border: 2px solid var(--maroon);">
         <h2>Technical Registry</h2>
         <a href="mailto:samongud@gmail.com" class="btn" style="max-width: 300px; margin: 20px auto 0;">Request Assistance</a>
     </div>
@@ -314,6 +340,31 @@
 </footer>
 
 <script>
+    // Theme Logic
+    const themeBtn = document.getElementById('theme-switcher');
+    const themeIcon = document.getElementById('theme-icon');
+    const currentTheme = localStorage.getItem('theme') || 'light';
+
+    if (currentTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        themeIcon.innerText = '☀️';
+        themeBtn.innerHTML = '<span id="theme-icon">☀️</span> Light Mode';
+    }
+
+    themeBtn.addEventListener('click', () => {
+        let theme = document.documentElement.getAttribute('data-theme');
+        if (theme === 'dark') {
+            document.documentElement.removeAttribute('data-theme');
+            localStorage.setItem('theme', 'light');
+            themeBtn.innerHTML = '<span id="theme-icon">🌙</span> Dark Mode';
+        } else {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+            themeBtn.innerHTML = '<span id="theme-icon">☀️</span> Light Mode';
+        }
+    });
+
+    // Canvas Background
     const canvas = document.getElementById('bg-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
