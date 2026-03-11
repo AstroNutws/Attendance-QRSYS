@@ -81,7 +81,7 @@
 
         h1 {
             font-family: var(--font-serif);
-            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-size: clamp(2.2rem, 8vw, 4.5rem);
             font-weight: 800;
             line-height: 1.1;
             color: var(--maroon);
@@ -231,7 +231,6 @@
             .span-full { grid-column: span 1; }
             nav { padding: 20px; }
             .log-item { grid-template-columns: 1fr; gap: 8px; }
-            .nav-logo { font-size: 1.1rem; }
         }
     </style>
 </head>
@@ -246,21 +245,21 @@
 
 <header>
     <h1>Secure Infrastructure for Modern Attendance Logging.</h1>
-    <p class="subtitle">A professional-grade attendance logging system designed for academic environments.</p>
+    <p class="subtitle">A professional-grade attendance logging system designed for schools.</p>
 </header>
 
 <div class="container">
     <div class="premium-card">
         <div id="badge-loader"></div>
-        <h2>Desktop Version</h2>
+        <h2>Desktop/Laptop Version</h2>
         <table class="req-table">
             <tr><td class="req-label">Environment</td><td class="req-value">Windows x64/32</td></tr>
             <tr><td class="req-label">Imaging</td><td class="req-value">Webcam Support</td></tr>
-            <tr><td class="req-label">Storage</td><td class="req-value">400MB Required</td></tr>
-            <tr><td class="req-label">Network</td><td class="req-value">Online/Offline</td></tr>
+            <tr><td class="req-label">Local Storage</td><td class="req-value">400MB Required</td></tr>
+            <tr><td class="req-label">Network</td><td class="req-value">Lan/Wi-Fi</td></tr>
         </table>
         <a href="#" id="win-btn" class="btn">Download Installer</a>
-        <div id="api-info" style="margin-top: 20px; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); text-align: center;">Handshaking with GitHub...</div>
+        <div id="api-info" style="margin-top: 20px; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); text-align: center;">Syncing with Registry...</div>
     </div>
 
     <div class="premium-card">
@@ -296,12 +295,17 @@
     </div>
 
     <div class="premium-card span-full">
-        <h3>Update Log</h3>
+        <h3>Version History</h3>
         <ul class="log-list">
-            <li class="log-item"><span class="log-tag">Desktop</span><span class="log-text">Integrated automated updater.</span></li>
-            <li class="log-item"><span class="log-tag">Bug Fixes</span><span class="log-text">Resolved portal access issues for admin/students.</span></li>
-            <li class="log-item"><span class="log-tag">Interface</span><span class="log-text">Refined UI color palette and scanner audio feedback.</span></li>
+            <li class="log-item"><span class="log-tag">Desktop</span><span class="log-text">Automated updater integrated.</span></li>
+            <li class="log-item"><span class="log-tag">Bug Fixes</span><span class="log-text">Fixed portal login synchronization.</span></li>
+            <li class="log-item"><span class="log-tag">Interface</span><span class="log-text">Updated color palette and audio indicators.</span></li>
         </ul>
+    </div>
+
+    <div class="premium-card span-full" style="text-align: center; border: 2px solid var(--maroon); background: #fffafb;">
+        <h2>Technical Registry</h2>
+        <a href="mailto:samongud@gmail.com" class="btn" style="max-width: 300px; margin: 20px auto 0;">Request Assistance</a>
     </div>
 </div>
 
@@ -318,12 +322,12 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         particles = [];
-        for(let i=0; i<40; i++) {
+        for(let i=0; i<45; i++) {
             particles.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
-                vx: (Math.random() - 0.5) * 0.4,
-                vy: (Math.random() - 0.5) * 0.4
+                vx: (Math.random() - 0.5) * 0.35,
+                vy: (Math.random() - 0.5) * 0.35
             });
         }
     }
@@ -334,7 +338,7 @@
             p.x += p.vx; p.y += p.vy;
             if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
             if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
-            ctx.fillStyle = '#80000011';
+            ctx.fillStyle = '#80000018';
             ctx.beginPath();
             ctx.arc(p.x, p.y, 2, 0, Math.PI*2);
             ctx.fill();
@@ -342,7 +346,7 @@
                 let p2 = particles[j];
                 let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
                 if(dist < 180) {
-                    ctx.strokeStyle = `rgba(128, 0, 0, ${0.1 - dist/1800})`;
+                    ctx.strokeStyle = `rgba(128, 0, 0, ${0.12 - dist/1800})`;
                     ctx.beginPath();
                     ctx.moveTo(p.x, p.y);
                     ctx.lineTo(p2.x, p2.y);
@@ -368,15 +372,15 @@
 
     async function sync() {
         try {
-            const r = await fetch(`https://api.github.com/repos/AstroNutws/Attendance-QRSYS/releases/latest`);
+            const r = await fetch('https://api.github.com/repos/AstroNutws/Attendance-QRSYS/releases/latest');
             const d = await r.json();
             const win = document.getElementById('win-btn');
             const file = d.assets.find(a => a.name.toLowerCase().includes('installer.exe'));
             if(file) win.href = file.browser_download_url;
-            document.getElementById('badge-loader').innerHTML = `<span class="badge">v${d.tag_name}</span>`;
-            document.getElementById('api-info').innerText = `Release Date: ${new Date(d.published_at).toLocaleDateString()}`;
+            document.getElementById('badge-loader').innerHTML = `<span class="badge">Build: ${d.tag_name}</span>`;
+            document.getElementById('api-info').innerText = `Registry Updated: ${new Date(d.published_at).toLocaleDateString()}`;
         } catch(e) {
-            document.getElementById('api-info').innerText = "OFFLINE MODE";
+            document.getElementById('api-info').innerText = "OFFLINE CACHE ACTIVE";
         }
     }
 
