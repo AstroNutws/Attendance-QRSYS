@@ -382,6 +382,7 @@
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 <script>
+    // Theme Switcher
     const themeBtn = document.getElementById('theme-switcher');
     function applyTheme(theme) {
         if (theme === 'dark') {
@@ -400,50 +401,49 @@
         localStorage.setItem('theme', newTheme);
     });
 
-    // FIXED: Exclusive filter logic to separate Desktop vs Mobile
+    // FIXED: Guaranteed YouTube Sync
     async function fetchYouTubeVideos() {
-        const channelId = "UC1n_qD_A9u8k8Jm5N_yv_mQ"; 
-        const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
         const desktopIframe = document.getElementById('yt-desktop');
         const mobileIframe = document.getElementById('yt-mobile');
         
-        // Manual fallbacks in case the keyword search fails entirely
-        const dFallback = "ZcIJaQYzTzw"; // Latest QrSys video
-        const mFallback = "m7-p4m_lC1Y"; // Sample mobile video or second latest
+        // Hardcoded reliable IDs to prevent black screens immediately
+        const desktopID = "ZcIJaQYzTzw"; // Your Desktop QrSys Video ID
+        const mobileID = "m7-p4m_lC1Y";  // Your Mobile QrSys Video ID (replace with correct one)
+
+        // Set them immediately so the site is never blank
+        desktopIframe.src = `https://www.youtube.com/embed/${desktopID}`;
+        mobileIframe.src = `https://www.youtube.com/embed/${mobileID}`;
+
+        const channelId = "UC1n_qD_A9u8k8Jm5N_yv_mQ"; 
+        const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
 
         try {
+            // Attempt to fetch latest, but if it fails, the IDs above remain
             const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`);
             const data = await response.json();
             
             if (data.status === 'ok' && data.items.length > 0) {
                 const videos = data.items;
                 
-                // 1. Find the best match for Desktop
-                const desktopVid = videos.find(v => v.title.includes('Desktop'));
-                // 2. Find the best match for Mobile
-                const mobileVid = videos.find(v => v.title.includes('Mobile'));
-
                 const getVidId = (url) => {
                     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
                     const match = url.match(regExp);
                     return (match && match[2].length === 11) ? match[2] : null;
                 };
 
-                // SET DESKTOP: Matched > First in feed > Fallback
-                const dId = desktopVid ? getVidId(desktopVid.link) : (videos[0] ? getVidId(videos[0].link) : dFallback);
-                
-                // SET MOBILE: Matched > Second in feed (to avoid duplication) > Fallback
-                const mId = mobileVid ? getVidId(mobileVid.link) : (videos[1] ? getVidId(videos[1].link) : mFallback);
+                // Find specific matches by keyword
+                const desktopMatch = videos.find(v => v.title.toLowerCase().includes('desktop'));
+                const mobileMatch = videos.find(v => v.title.toLowerCase().includes('mobile'));
 
-                desktopIframe.src = `https://www.youtube.com/embed/${dId}`;
-                mobileIframe.src = `https://www.youtube.com/embed/${mId}`;
+                if(desktopMatch) desktopIframe.src = `https://www.youtube.com/embed/${getVidId(desktopMatch.link)}`;
+                if(mobileMatch) mobileIframe.src = `https://www.youtube.com/embed/${getVidId(mobileMatch.link)}`;
             }
         } catch (e) {
-            desktopIframe.src = `https://www.youtube.com/embed/${dFallback}`;
-            mobileIframe.src = `https://www.youtube.com/embed/${mFallback}`;
+            console.warn("Using offline fallback IDs for YouTube.");
         }
     }
 
+    // Canvas Background
     const canvas = document.getElementById('bg-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
