@@ -13,6 +13,17 @@ Before beginning the setup, we highly recommend watching these short guides:
 
 ---
 
+## 🛠 Hardware Requirements
+
+To ensure the fastest scanning speeds and reliable notifications, ensure your hardware meets these standards:
+
+* **Admin PC:** Windows 10 or 11 with at least 4GB RAM.
+* **Scanning Camera:** 720p (HD) Webcam or better. High-definition cameras prevent "motion blur" during rapid scanning.
+* **Mobile Device:** Android 8.0+ with a functioning **Autofocus** camera.
+* **Internet:** A stable connection is required for cloud synchronization and email alerts.
+
+---
+
 ## 1. Initial Desktop Setup
 
 1.  **Login:** Launch the PC version and log in using your authorized **Username** (Note: Full Name login has been deprecated for security).
