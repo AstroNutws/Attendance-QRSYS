@@ -2,7 +2,7 @@
 
 All notable changes to the QRSYS project are documented here.
 
-## [2.1.0] - PC Version - 2026-03-14
+## [2.1.1] - PC Version - 2026-03-14
 ### Added
 - **Security Update:** Transitioned from Full Name login to a more secure **Username-based authentication**.
 - **Communications:** Integrated an **Announcements Dashboard** for broadcasting school-wide information.
@@ -14,10 +14,11 @@ All notable changes to the QRSYS project are documented here.
 ### Improved
 - Complete UI overhaul for a cleaner, modern professional look.
 - Optimized database sync speed for high-traffic scanning periods.
+- General stability patches and minor bug fixes for the v2.1.x branch.
 
 ---
 
-## [1.9.0] - Mobile Client - 2026-03-14
+## [2.1.1] - Mobile Client - 2026-03-14
 ### Added
 - **Real-time Sync:** Enhanced mobile-to-cloud synchronization for the scanner module.
 - **UI Consistency:** Updated theme colors and button layouts to match the new PC Version branding.
@@ -26,6 +27,7 @@ All notable changes to the QRSYS project are documented here.
 ### Fixed
 - Improved camera autofocus for faster QR detection on mid-range Android devices.
 - Resolved session timeout issues during long periods of inactivity.
+- Synchronized versioning core with the PC edition for ecosystem stability.
 
 ---
 **Developer:** AstroNutws  
