@@ -421,24 +421,39 @@
 
     async function sync() {
         try {
-            const r = await fetch('https://api.github.com/repos/AstroNutws/Attendance-QRSYS/releases/latest');
-            const d = await r.json();
+            const r = await fetch('https://api.github.com/repos/AstroNutws/Attendance-QRSYS/releases');
+            const releases = await r.json();
             
             const win = document.getElementById('win-btn');
-            const winFile = d.assets.find(a => a.name.toLowerCase().includes('.exe') || a.name.toLowerCase().includes('installer'));
-            if(winFile) win.href = winFile.browser_download_url;
-
             const mob = document.getElementById('mobile-btn');
-            const apkFile = d.assets.find(a => a.name.toLowerCase().endsWith('.apk'));
+            
+            let winFile = null;
+            let apkFile = null;
+            
+            for (const release of releases) {
+                if (!winFile) {
+                    winFile = release.assets.find(a => a.name.toLowerCase().includes('.exe') || a.name.toLowerCase().includes('installer'));
+                }
+                if (!apkFile) {
+                    apkFile = release.assets.find(a => a.name.toLowerCase().endsWith('.apk'));
+                }
+                if (winFile && apkFile) break;
+            }
+
+            if(winFile) win.href = winFile.browser_download_url;
+            
             if(apkFile) {
                 mob.href = apkFile.browser_download_url;
                 mob.innerText = `Mobile Download (${(apkFile.size / 1024 / 1024).toFixed(1)} MB)`;
             }
 
-            document.getElementById('badge-loader').innerHTML = `<span class="badge">Build: ${d.tag_name}</span>`;
-            document.getElementById('api-info').innerText = `Registry Updated: ${new Date(d.published_at).toLocaleDateString()}`;
+            if (releases.length > 0) {
+                document.getElementById('badge-loader').innerHTML = `<span class="badge">Build: ${releases[0].tag_name}</span>`;
+                document.getElementById('api-info').innerText = `Registry Updated: ${new Date(releases[0].published_at).toLocaleDateString()}`;
+            }
         } catch(e) {
             document.getElementById('api-info').innerText = "OFFLINE CACHE ACTIVE";
+            document.getElementById('mobile-btn').href = "https://github.com/AstroNutws/Attendance-QRSYS/releases";
         }
     }
 
