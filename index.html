@@ -284,7 +284,7 @@
             <tr><td class="req-label">Storage</td><td class="req-value">400MB Required</td></tr>
             <tr><td class="req-label">Network</td><td class="req-value">Lan/Wi-Fi</td></tr>
         </table>
-        <a href="#" id="win-btn" class="btn">Pc/Laptop Download</a>
+        <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/latest" id="win-btn" class="btn">Pc/Laptop Download</a>
         <div id="api-info" style="margin-top: 20px; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); text-align: center;">Syncing with Registry...</div>
     </div>
 
@@ -297,7 +297,7 @@
             <tr><td class="req-label">Capacity</td><td class="req-value">50MB Available</td></tr>
             <tr><td class="req-label">Network</td><td class="req-value">Wifi/Data</td></tr>
         </table>
-        <a href="#" id="mobile-btn" class="btn">Mobile Download</a>
+        <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/latest" id="mobile-btn" class="btn">Mobile Download</a>
     </div>
 
     <div class="premium-card">
@@ -439,7 +439,6 @@
             document.getElementById('api-info').innerText = `Registry Updated: ${new Date(d.published_at).toLocaleDateString()}`;
         } catch(e) {
             document.getElementById('api-info').innerText = "OFFLINE CACHE ACTIVE";
-            document.getElementById('mobile-btn').href = "https://github.com/AstroNutws/Attendance-QRSYS/releases";
         }
     }
 
