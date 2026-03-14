@@ -340,8 +340,8 @@
             <tr><td class="req-label">Arch</td><td class="req-value">VB.NET / .NET 10.0</td></tr>
             <tr><td class="req-label">Database</td><td class="req-value">PostgreSQL (Supabase)</td></tr>
         </table>
-        <a href="#" id="win-btn" class="btn">Fetching Latest .exe...</a>
-        <div id="api-info" style="margin-top: 20px; font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); text-align: center;">Registry Syncing...</div>
+        <a href="#" id="win-btn" class="btn">Fetching Release...</a>
+        <div id="api-info" style="margin-top: 20px; font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); text-align: center;">Registry: Syncing...</div>
     </div>
 
     <div class="premium-card">
@@ -353,7 +353,7 @@
             <tr><td class="req-label">Features</td><td class="req-value">QR Scan & Personal Logs</td></tr>
             <tr><td class="req-label">Storage</td><td class="req-value">~60MB Installation</td></tr>
         </table>
-        <a href="#" id="mobile-btn" class="btn">Fetching Latest .apk...</a>
+        <a href="#" id="mobile-btn" class="btn">Fetching Release...</a>
     </div>
 
     <div class="premium-card span-full" style="background: transparent; border: none; padding: 0; box-shadow: none; transform: none;">
@@ -412,6 +412,7 @@
     const themeBtn = document.getElementById('theme-switcher');
     const winBtn = document.getElementById('win-btn');
     const mobBtn = document.getElementById('mobile-btn');
+    const apiInfo = document.getElementById('api-info');
 
     function applyTheme(theme) {
         if (theme === 'dark') {
@@ -436,40 +437,43 @@
         const titleContainer = document.getElementById('registry-title');
         
         try {
-            // Fetch Latest Release Assets
+            // Fetch Latest Release Data
             const apiResp = await fetch('https://api.github.com/repos/AstroNutws/Attendance-QRSYS/releases/latest');
             if (apiResp.ok) {
                 const releaseData = await apiResp.json();
+                const version = releaseData.tag_name; // e.g., v2.1.1
                 
-                // Find .exe and .apk specifically
+                // Asset Filtering
                 const exeAsset = releaseData.assets.find(a => a.name.endsWith('.exe'));
                 const apkAsset = releaseData.assets.find(a => a.name.endsWith('.apk'));
 
                 if (exeAsset) {
                     winBtn.href = exeAsset.browser_download_url;
-                    winBtn.innerText = "Download for Laptop/PC";
+                    winBtn.innerText = `Download PC (${version})`;
                 } else {
-                    winBtn.innerText = "Desktop Release Pending";
+                    winBtn.innerText = "PC Release Pending";
                 }
 
                 if (apkAsset) {
                     mobBtn.href = apkAsset.browser_download_url;
-                    mobBtn.innerText = "Download Mobile";
+                    mobBtn.innerText = `Download APK (${version})`;
                 } else {
-                    mobBtn.innerText = "Mobile Release Pending";
+                    mobBtn.innerText = "APK Release Pending";
                 }
+                
+                apiInfo.innerText = "Registry: Online (Encrypted)";
             }
 
-            // Fetch Changelog for Registry
+            // Fetch Changelog
             const response = await fetch(`https://raw.githubusercontent.com/AstroNutws/Attendance-QRSYS/main/CHANGELOG.md`);
             if(!response.ok) throw new Error();
             const text = await response.text();
 
             const versionMatch = text.match(/## \[(\d+\.\d+\.\d+)\][\s\S]*?(?=## \[|$)/);
             if (versionMatch) {
-                const version = versionMatch[1];
+                const verNum = versionMatch[1];
                 const content = versionMatch[0];
-                titleContainer.innerText = `Update Registry (v${version})`;
+                titleContainer.innerText = `Update Registry (v${verNum})`;
                 
                 const items = [];
                 const lines = content.split('\n');
@@ -500,8 +504,9 @@
                 }
             }
         } catch (e) {
-            listContainer.innerHTML = '<div class="log-item"><span class="log-tag tag-fixed">Error</span><span class="log-text">Failed to sync live registry. Registry data may be offline.</span></div>';
-            winBtn.innerText = "Check Releases on GitHub";
+            apiInfo.innerText = "Registry: Connection Error";
+            listContainer.innerHTML = '<div class="log-item"><span class="log-tag tag-fixed">Error</span><span class="log-text">Failed to sync live registry.</span></div>';
+            winBtn.innerText = "View Releases on GitHub";
             winBtn.href = "https://github.com/AstroNutws/Attendance-QRSYS/releases";
             mobBtn.href = "https://github.com/AstroNutws/Attendance-QRSYS/releases";
         }
