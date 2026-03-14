@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QRSYS | Attendance Logging</title>
+    <title>Project QrSys | Infrastructure Portal</title>
     <meta name="theme-color" content="#800000">
     <link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/100/800000/university.png">
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@600;800&family=Inter:wght@300;400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
@@ -91,10 +91,6 @@
             align-items: center;
             gap: 8px;
             transition: var(--transition);
-        }
-
-        .theme-toggle:hover {
-            background: var(--border);
         }
 
         header {
@@ -215,7 +211,6 @@
             border: 0;
         }
 
-        /* Repo Viewer Styles */
         .doc-viewer {
             background: var(--card-bg);
             color: var(--text-dark);
@@ -228,13 +223,6 @@
             border-top: none;
         }
 
-        .doc-viewer h1, .doc-viewer h2 { color: var(--maroon); margin: 20px 0 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
-        .doc-viewer p { margin-bottom: 15px; }
-        .doc-viewer ul { margin: 10px 0 20px 20px; }
-        .doc-viewer li { margin-bottom: 5px; }
-        .doc-viewer code { background: var(--border); padding: 2px 6px; border-radius: 4px; font-family: var(--font-mono); font-size: 0.85rem; }
-
-        .tab-container { display: flex; gap: 5px; }
         .tab-btn {
             background: var(--cream);
             border: 1px solid var(--border);
@@ -266,7 +254,6 @@
             border: 1px solid var(--border);
         }
 
-        .log-list { list-style: none; }
         .log-item {
             padding: 20px 0;
             border-bottom: 1px solid var(--border);
@@ -298,8 +285,9 @@
 <body>
 
 <nav>
-    <div class="nav-logo">QRSYS</div>
+    <div class="nav-logo">PROJECT QRSYS</div>
     <div class="nav-controls">
+        <a href="https://www.youtube.com/@ProjectQrSys" target="_blank" style="text-decoration: none; color: var(--maroon); font-weight: 700; font-size: 0.8rem;">YOUTUBE CHANNEL</a>
         <button class="theme-toggle" id="theme-switcher">
             <span id="theme-icon">🌙</span> Dark Mode
         </button>
@@ -309,93 +297,93 @@
 <canvas id="bg-canvas"></canvas>
 
 <header>
-    <h1>Secure Infrastructure for Modern Attendance Logging.</h1>
-    <p class="subtitle">A professional-grade attendance logging system designed for schools.</p>
+    <h1>Infrastructure for Modern Attendance Logging.</h1>
+    <p class="subtitle">Official portal for Project QrSys development and distribution.</p>
 </header>
 
 <div class="container">
     <div class="premium-card">
         <div id="badge-loader"></div>
-        <h2>Desktop Version</h2>
+        <h2>Desktop Edition</h2>
         <table class="req-table">
-            <tr><td class="req-label">Environment</td><td class="req-value">Windows x64/32</td></tr>
-            <tr><td class="req-label">Imaging</td><td class="req-value">Webcam Support</td></tr>
-            <tr><td class="req-label">Storage</td><td class="req-value">400MB Required</td></tr>
-            <tr><td class="req-label">Network</td><td class="req-value">Lan/Wi-Fi</td></tr>
+            <tr><td class="req-label">Platform</td><td class="req-value">Windows PC/Laptop</td></tr>
+            <tr><td class="req-label">Input</td><td class="req-value">Webcam/QR Scanner</td></tr>
+            <tr><td class="req-label">Base Size</td><td class="req-value">~400MB</td></tr>
+            <tr><td class="req-label">Database</td><td class="req-value">Supabase Cloud</td></tr>
         </table>
-        <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/latest" id="win-btn" class="btn">Pc/Laptop Download</a>
-        <div id="api-info" style="margin-top: 20px; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); text-align: center;">Syncing with Registry...</div>
+        <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/latest" id="win-btn" class="btn">Download for PC</a>
+        <div id="api-info" style="margin-top: 20px; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); text-align: center;">Registry Syncing...</div>
     </div>
 
     <div class="premium-card">
-        <div class="badge" style="background: #22543d;">Stable Mobile Build</div>
+        <div class="badge" style="background: #22543d;">Mobile Deployment</div>
         <h2>Mobile Client</h2>
         <table class="req-table">
-            <tr><td class="req-label">OS Version</td><td class="req-value">Android 8.0+</td></tr>
-            <tr><td class="req-label">Memory</td><td class="req-value">2GB RAM Min.</td></tr>
-            <tr><td class="req-label">Capacity</td><td class="req-value">50MB Available</td></tr>
-            <tr><td class="req-label">Network</td><td class="req-value">Wifi/Data</td></tr>
+            <tr><td class="req-label">OS</td><td class="req-value">Android 8.0+</td></tr>
+            <tr><td class="req-label">Arch</td><td class="req-value">.NET MAUI / ARM</td></tr>
+            <tr><td class="req-label">Storage</td><td class="req-value">50MB Available</td></tr>
+            <tr><td class="req-label">Connectivity</td><td class="req-value">Online/Cloud Sync</td></tr>
         </table>
-        <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/latest" id="mobile-btn" class="btn">Mobile Download</a>
+        <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/latest" id="mobile-btn" class="btn">Download APK</a>
     </div>
 
     <div class="premium-card span-full" style="background: transparent; border: none; padding: 0; box-shadow: none; transform: none;">
-        <h3>Repository Documentation</h3>
+        <h3>Technical Documentation</h3>
         <div class="tab-container">
             <button class="tab-btn active" onclick="loadRepoFile('README.md', this)">README.md</button>
+            <button class="tab-btn" onclick="loadRepoFile('USER_MANUAL.md', this)">USER_MANUAL.md</button>
             <button class="tab-btn" onclick="loadRepoFile('ARCHITECTURE.md', this)">ARCHITECTURE.md</button>
             <button class="tab-btn" onclick="loadRepoFile('LICENSE', this)">LICENSE</button>
         </div>
         <div class="doc-viewer" id="doc-content">
-            <div style="text-align:center; padding: 40px; color: var(--text-muted);">Syncing live documentation...</div>
+            <div style="text-align:center; padding: 40px; color: var(--text-muted);">Fetching repository data...</div>
         </div>
     </div>
 
     <div class="premium-card">
-        <h3>Walkthrough 01 (Desktop)</h3>
+        <h3>Latest Desktop Demo</h3>
         <div class="video-wrapper">
-            <iframe src="https://www.youtube.com/embed/ZcIJaQYzTzw" frameborder="0" allowfullscreen allow="autoplay"></iframe>
+            <iframe id="yt-desktop" src="" frameborder="0" allowfullscreen allow="autoplay"></iframe>
         </div>
     </div>
 
     <div class="premium-card">
-        <h3>Walkthrough 02 (Mobile)</h3>
+        <h3>Latest Mobile Demo</h3>
         <div class="video-wrapper">
-            <iframe src="https://streamable.com/e/a4n7ic?loop=0" frameborder="0" allowfullscreen allow="autoplay"></iframe>
+            <iframe id="yt-mobile" src="" frameborder="0" allowfullscreen allow="autoplay"></iframe>
         </div>
     </div>
 
     <div class="premium-card span-full">
-        <h3>Server Uptime</h3>
+        <h3>System Uptime</h3>
         <div class="uptime-display" id="uptime-counter">00:00:00:00</div>
-        <p style="text-align: center; color: var(--text-muted); font-size: 0.7rem; margin-top: 25px; letter-spacing: 3px; font-weight: 600;">CLOUD SYNC STATUS: VERIFIED</p>
+        <p style="text-align: center; color: var(--text-muted); font-size: 0.7rem; margin-top: 25px; letter-spacing: 3px; font-weight: 600;">ENCRYPTED CLOUD CONNECTION: ACTIVE</p>
     </div>
 
     <div class="premium-card span-full">
-        <h3>Internal Update Log</h3>
-        <ul class="log-list">
-            <li class="log-item"><span class="log-tag">Core</span><span class="log-text">Implemented Multi-Tenant Organization selection logic.</span></li>
-            <li class="log-item"><span class="log-tag">Bug Fix</span><span class="log-text">Resolved 'System.Threading.ManualResetEventSlim' disposed object exception.</span></li>
-            <li class="log-item"><span class="log-tag">Frontend</span><span class="log-text">Integrated live Markdown rendering for repository documentation.</span></li>
+        <h3>Update Registry</h3>
+        <ul class="log-list" style="list-style: none;">
+            <li class="log-item"><span class="log-tag">Release</span><span class="log-text">Official deployment of Project QrSys YouTube Channel.</span></li>
+            <li class="log-item"><span class="log-tag">UI/UX</span><span class="log-text">Themed interface to Maroon and White Professional standards.</span></li>
+            <li class="log-item"><span class="log-tag">Core</span><span class="log-text">Integrated dynamic YouTube API feed for latest walkthroughs.</span></li>
         </ul>
     </div>
 
     <div class="premium-card span-full" style="text-align: center; border: 2px solid var(--maroon);">
-        <h2>Technical Registry</h2>
-        <a href="mailto:samongud@gmail.com" class="btn" style="max-width: 300px; margin: 20px auto 0;">Request Assistance</a>
+        <h2>Developer Registry</h2>
+        <a href="mailto:samongud@gmail.com" class="btn" style="max-width: 300px; margin: 20px auto 0;">Inquiry / Assistance</a>
     </div>
 </div>
 
 <footer style="text-align: center; padding: 100px; opacity: 0.4; font-size: 0.7rem; font-weight: 700; color: var(--maroon); letter-spacing: 4px; text-transform: uppercase;">
-    &copy; 2026 QRSYS Academic Infrastructure
+    &copy; 2026 Project QrSys Development Lab
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 <script>
+    // Theme Switcher
     const themeBtn = document.getElementById('theme-switcher');
-    const themeIcon = document.getElementById('theme-icon');
-    
     function applyTheme(theme) {
         if (theme === 'dark') {
             document.documentElement.setAttribute('data-theme', 'dark');
@@ -405,9 +393,7 @@
             themeBtn.innerHTML = '<span id="theme-icon">🌙</span> Dark Mode';
         }
     }
-
     applyTheme(localStorage.getItem('theme') || 'light');
-
     themeBtn.addEventListener('click', () => {
         const isDark = document.documentElement.hasAttribute('data-theme');
         const newTheme = isDark ? 'light' : 'dark';
@@ -415,13 +401,45 @@
         localStorage.setItem('theme', newTheme);
     });
 
+    // YouTube Dynamic Loader
+    async function fetchYouTubeVideos() {
+        const channelId = "UC1n_qD_A9u8k8Jm5N_yv_mQ"; 
+        const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
+        
+        try {
+            const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`);
+            const data = await response.json();
+            
+            if (data.status === 'ok') {
+                const videos = data.items;
+                const desktopVid = videos.find(v => 
+                    v.title.toLowerCase().includes('desktop') || v.title.toLowerCase().includes('laptop') || v.title.toLowerCase().includes('pc')
+                );
+                const mobileVid = videos.find(v => 
+                    v.title.toLowerCase().includes('mobile') || v.title.toLowerCase().includes('android') || v.title.toLowerCase().includes('maui')
+                );
+
+                if (desktopVid) {
+                    const id = desktopVid.link.split('v=')[1];
+                    document.getElementById('yt-desktop').src = `https://www.youtube.com/embed/${id}`;
+                }
+                if (mobileVid) {
+                    const id = mobileVid.link.split('v=')[1];
+                    document.getElementById('yt-mobile').src = `https://www.youtube.com/embed/${id}`;
+                }
+            }
+        } catch (e) {
+            console.error("YouTube Sync Failed", e);
+            document.getElementById('yt-desktop').src = "https://www.youtube.com/embed/ZcIJaQYzTzw";
+        }
+    }
+
+    // Canvas Background
     const canvas = document.getElementById('bg-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
-
     function init() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
         particles = [];
         for(let i=0; i<45; i++) {
             particles.push({
@@ -432,7 +450,6 @@
             });
         }
     }
-
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         particles.forEach((p, i) => {
@@ -440,18 +457,13 @@
             if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
             if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
             ctx.fillStyle = '#80000018';
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, 2, 0, Math.PI*2);
-            ctx.fill();
+            ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI*2); ctx.fill();
             for(let j=i+1; j<particles.length; j++) {
                 let p2 = particles[j];
                 let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
                 if(dist < 180) {
                     ctx.strokeStyle = `rgba(128, 0, 0, ${0.12 - dist/1800})`;
-                    ctx.beginPath();
-                    ctx.moveTo(p.x, p.y);
-                    ctx.lineTo(p2.x, p2.y);
-                    ctx.stroke();
+                    ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
                 }
             }
         });
@@ -466,8 +478,7 @@
             const h = Math.floor((diff / 3600000) % 24);
             const m = Math.floor((diff / 60000) % 60);
             const s = Math.floor((diff / 1000) % 60);
-            document.getElementById('uptime-counter').innerText = 
-                `${d}d ${h.toString().padStart(2, '0')}h ${m.toString().padStart(2, '0')}m ${s.toString().padStart(2, '0')}s`;
+            document.getElementById('uptime-counter').innerText = `${d}d ${h.toString().padStart(2, '0')}h ${m.toString().padStart(2, '0')}m ${s.toString().padStart(2, '0')}s`;
         }, 1000);
     }
 
@@ -475,45 +486,32 @@
         const docDiv = document.getElementById('doc-content');
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         if(btn) btn.classList.add('active');
-
+        docDiv.innerHTML = `<div style="text-align:center; padding: 40px; color: var(--text-muted);">Syncing ${fileName}...</div>`;
+        
         try {
             const response = await fetch(`https://raw.githubusercontent.com/AstroNutws/Attendance-QRSYS/main/${fileName}`);
             if(!response.ok) throw new Error();
             const rawText = await response.text();
-            // Render Markdown to HTML
             docDiv.innerHTML = marked.parse(rawText);
         } catch(e) {
-            docDiv.innerHTML = `<p style="color:red; text-align:center;">Failed to sync ${fileName}.</p>`;
+            docDiv.innerHTML = `<p style="color:var(--maroon); text-align:center; padding: 40px;">${fileName} not found or failed to sync.</p>`;
         }
     }
 
-    async function sync() {
+    async function syncGitHub() {
         try {
             const r = await fetch('https://api.github.com/repos/AstroNutws/Attendance-QRSYS/releases');
             const releases = await r.json();
-            const win = document.getElementById('win-btn');
-            const mob = document.getElementById('mobile-btn');
-            
             if (releases.length > 0) {
                 const latest = releases[0];
-                const winFile = latest.assets.find(a => a.name.toLowerCase().includes('.exe'));
-                const apkFile = latest.assets.find(a => a.name.toLowerCase().endsWith('.apk'));
-
-                if(winFile) win.href = winFile.browser_download_url;
-                if(apkFile) {
-                    mob.href = apkFile.browser_download_url;
-                    mob.innerText = `Mobile Download (${(apkFile.size / 1048576).toFixed(1)} MB)`;
-                }
                 document.getElementById('badge-loader').innerHTML = `<span class="badge">Build: ${latest.tag_name}</span>`;
                 document.getElementById('api-info').innerText = `Registry Updated: ${new Date(latest.published_at).toLocaleDateString()}`;
             }
-        } catch(e) {
-            document.getElementById('api-info').innerText = "OFFLINE CACHE ACTIVE";
-        }
+        } catch(e) { document.getElementById('api-info').innerText = "OFFLINE CACHE ACTIVE"; }
     }
 
     window.addEventListener('resize', init);
-    init(); draw(); updateUptime(); sync(); loadRepoFile('README.md');
+    init(); draw(); updateUptime(); syncGitHub(); fetchYouTubeVideos(); loadRepoFile('README.md');
 </script>
 </body>
 </html>
