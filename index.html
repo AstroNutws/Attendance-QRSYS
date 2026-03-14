@@ -400,17 +400,18 @@
         localStorage.setItem('theme', newTheme);
     });
 
-    // FIXED: Strict Keyword matching for (Mobile Edition) and (Desktop Edition)
+    // FIXED: Strict Logic to prevent Desktop video from playing in Mobile frame
     async function fetchYouTubeVideos() {
         const desktopIframe = document.getElementById('yt-desktop');
         const mobileIframe = document.getElementById('yt-mobile');
         
-        // Immediate hard fallbacks to stop the black screen
-        const dFallback = "ZcIJaQYzTzw"; 
-        const mFallback = "ZcIJaQYzTzw"; // Set this to your mobile edition ID if different
+        // HARDCODED FALLBACKS (These will play if the API search finds nothing)
+        const desktopFallbackID = "ZcIJaQYzTzw"; // Your PC Walkthrough
+        const mobileFallbackID = "o7K2YmU_0Yg";  // Hardcoded ID for "Mobile Edition v2.1.0"
 
-        desktopIframe.src = `https://www.youtube.com/embed/${dFallback}`;
-        mobileIframe.src = `https://www.youtube.com/embed/${mFallback}`;
+        // Set fallbacks immediately
+        desktopIframe.src = `https://www.youtube.com/embed/${desktopFallbackID}`;
+        mobileIframe.src = `https://www.youtube.com/embed/${mobileFallbackID}`;
 
         const channelId = "UC1n_qD_A9u8k8Jm5N_yv_mQ"; 
         const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
@@ -421,23 +422,25 @@
             
             if (data.status === 'ok' && data.items.length > 0) {
                 const videos = data.items;
-                
-                // Helper to get ID
                 const getVidId = (url) => {
-                    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-                    const match = url.match(regExp);
+                    const match = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/);
                     return (match && match[2].length === 11) ? match[2] : null;
                 };
 
-                // Search for titles containing the exact phrases
-                const desktopMatch = videos.find(v => v.title.toLowerCase().includes('desktop edition'));
-                const mobileMatch = videos.find(v => v.title.toLowerCase().includes('mobile edition'));
+                // Search strictly for keywords to separate the demos
+                const desktopVid = videos.find(v => v.title.toLowerCase().includes('desktop') && !v.title.toLowerCase().includes('mobile'));
+                const mobileVid = videos.find(v => v.title.toLowerCase().includes('mobile'));
 
-                if(desktopMatch) desktopIframe.src = `https://www.youtube.com/embed/${getVidId(desktopMatch.link)}`;
-                if(mobileMatch) mobileIframe.src = `https://www.youtube.com/embed/${getVidId(mobileMatch.link)}`;
+                if(desktopVid) {
+                    desktopIframe.src = `https://www.youtube.com/embed/${getVidId(desktopVid.link)}`;
+                }
+                
+                if(mobileVid) {
+                    mobileIframe.src = `https://www.youtube.com/embed/${getVidId(mobileVid.link)}`;
+                }
             }
         } catch (e) {
-            console.warn("Failed to update from RSS, using default IDs.");
+            console.warn("API limit or block. Fallback IDs active.");
         }
     }
 
