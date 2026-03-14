@@ -400,18 +400,17 @@
         localStorage.setItem('theme', newTheme);
     });
 
-    // FIXED: Strict Logic to prevent Desktop video from playing in Mobile frame
     async function fetchYouTubeVideos() {
         const desktopIframe = document.getElementById('yt-desktop');
         const mobileIframe = document.getElementById('yt-mobile');
         
-        // HARDCODED FALLBACKS (These will play if the API search finds nothing)
-        const desktopFallbackID = "ZcIJaQYzTzw"; // Your PC Walkthrough
-        const mobileFallbackID = "o7K2YmU_0Yg";  // Hardcoded ID for "Mobile Edition v2.1.0"
+        // MANUALLY SET IDS
+        const desktopID = "ZcIJaQYzTzw"; // Desktop demo
+        const mobileID = "hnoCBZ3_GgQ";  // Mobile Edition v2.1.0 demo
 
-        // Set fallbacks immediately
-        desktopIframe.src = `https://www.youtube.com/embed/${desktopFallbackID}`;
-        mobileIframe.src = `https://www.youtube.com/embed/${mobileFallbackID}`;
+        // Force set IDs to avoid matching errors
+        desktopIframe.src = `https://www.youtube.com/embed/${desktopID}`;
+        mobileIframe.src = `https://www.youtube.com/embed/${mobileID}`;
 
         const channelId = "UC1n_qD_A9u8k8Jm5N_yv_mQ"; 
         const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
@@ -427,20 +426,15 @@
                     return (match && match[2].length === 11) ? match[2] : null;
                 };
 
-                // Search strictly for keywords to separate the demos
-                const desktopVid = videos.find(v => v.title.toLowerCase().includes('desktop') && !v.title.toLowerCase().includes('mobile'));
-                const mobileVid = videos.find(v => v.title.toLowerCase().includes('mobile'));
+                // Specific matching logic
+                const desktopMatch = videos.find(v => v.title.toLowerCase().includes('desktop') && !v.title.toLowerCase().includes('mobile'));
+                const mobileMatch = videos.find(v => v.title.toLowerCase().includes('mobile edition'));
 
-                if(desktopVid) {
-                    desktopIframe.src = `https://www.youtube.com/embed/${getVidId(desktopVid.link)}`;
-                }
-                
-                if(mobileVid) {
-                    mobileIframe.src = `https://www.youtube.com/embed/${getVidId(mobileVid.link)}`;
-                }
+                if(desktopMatch) desktopIframe.src = `https://www.youtube.com/embed/${getVidId(desktopMatch.link)}`;
+                if(mobileMatch) mobileIframe.src = `https://www.youtube.com/embed/${getVidId(mobileMatch.link)}`;
             }
         } catch (e) {
-            console.warn("API limit or block. Fallback IDs active.");
+            console.warn("RSS Feed unavailable. Defaulting to hardcoded IDs.");
         }
     }
 
