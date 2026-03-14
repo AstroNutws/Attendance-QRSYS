@@ -382,7 +382,6 @@
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 <script>
-    // Theme Switcher
     const themeBtn = document.getElementById('theme-switcher');
     function applyTheme(theme) {
         if (theme === 'dark') {
@@ -401,49 +400,47 @@
         localStorage.setItem('theme', newTheme);
     });
 
-    // FIXED: Guaranteed YouTube Sync
+    // FIXED: Strict Keyword matching for (Mobile Edition) and (Desktop Edition)
     async function fetchYouTubeVideos() {
         const desktopIframe = document.getElementById('yt-desktop');
         const mobileIframe = document.getElementById('yt-mobile');
         
-        // Hardcoded reliable IDs to prevent black screens immediately
-        const desktopID = "ZcIJaQYzTzw"; // Your Desktop QrSys Video ID
-        const mobileID = "m7-p4m_lC1Y";  // Your Mobile QrSys Video ID (replace with correct one)
+        // Immediate hard fallbacks to stop the black screen
+        const dFallback = "ZcIJaQYzTzw"; 
+        const mFallback = "ZcIJaQYzTzw"; // Set this to your mobile edition ID if different
 
-        // Set them immediately so the site is never blank
-        desktopIframe.src = `https://www.youtube.com/embed/${desktopID}`;
-        mobileIframe.src = `https://www.youtube.com/embed/${mobileID}`;
+        desktopIframe.src = `https://www.youtube.com/embed/${dFallback}`;
+        mobileIframe.src = `https://www.youtube.com/embed/${mFallback}`;
 
         const channelId = "UC1n_qD_A9u8k8Jm5N_yv_mQ"; 
         const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
 
         try {
-            // Attempt to fetch latest, but if it fails, the IDs above remain
             const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`);
             const data = await response.json();
             
             if (data.status === 'ok' && data.items.length > 0) {
                 const videos = data.items;
                 
+                // Helper to get ID
                 const getVidId = (url) => {
                     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
                     const match = url.match(regExp);
                     return (match && match[2].length === 11) ? match[2] : null;
                 };
 
-                // Find specific matches by keyword
-                const desktopMatch = videos.find(v => v.title.toLowerCase().includes('desktop'));
-                const mobileMatch = videos.find(v => v.title.toLowerCase().includes('mobile'));
+                // Search for titles containing the exact phrases
+                const desktopMatch = videos.find(v => v.title.toLowerCase().includes('desktop edition'));
+                const mobileMatch = videos.find(v => v.title.toLowerCase().includes('mobile edition'));
 
                 if(desktopMatch) desktopIframe.src = `https://www.youtube.com/embed/${getVidId(desktopMatch.link)}`;
                 if(mobileMatch) mobileIframe.src = `https://www.youtube.com/embed/${getVidId(mobileMatch.link)}`;
             }
         } catch (e) {
-            console.warn("Using offline fallback IDs for YouTube.");
+            console.warn("Failed to update from RSS, using default IDs.");
         }
     }
 
-    // Canvas Background
     const canvas = document.getElementById('bg-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
