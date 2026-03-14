@@ -401,17 +401,25 @@
         localStorage.setItem('theme', newTheme);
     });
 
-    // YouTube Dynamic Loader
+    // FIX: Enhanced YouTube Loader with Hard Fallbacks
     async function fetchYouTubeVideos() {
         const channelId = "UC1n_qD_A9u8k8Jm5N_yv_mQ"; 
         const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
+        const desktopIframe = document.getElementById('yt-desktop');
+        const mobileIframe = document.getElementById('yt-mobile');
         
+        // Static Fallbacks (Change these IDs to your preferred specific videos)
+        const fallbackDesktopId = "ZcIJaQYzTzw"; 
+        const fallbackMobileId = "ZcIJaQYzTzw";
+
         try {
             const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`);
             const data = await response.json();
             
-            if (data.status === 'ok') {
+            if (data.status === 'ok' && data.items.length > 0) {
                 const videos = data.items;
+                
+                // Try to find by keyword
                 const desktopVid = videos.find(v => 
                     v.title.toLowerCase().includes('desktop') || v.title.toLowerCase().includes('laptop') || v.title.toLowerCase().includes('pc')
                 );
@@ -419,18 +427,19 @@
                     v.title.toLowerCase().includes('mobile') || v.title.toLowerCase().includes('android') || v.title.toLowerCase().includes('maui')
                 );
 
-                if (desktopVid) {
-                    const id = desktopVid.link.split('v=')[1];
-                    document.getElementById('yt-desktop').src = `https://www.youtube.com/embed/${id}`;
-                }
-                if (mobileVid) {
-                    const id = mobileVid.link.split('v=')[1];
-                    document.getElementById('yt-mobile').src = `https://www.youtube.com/embed/${id}`;
-                }
+                // Assign found video OR use the very first/latest video in the feed as a secondary fallback
+                const dId = desktopVid ? desktopVid.link.split('v=')[1] : (videos[0].link.split('v=')[1]);
+                const mId = mobileVid ? mobileVid.link.split('v=')[1] : (videos[1] ? videos[1].link.split('v=')[1] : videos[0].link.split('v=')[1]);
+
+                desktopIframe.src = `https://www.youtube.com/embed/${dId}`;
+                mobileIframe.src = `https://www.youtube.com/embed/${mId}`;
+            } else {
+                throw new Error("Empty feed");
             }
         } catch (e) {
-            console.error("YouTube Sync Failed", e);
-            document.getElementById('yt-desktop').src = "https://www.youtube.com/embed/ZcIJaQYzTzw";
+            console.error("YouTube Sync Failed, using hard fallbacks", e);
+            desktopIframe.src = `https://www.youtube.com/embed/${fallbackDesktopId}`;
+            mobileIframe.src = `https://www.youtube.com/embed/${fallbackMobileId}`;
         }
     }
 
