@@ -403,12 +403,9 @@
     async function fetchYouTubeVideos() {
         const desktopIframe = document.getElementById('yt-desktop');
         const mobileIframe = document.getElementById('yt-mobile');
-        
-        // MANUALLY SET IDS
-        const desktopID = "ZcIJaQYzTzw"; // Desktop demo
-        const mobileID = "hnoCBZ3_GgQ";  // Mobile Edition v2.1.0 demo
+        const desktopID = "ZcIJaQYzTzw"; 
+        const mobileID = "hnoCBZ3_GgQ";  
 
-        // Force set IDs to avoid matching errors
         desktopIframe.src = `https://www.youtube.com/embed/${desktopID}`;
         mobileIframe.src = `https://www.youtube.com/embed/${mobileID}`;
 
@@ -426,7 +423,6 @@
                     return (match && match[2].length === 11) ? match[2] : null;
                 };
 
-                // Specific matching logic
                 const desktopMatch = videos.find(v => v.title.toLowerCase().includes('desktop') && !v.title.toLowerCase().includes('mobile'));
                 const mobileMatch = videos.find(v => v.title.toLowerCase().includes('mobile edition'));
 
@@ -502,15 +498,42 @@
     }
 
     async function syncGitHub() {
+        const winBtn = document.getElementById('win-btn');
+        const mobileBtn = document.getElementById('mobile-btn');
+        const apiInfo = document.getElementById('api-info');
+        const badgeLoader = document.getElementById('badge-loader');
+
         try {
-            const r = await fetch('https://api.github.com/repos/AstroNutws/Attendance-QRSYS/releases');
-            const releases = await r.json();
-            if (releases.length > 0) {
-                const latest = releases[0];
-                document.getElementById('badge-loader').innerHTML = `<span class="badge">Build: ${latest.tag_name}</span>`;
-                document.getElementById('api-info').innerText = `Registry Updated: ${new Date(latest.published_at).toLocaleDateString()}`;
+            const r = await fetch('https://api.github.com/repos/AstroNutws/Attendance-QRSYS/releases/latest');
+            if (!r.ok) throw new Error("API Limit reached or Repo Private");
+            
+            const latest = await r.json();
+            
+            // Update labels
+            badgeLoader.innerHTML = `<span class="badge">Build: ${latest.tag_name}</span>`;
+            apiInfo.innerText = `Registry Updated: ${new Date(latest.published_at).toLocaleDateString()}`;
+
+            // Search assets for specific file types
+            const assets = latest.assets;
+            
+            // Search for Windows EXE
+            const desktopAsset = assets.find(a => a.name.toLowerCase().endsWith('.exe'));
+            if (desktopAsset) {
+                winBtn.href = desktopAsset.browser_download_url;
+                winBtn.innerText = `Download ${latest.tag_name} (PC)`;
             }
-        } catch(e) { document.getElementById('api-info').innerText = "OFFLINE CACHE ACTIVE"; }
+
+            // Search for Android APK
+            const mobileAsset = assets.find(a => a.name.toLowerCase().endsWith('.apk'));
+            if (mobileAsset) {
+                mobileBtn.href = mobileAsset.browser_download_url;
+                mobileBtn.innerText = `Download ${latest.tag_name} (APK)`;
+            }
+
+        } catch(e) { 
+            apiInfo.innerText = "OFFLINE CACHE ACTIVE"; 
+            console.error("GitHub Sync failed:", e);
+        }
     }
 
     window.addEventListener('resize', init);
