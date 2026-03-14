@@ -1,4 +1,4 @@
-# QRSYS | Quick Start Guide (v2.1.0)
+# QRSYS | Quick Start Guide (v2.1.1)
 
 Welcome to the **QRSYS Attendance Logging System**. Follow this guide to properly set up and manage your organization’s attendance infrastructure.
 
@@ -8,8 +8,8 @@ Welcome to the **QRSYS Attendance Logging System**. Follow this guide to properl
 
 Before beginning the setup, we highly recommend watching these short guides:
 
-* **Desktop Admin Setup (v2.1.0):** https://youtu.be/ZcIJaQYzTzw
-* **Mobile Scanner Guide (v1.9.0):** https://streamable.com/a4n7ic
+* **Desktop Admin Setup (v2.1.1):** https://youtu.be/ZcIJaQYzTzw
+* **Mobile Scanner Guide (v2.1.1):** https://streamable.com/a4n7ic
 
 ---
 
