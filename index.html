@@ -297,7 +297,7 @@
             <tr><td class="req-label">Capacity</td><td class="req-value">50MB Available</td></tr>
             <tr><td class="req-label">Network</td><td class="req-value">Wifi/Data</td></tr>
         </table>
-        <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/download/v1.0.0/com.qrsys.app.apk" class="btn">Mobile Download</a>
+        <a href="#" id="mobile-btn" class="btn">Mobile Download</a>
     </div>
 
     <div class="premium-card">
@@ -340,7 +340,6 @@
 </footer>
 
 <script>
-    // Theme Logic
     const themeBtn = document.getElementById('theme-switcher');
     const themeIcon = document.getElementById('theme-icon');
     const currentTheme = localStorage.getItem('theme') || 'light';
@@ -364,7 +363,6 @@
         }
     });
 
-    // Canvas Background
     const canvas = document.getElementById('bg-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -425,13 +423,23 @@
         try {
             const r = await fetch('https://api.github.com/repos/AstroNutws/Attendance-QRSYS/releases/latest');
             const d = await r.json();
+            
             const win = document.getElementById('win-btn');
-            const file = d.assets.find(a => a.name.toLowerCase().includes('installer.exe'));
-            if(file) win.href = file.browser_download_url;
+            const winFile = d.assets.find(a => a.name.toLowerCase().includes('.exe') || a.name.toLowerCase().includes('installer'));
+            if(winFile) win.href = winFile.browser_download_url;
+
+            const mob = document.getElementById('mobile-btn');
+            const apkFile = d.assets.find(a => a.name.toLowerCase().endsWith('.apk'));
+            if(apkFile) {
+                mob.href = apkFile.browser_download_url;
+                mob.innerText = `Mobile Download (${(apkFile.size / 1024 / 1024).toFixed(1)} MB)`;
+            }
+
             document.getElementById('badge-loader').innerHTML = `<span class="badge">Build: ${d.tag_name}</span>`;
             document.getElementById('api-info').innerText = `Registry Updated: ${new Date(d.published_at).toLocaleDateString()}`;
         } catch(e) {
             document.getElementById('api-info').innerText = "OFFLINE CACHE ACTIVE";
+            document.getElementById('mobile-btn').href = "https://github.com/AstroNutws/Attendance-QRSYS/releases";
         }
     }
 
@@ -440,6 +448,3 @@
 </script>
 </body>
 </html>
-
-
-
