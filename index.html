@@ -21,7 +21,6 @@
             --font-sans: 'Inter', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
             --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            
             --tag-added: #22543d;
             --tag-improved: #2a4365;
             --tag-fixed: #744210;
@@ -331,7 +330,7 @@
             <tr><td class="req-label">Arch</td><td class="req-value">VB.NET / .NET 6.0</td></tr>
             <tr><td class="req-label">Database</td><td class="req-value">PostgreSQL (Supabase)</td></tr>
         </table>
-        <a href="#" id="win-btn" class="btn">Download for Windows</a>
+        <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/latest" id="win-btn" class="btn">Download for Windows</a>
         <div id="api-info" style="margin-top: 20px; font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); text-align: center;">Registry Syncing...</div>
     </div>
 
@@ -344,7 +343,7 @@
             <tr><td class="req-label">Features</td><td class="req-value">QR Scan & Personal Logs</td></tr>
             <tr><td class="req-label">Storage</td><td class="req-value">~60MB Installation</td></tr>
         </table>
-        <a href="#" id="mobile-btn" class="btn">Download APK</a>
+        <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/latest" id="mobile-btn" class="btn">Download APK</a>
     </div>
 
     <div class="premium-card span-full" style="background: transparent; border: none; padding: 0; box-shadow: none; transform: none;">
@@ -418,41 +417,6 @@
         localStorage.setItem('theme', newTheme);
     });
 
-    // FETCH LATEST DOWNLOAD LINKS DIRECTLY
-    async function updateDownloadLinks() {
-        const repo = "AstroNutws/Attendance-QRSYS";
-        const winBtn = document.getElementById('win-btn');
-        const mobileBtn = document.getElementById('mobile-btn');
-        const apiStatus = document.getElementById('api-info');
-        const badgeLoader = document.getElementById('badge-loader');
-
-        try {
-            const response = await fetch(`https://api.github.com/repos/${repo}/releases/latest`);
-            if(!response.ok) throw new Error();
-            const data = await response.json();
-            
-            // Map assets
-            const assets = data.assets;
-            const exeAsset = assets.find(a => a.name.toLowerCase().endsWith('.exe'));
-            const apkAsset = assets.find(a => a.name.toLowerCase().endsWith('.apk'));
-
-            if(exeAsset) winBtn.href = exeAsset.browser_download_url;
-            else winBtn.href = `https://github.com/${repo}/releases/latest`;
-
-            if(apkAsset) mobileBtn.href = apkAsset.browser_download_url;
-            else mobileBtn.href = `https://github.com/${repo}/releases/latest`;
-
-            // Update UI Versioning
-            apiStatus.innerText = `Registry Sync: v${data.tag_name} Online`;
-            if(badgeLoader) badgeLoader.innerHTML = `<span class="badge">V${data.tag_name} Stable</span>`;
-
-        } catch (e) {
-            apiStatus.innerText = "Registry Sync Error: Offline Mode";
-            winBtn.href = `https://github.com/${repo}/releases/latest`;
-            mobileBtn.href = `https://github.com/${repo}/releases/latest`;
-        }
-    }
-
     async function syncUpdateRegistry() {
         const listContainer = document.getElementById('registry-logs');
         const titleContainer = document.getElementById('registry-title');
@@ -497,7 +461,7 @@
                 }
             }
         } catch (e) {
-            listContainer.innerHTML = '<div class="log-item"><span class="log-tag tag-fixed">Error</span><span class="log-text">Failed to sync live registry.</span></div>';
+            listContainer.innerHTML = '<div class="log-item"><span class="log-tag tag-fixed">Error</span><span class="log-text">Failed to sync live registry. Registry data may be offline.</span></div>';
         }
     }
 
@@ -565,12 +529,7 @@
     }
 
     window.addEventListener('resize', initCanvas);
-    initCanvas(); 
-    drawCanvas(); 
-    updateUptime(); 
-    syncUpdateRegistry(); 
-    loadRepoFile('README.md');
-    updateDownloadLinks(); // Initialize Dynamic Downloads
+    initCanvas(); drawCanvas(); updateUptime(); syncUpdateRegistry(); loadRepoFile('README.md');
 </script>
 </body>
 </html>
