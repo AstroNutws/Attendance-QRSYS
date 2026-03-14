@@ -340,7 +340,7 @@
             <tr><td class="req-label">Arch</td><td class="req-value">VB.NET / .NET 10.0</td></tr>
             <tr><td class="req-label">Database</td><td class="req-value">PostgreSQL (Supabase)</td></tr>
         </table>
-        <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/latest" id="win-btn" class="btn">Download for Laptop/PC</a>
+        <a href="#" id="win-btn" class="btn">Fetching Latest .exe...</a>
         <div id="api-info" style="margin-top: 20px; font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); text-align: center;">Registry Syncing...</div>
     </div>
 
@@ -353,7 +353,7 @@
             <tr><td class="req-label">Features</td><td class="req-value">QR Scan & Personal Logs</td></tr>
             <tr><td class="req-label">Storage</td><td class="req-value">~60MB Installation</td></tr>
         </table>
-        <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/latest" id="mobile-btn" class="btn">Download Mobile</a>
+        <a href="#" id="mobile-btn" class="btn">Fetching Latest .apk...</a>
     </div>
 
     <div class="premium-card span-full" style="background: transparent; border: none; padding: 0; box-shadow: none; transform: none;">
@@ -410,6 +410,9 @@
 
 <script>
     const themeBtn = document.getElementById('theme-switcher');
+    const winBtn = document.getElementById('win-btn');
+    const mobBtn = document.getElementById('mobile-btn');
+
     function applyTheme(theme) {
         if (theme === 'dark') {
             document.documentElement.setAttribute('data-theme', 'dark');
@@ -419,6 +422,7 @@
             themeBtn.innerHTML = '<span id="theme-icon">🌙</span> Dark Mode';
         }
     }
+
     applyTheme(localStorage.getItem('theme') || 'light');
     themeBtn.addEventListener('click', () => {
         const isDark = document.documentElement.hasAttribute('data-theme');
@@ -432,6 +436,31 @@
         const titleContainer = document.getElementById('registry-title');
         
         try {
+            // Fetch Latest Release Assets
+            const apiResp = await fetch('https://api.github.com/repos/AstroNutws/Attendance-QRSYS/releases/latest');
+            if (apiResp.ok) {
+                const releaseData = await apiResp.json();
+                
+                // Find .exe and .apk specifically
+                const exeAsset = releaseData.assets.find(a => a.name.endsWith('.exe'));
+                const apkAsset = releaseData.assets.find(a => a.name.endsWith('.apk'));
+
+                if (exeAsset) {
+                    winBtn.href = exeAsset.browser_download_url;
+                    winBtn.innerText = "Download for Laptop/PC";
+                } else {
+                    winBtn.innerText = "Desktop Release Pending";
+                }
+
+                if (apkAsset) {
+                    mobBtn.href = apkAsset.browser_download_url;
+                    mobBtn.innerText = "Download Mobile";
+                } else {
+                    mobBtn.innerText = "Mobile Release Pending";
+                }
+            }
+
+            // Fetch Changelog for Registry
             const response = await fetch(`https://raw.githubusercontent.com/AstroNutws/Attendance-QRSYS/main/CHANGELOG.md`);
             if(!response.ok) throw new Error();
             const text = await response.text();
@@ -472,6 +501,9 @@
             }
         } catch (e) {
             listContainer.innerHTML = '<div class="log-item"><span class="log-tag tag-fixed">Error</span><span class="log-text">Failed to sync live registry. Registry data may be offline.</span></div>';
+            winBtn.innerText = "Check Releases on GitHub";
+            winBtn.href = "https://github.com/AstroNutws/Attendance-QRSYS/releases";
+            mobBtn.href = "https://github.com/AstroNutws/Attendance-QRSYS/releases";
         }
     }
 
