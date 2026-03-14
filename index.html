@@ -227,6 +227,37 @@
             border: 1px solid var(--border);
         }
 
+        /* Documentation / Live Repo Styles */
+        .doc-viewer {
+            background: #000;
+            color: #0f0;
+            font-family: var(--font-mono);
+            padding: 20px;
+            border-radius: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+            border: 1px solid var(--border);
+        }
+
+        .tab-btn {
+            background: var(--border);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: var(--text-muted);
+        }
+
+        .tab-btn.active {
+            background: #000;
+            color: #0f0;
+        }
+
         .log-list { list-style: none; }
         .log-item {
             padding: 20px 0;
@@ -300,6 +331,16 @@
         <a href="https://github.com/AstroNutws/Attendance-QRSYS/releases/latest" id="mobile-btn" class="btn">Mobile Download</a>
     </div>
 
+    <div class="premium-card span-full">
+        <h3>Live Repository Insights</h3>
+        <div style="margin-bottom: -1px;">
+            <button class="tab-btn active" onclick="loadRepoFile('README.md', this)">README.md</button>
+            <button class="tab-btn" onclick="loadRepoFile('ARCHITECTURE.md', this)">ARCHITECTURE.md</button>
+            <button class="tab-btn" onclick="loadRepoFile('LICENSE', this)">LICENSE</button>
+        </div>
+        <div class="doc-viewer" id="doc-content">Fetching documentation from main branch...</div>
+    </div>
+
     <div class="premium-card">
         <h3>Walkthrough 01 (Desktop)</h3>
         <div class="video-wrapper">
@@ -321,11 +362,11 @@
     </div>
 
     <div class="premium-card span-full">
-        <h3>Update Log</h3>
+        <h3>Internal Update Log</h3>
         <ul class="log-list">
-            <li class="log-item"><span class="log-tag">Desktop</span><span class="log-text">Automated updater integrated, Email Notifier, Admin Side Updates</span></li>
-            <li class="log-item"><span class="log-tag">Bug Fixes</span><span class="log-text">Fixed portal login synchronization.</span></li>
-            <li class="log-item"><span class="log-tag">Interface</span><span class="log-text">Cleaned The Scanner Ui And Added A Sound, Announcement Dashboard.</span></li>
+            <li class="log-item"><span class="log-tag">Core</span><span class="log-text">Implemented Multi-Tenant School Selection logic for dynamic database routing.</span></li>
+            <li class="log-item"><span class="log-tag">Mobile Fix</span><span class="log-text">Resolved 'System.Threading.ManualResetEventSlim' object disposed errors during UI transitions.</span></li>
+            <li class="log-item"><span class="log-tag">Infrastructure</span><span class="log-text">Added centralized Master Database routing for cross-platform organization discovery.</span></li>
         </ul>
     </div>
 
@@ -419,6 +460,27 @@
         }, 1000);
     }
 
+    // FUNCTION TO SYNC WITH GITHUB REPO FILES
+    async function loadRepoFile(fileName, btn) {
+        const docDiv = document.getElementById('doc-content');
+        
+        // Update UI Tabs
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        if(btn) btn.classList.add('active');
+
+        docDiv.innerText = `Updating from GitHub [${fileName}]...`;
+        
+        try {
+            // This fetches the raw file content from your GitHub main branch
+            const response = await fetch(`https://raw.githubusercontent.com/AstroNutws/Attendance-QRSYS/main/${fileName}`);
+            if(!response.ok) throw new Error("File not found");
+            const text = await response.text();
+            docDiv.innerText = text;
+        } catch(e) {
+            docDiv.innerText = `Error: Could not sync ${fileName}. Please check repository permissions.`;
+        }
+    }
+
     async function sync() {
         try {
             const r = await fetch('https://api.github.com/repos/AstroNutws/Attendance-QRSYS/releases');
@@ -459,6 +521,8 @@
 
     window.addEventListener('resize', init);
     init(); draw(); updateUptime(); sync();
+    // Initial file load
+    loadRepoFile('README.md');
 </script>
 </body>
 </html>
