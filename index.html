@@ -351,7 +351,7 @@
 
 <header>
     <div class="security-verify">
-        <span style="font-size: 1rem;">🛡️</span> SHA-256 Hashing | Isolated DB Ownership
+        <span style="font-size: 1rem;">🛡️</span> SHA-256 Hashing | Multi-Tier RBAC
     </div>
     <h1>Infrastructure for Modern Attendance Logging.</h1>
     <p class="subtitle">A secure, cloud-integrated ecosystem for academic institutions.</p>
@@ -384,32 +384,44 @@
     </div>
 
     <div class="premium-card span-full">
-        <h3>Administrative Hierarchy</h3>
+        <h3>Administrative Hierarchy (RBAC)</h3>
         <table class="perm-table">
             <thead>
                 <tr>
                     <th>Privilege</th>
                     <th>Standard Admin</th>
-                    <th>Super Admin (Upcoming)</th>
+                    <th>Super Admin</th>
                     <th>Client (Owner)</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>Create New Admin Peers</td>
-                    <td class="check">✓</td>
-                    <td class="check">✓</td>
-                    <td class="check">✓</td>
-                </tr>
-                <tr>
-                    <td>Update Peer Accounts (Username/Pass)</td>
                     <td class="cross">✕</td>
                     <td class="check">✓</td>
                     <td class="check">✓</td>
                 </tr>
                 <tr>
-                    <td>View Attendance Logs</td>
+                    <td>Update Peer Details (Username/Email/Pass)</td>
+                    <td class="cross">✕</td>
                     <td class="check">✓</td>
+                    <td class="check">✓</td>
+                </tr>
+                <tr>
+                    <td>Manage Sections & Students</td>
+                    <td class="check">✓</td>
+                    <td class="check">✓</td>
+                    <td class="check">✓</td>
+                </tr>
+                <tr>
+                    <td>View Attendance logs & Announcements</td>
+                    <td class="check">✓</td>
+                    <td class="check">✓</td>
+                    <td class="check">✓</td>
+                </tr>
+                <tr>
+                    <td>Access Super Admin Panel</td>
+                    <td class="cross">✕</td>
                     <td class="check">✓</td>
                     <td class="check">✓</td>
                 </tr>
@@ -441,12 +453,12 @@
         <h3>Frequently Asked Questions</h3>
         <div class="faq-list">
             <div class="faq-item">
-                <div class="faq-question">Who has access to the database? <span class="faq-icon">▼</span></div>
-                <div class="faq-answer">Neither Standard nor Super Admins have direct database access. Ownership is strictly isolated to the Client (Database Owner) via the Supabase Dashboard. This ensures that system-level management remains separated from core data storage for maximum security.</div>
+                <div class="faq-question">What is the difference between Admins? <span class="faq-icon">▼</span></div>
+                <div class="faq-answer">Standard Admins handle daily operations like monitoring and student finding. Super Admins act as system overseers with the exclusive power to create other admin accounts, update credentials (emails/passwords), and access the specialized Super Admin management panel.</div>
             </div>
             <div class="faq-item">
-                <div class="faq-question">What can the upcoming Super Admin do? <span class="faq-icon">▼</span></div>
-                <div class="faq-answer">The Super Admin will act as the system overseer, with the ability to manage peer accounts, including updating usernames and resetting passwords, as well as conducting high-level attendance auditing.</div>
+                <div class="faq-question">Who has access to the database? <span class="faq-icon">▼</span></div>
+                <div class="faq-answer">Neither Standard nor Super Admins have direct database access. Ownership is strictly isolated to the Client (Database Owner) via the Supabase Dashboard. This ensures that system-level management remains separated from core data storage for maximum security.</div>
             </div>
             <div class="faq-item">
                 <div class="faq-question">How are passwords secured? <span class="faq-icon">▼</span></div>
@@ -649,7 +661,7 @@
             <br>
             <p><strong>3. Cryptographic Integrity:</strong> All administrative and user credentials are processed via SHA-256 salted hashing. Plaintext passwords never enter the data stream.</p>
             <br>
-            <p><strong>4. Access Scoping:</strong> Admin accounts are limited to operational tasks (logging, peer management). System management does not grant direct table-level manipulation rights.</p>
+            <p><strong>4. Access Scoping (RBAC):</strong> Role-Based Access Control is enforced. Standard Admin accounts are restricted to operational data. Administrative management (account creation/credential resets) is reserved for Super Admin accounts and above.</p>
         `;
     }
 
