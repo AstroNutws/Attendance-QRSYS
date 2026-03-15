@@ -220,7 +220,7 @@
         .faq-item { border-bottom: 1px solid var(--border); padding: 15px 0; }
         .faq-question { display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 700; font-size: 0.9rem; }
         .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; color: var(--text-muted); font-size: 0.85rem; padding-top: 0; }
-        .faq-item.active .faq-answer { max-height: 100px; padding-top: 10px; }
+        .faq-item.active .faq-answer { max-height: 150px; padding-top: 10px; }
         .faq-icon { transition: transform 0.3s; font-size: 0.7rem; }
         .faq-item.active .faq-icon { transform: rotate(180deg); }
 
@@ -306,6 +306,16 @@
             top: 0; left: 0; width: 100%; height: 100%;
         }
 
+        .perm-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        .perm-table th { text-align: left; color: var(--maroon); text-transform: uppercase; font-size: 0.65rem; padding: 10px; border-bottom: 2px solid var(--border); }
+        .perm-table td { padding: 12px 10px; border-bottom: 1px solid var(--border); }
+        .check { color: #22c55e; font-weight: 800; }
+        .cross { color: #ef4444; font-weight: 800; }
+
         footer {
             text-align: center;
             padding: 80px 20px;
@@ -340,7 +350,7 @@
 
 <header>
     <div class="security-verify">
-        <span style="font-size: 1rem;">🛡️</span> End-to-End Encrypted | Supabase Security Verified
+        <span style="font-size: 1rem;">🛡️</span> SHA-256 Hashing Active | Supabase Security Verified
     </div>
     <h1>Infrastructure for Modern Attendance Logging.</h1>
     <p class="subtitle">A secure, cloud-integrated ecosystem for academic institutions.</p>
@@ -352,9 +362,9 @@
         <h2>Desktop Edition</h2>
         <table class="req-table">
             <tr><td class="req-label">Platform</td><td class="req-value">Windows 7 - 11</td></tr>
-            <tr><td class="req-label">Input</td><td class="req-value">USB/Integrated Webcam</td></tr>
-            <tr><td class="req-label">Arch</td><td class="req-value">VB.NET / .NET 10.0</td></tr>
-            <tr><td class="req-label">Database</td><td class="req-value">SQL (Supabase)</td></tr>
+            <tr><td class="req-label">Input</td><td class="req-value">Webcam Interface</td></tr>
+            <tr><td class="req-label">Arch</td><td class="req-value">VB.NET / Npgsql</td></tr>
+            <tr><td class="req-label">Security</td><td class="req-value">Salted Hashing</td></tr>
         </table>
         <a href="#" id="win-btn" class="btn">Fetching Release...</a>
         <div id="api-info" style="margin-top: 20px; font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); text-align: center;">Registry: Syncing...</div>
@@ -366,31 +376,45 @@
         <table class="req-table">
             <tr><td class="req-label">OS</td><td class="req-value">Android 8.0+</td></tr>
             <tr><td class="req-label">Framework</td><td class="req-value">.NET MAUI</td></tr>
-            <tr><td class="req-label">Features</td><td class="req-value">QR Scan & Personal Logs</td></tr>
-            <tr><td class="req-label">Storage</td><td class="req-value">~60MB Installation</td></tr>
+            <tr><td class="req-label">Sync</td><td class="req-value">Real-time Cloud</td></tr>
+            <tr><td class="req-label">Storage</td><td class="req-value">~60MB</td></tr>
         </table>
         <a href="#" id="mobile-btn" class="btn">Fetching Release...</a>
     </div>
 
     <div class="premium-card span-full">
-        <h3>System Engine & Performance</h3>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
-            <div style="padding: 20px; border-left: 3px solid var(--maroon); background: rgba(128, 0, 0, 0.02);">
-                <h4 style="font-size: 0.8rem; text-transform: uppercase; color: var(--maroon);">Throughput</h4>
-                <p style="font-size: 1.2rem; font-weight: 800;">Hardware-Accelerated</p>
-                <p style="font-size: 0.75rem; color: var(--text-muted);">High-speed shutter logic designed for any USB Webcam or HD Integrated camera.</p>
-            </div>
-            <div style="padding: 20px; border-left: 3px solid var(--maroon); background: rgba(128, 0, 0, 0.02);">
-                <h4 style="font-size: 0.8rem; text-transform: uppercase; color: var(--maroon);">Data Integrity</h4>
-                <p style="font-size: 1.2rem; font-weight: 800;">Direct SQL Entry</p>
-                <p style="font-size: 0.75rem; color: var(--text-muted);">Atomic insertion logic ensuring zero log loss via stable Supabase cloud handshake.</p>
-            </div>
-            <div style="padding: 20px; border-left: 3px solid var(--maroon); background: rgba(128, 0, 0, 0.02);">
-                <h4 style="font-size: 0.8rem; text-transform: uppercase; color: var(--maroon);">Alert Relay</h4>
-                <p style="font-size: 1.2rem; font-weight: 800;">Instant Notify</p>
-                <p style="font-size: 0.75rem; color: var(--text-muted);">Real-time SMTP relay for scan-in, scan-out, and administrative registration events.</p>
-            </div>
-        </div>
+        <h3>Administrative Hierarchy</h3>
+        <table class="perm-table">
+            <thead>
+                <tr>
+                    <th>Privilege</th>
+                    <th>Standard Admin</th>
+                    <th>Super Admin (Upcoming)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Create New Admin Peers</td>
+                    <td class="check">✓</td>
+                    <td class="check">✓</td>
+                </tr>
+                <tr>
+                    <td>View Attendance Logs</td>
+                    <td class="check">✓</td>
+                    <td class="check">✓</td>
+                </tr>
+                <tr>
+                    <td>Manage/Delete Other Admins</td>
+                    <td class="cross">✕</td>
+                    <td class="check">✓</td>
+                </tr>
+                <tr>
+                    <td>Database Master Access</td>
+                    <td class="cross">✕</td>
+                    <td class="check">✓</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
     <div class="premium-card">
@@ -411,26 +435,22 @@
         <h3>Frequently Asked Questions</h3>
         <div class="faq-list">
             <div class="faq-item">
-                <div class="faq-question">When are email notifications triggered? <span class="faq-icon">▼</span></div>
-                <div class="faq-answer">Notifications are sent instantly for three main events: when a user scans IN, when a user scans OUT, and upon successful account registration.</div>
+                <div class="faq-question">Why can't I edit other admins? <span class="faq-icon">▼</span></div>
+                <div class="faq-answer">QrSys follows a "Horizontal Provisioning" model for standard admins. This ensures that while you can add peers to help manage an event, you cannot modify or compromise their credentials. Full account management is reserved for the Super Admin role.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">How are passwords secured? <span class="faq-icon">▼</span></div>
+                <div class="faq-answer">All passwords undergo SHA-256 one-way hashing before transmission. The system never stores or transmits plaintext passwords, ensuring that even in the event of database access, user credentials remain unreadable.</div>
             </div>
             <div class="faq-item">
                 <div class="faq-question">Does it work offline? <span class="faq-icon">▼</span></div>
                 <div class="faq-answer">No. To ensure 100% data accuracy and real-time syncing between the PC Hub and Mobile Client, a stable internet connection is required for the Supabase handshake.</div>
             </div>
-            <div class="faq-item">
-                <div class="faq-question">Can I manage other administrators? <span class="faq-icon">▼</span></div>
-                <div class="faq-answer">Yes. The QrSys Admin Dashboard allows authorized administrators to create and manage additional admin accounts directly within the system.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">How do I reset the Admin password? <span class="faq-icon">▼</span></div>
-                <div class="faq-answer">For security reasons, password resets are handled via direct SQL intervention. Please contact the developer via the Assistance inquiry to verify identity.</div>
-            </div>
         </div>
     </div>
 
     <div class="premium-card span-full" style="background: transparent; border: none; padding: 0; box-shadow: none; transform: none;">
-        <h3> Technical Documentation</h3>
+        <h3>Technical Documentation</h3>
         <div class="tab-container">
             <button class="tab-btn active" onclick="loadRepoFile('README.md', this)">README</button>
             <button class="tab-btn" onclick="loadRepoFile('LICENSE.md', this)">LICENSE</button>
