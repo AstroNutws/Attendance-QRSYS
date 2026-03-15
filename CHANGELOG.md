@@ -2,8 +2,14 @@
 
 All notable changes to the QRSYS project are documented here.
 
-## [2.1.5] - PC & Mobile Ecosystem - 2026-03-15
+## [2.2.0] - Super Admin Ecosystem Update - 2026-03-15
 ### Added
+- **True Super Admin Management:** Upgraded the `super_admin_panel` to allow management of all administrator accounts, including the promotion and demotion of other Super Admins.
+- **Granular Privilege Control:** Integrated a "Super Admin" toggle in both the registration and management forms to define account-level permissions.
+- **Safe State Handling:** Implemented `IsDBNull` checks in the management panel to prevent application crashes when encountering legacy accounts with null privilege status.
+- **Self-Modification Safety Lock:** Added a logic bridge to prevent Super Admins from accidentally demoting themselves, ensuring at least one Super Admin remains active.
+
+### Improved
 - **Intelligent Admin Change Logs:** Updated the security engine to track exactly what changes are made to administrator accounts, generating a "Before & After" comparison for usernames and emails.
 - **Dual-Recipient Security Alerts:** When an administrator's email is updated, the system now automatically notifies both the old and new addresses to prevent unauthorized takeovers.
 - **Interactive "Secret" Password Reveal:** Integrated a secure "Click to Reveal" CSS block in security emails, hiding new credentials behind a toggle for better privacy.
@@ -12,13 +18,8 @@ All notable changes to the QRSYS project are documented here.
 - **Parent Registration Alerts:** The system now automatically sends a "Registration Successful" email to parents immediately after a student account is linked.
 - **Maroon Branding Overhaul:** Replaced the default .NET violet theme with the official QrSys Maroon and White scheme across the entire mobile application.
 
-### Improved
-- **Partial Profile Updates:** Refined the Super Admin Panel to allow selective updates (change just password, email, or username) without re-entering all credentials.
-- **Unified Cross-Platform Login:** Synchronized the authentication engine between PC and Mobile for an identical, seamless login experience.
-- **Search Capabilities:** Upgraded Mobile Student Finder to load 60 recent logs instantly with precise session durations.
-- **Developer Support Integration:** Added direct links to the official developer portfolio (`joshuagabriel.me`) within all automated system emails.
-
 ### Fixed
+- **Cast Exception Patch:** Fixed `System.InvalidCastException` when loading admin lists by implementing robust `DBNull` handling for the `is_superadmin` boolean field.
 - **Database Logic Safety:** Implemented fallback logic in the Admin Panel to ensure accidental empty fields no longer overwrite existing records with blank values.
 - **Email Delivery Reliability:** Optimized the `ConcurrentQueue` handling in `EmailService` to ensure security alerts are prioritized during high-traffic scanning.
 - **Theme Consistency:** Eliminated the "Violet Bar" issue on mobile devices for a consistent brand experience.
@@ -50,5 +51,5 @@ All notable changes to the QRSYS project are documented here.
 - Synchronized versioning core with the PC edition for ecosystem stability.
 
 ---
-**Developer:** (AstroNutws)  
+**Developer:** Joshua Gabriel De Leon (AstroNutws)
 **Contact:** samongud@gmail.com
