@@ -14,7 +14,7 @@ All notable changes to the QRSYS project are documented here.
 - **Smart Checkout Tracking:** Introduced intelligent status recognition. The system now accurately distinguishes between a standard check-out (**O**), "Out Early" (**O(E)**), and "Out Late-In" (**O(L)**).
 - **Comprehensive Time Logging:** Dashboards and logs now display both **"Time In"** and **"Time Out"** simultaneously for a complete school day overview.
 - **Parent Registration Alerts:** The system now automatically sends a "Registration Successful" email to parents immediately after a student account is linked.
-- **Maroon Branding Overhaul:** Replaced the default .NET violet theme with the official QrSys Maroon and White scheme across the entire mobile application.
+- **Maroon Branding Overhaul:** Replaced the default .NET violet theme with the official QrSys Maroon and White scheme across the entire mobile app.
 
 ### Improved
 - **Partial Profile Updates:** Refined the Super Admin Panel to allow selective updates (change just password, email, or username) without re-entering all credentials.
