@@ -220,7 +220,7 @@
         .faq-item { border-bottom: 1px solid var(--border); padding: 15px 0; }
         .faq-question { display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 700; font-size: 0.9rem; }
         .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; color: var(--text-muted); font-size: 0.85rem; padding-top: 0; }
-        .faq-item.active .faq-answer { max-height: 150px; padding-top: 10px; }
+        .faq-item.active .faq-answer { max-height: 200px; padding-top: 10px; }
         .faq-icon { transition: transform 0.3s; font-size: 0.7rem; }
         .faq-item.active .faq-icon { transform: rotate(180deg); }
 
@@ -315,6 +315,7 @@
         .perm-table td { padding: 12px 10px; border-bottom: 1px solid var(--border); }
         .check { color: #22c55e; font-weight: 800; }
         .cross { color: #ef4444; font-weight: 800; }
+        .shield { color: var(--maroon); font-weight: 800; }
 
         footer {
             text-align: center;
@@ -350,7 +351,7 @@
 
 <header>
     <div class="security-verify">
-        <span style="font-size: 1rem;">🛡️</span> SHA-256 Hashing Active | Supabase Security Verified
+        <span style="font-size: 1rem;">🛡️</span> SHA-256 Hashing | Isolated DB Ownership
     </div>
     <h1>Infrastructure for Modern Attendance Logging.</h1>
     <p class="subtitle">A secure, cloud-integrated ecosystem for academic institutions.</p>
@@ -390,6 +391,7 @@
                     <th>Privilege</th>
                     <th>Standard Admin</th>
                     <th>Super Admin (Upcoming)</th>
+                    <th>Client (Owner)</th>
                 </tr>
             </thead>
             <tbody>
@@ -397,21 +399,25 @@
                     <td>Create New Admin Peers</td>
                     <td class="check">✓</td>
                     <td class="check">✓</td>
+                    <td class="check">✓</td>
+                </tr>
+                <tr>
+                    <td>Update Peer Accounts (Username/Pass)</td>
+                    <td class="cross">✕</td>
+                    <td class="check">✓</td>
+                    <td class="check">✓</td>
                 </tr>
                 <tr>
                     <td>View Attendance Logs</td>
                     <td class="check">✓</td>
                     <td class="check">✓</td>
-                </tr>
-                <tr>
-                    <td>Manage/Delete Other Admins</td>
-                    <td class="cross">✕</td>
                     <td class="check">✓</td>
                 </tr>
                 <tr>
-                    <td>Database Master Access</td>
+                    <td>Direct Database (SQL) Access</td>
                     <td class="cross">✕</td>
-                    <td class="check">✓</td>
+                    <td class="cross">✕</td>
+                    <td class="shield">SHIELDED</td>
                 </tr>
             </tbody>
         </table>
@@ -435,16 +441,16 @@
         <h3>Frequently Asked Questions</h3>
         <div class="faq-list">
             <div class="faq-item">
-                <div class="faq-question">Why can't I edit other admins? <span class="faq-icon">▼</span></div>
-                <div class="faq-answer">QrSys follows a "Horizontal Provisioning" model for standard admins. This ensures that while you can add peers to help manage an event, you cannot modify or compromise their credentials. Full account management is reserved for the Super Admin role.</div>
+                <div class="faq-question">Who has access to the database? <span class="faq-icon">▼</span></div>
+                <div class="faq-answer">Neither Standard nor Super Admins have direct database access. Ownership is strictly isolated to the Client (Database Owner) via the Supabase Dashboard. This ensures that system-level management remains separated from core data storage for maximum security.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">What can the upcoming Super Admin do? <span class="faq-icon">▼</span></div>
+                <div class="faq-answer">The Super Admin will act as the system overseer, with the ability to manage peer accounts, including updating usernames and resetting passwords, as well as conducting high-level attendance auditing.</div>
             </div>
             <div class="faq-item">
                 <div class="faq-question">How are passwords secured? <span class="faq-icon">▼</span></div>
                 <div class="faq-answer">All passwords undergo SHA-256 one-way hashing before transmission. The system never stores or transmits plaintext passwords, ensuring that even in the event of database access, user credentials remain unreadable.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">Does it work offline? <span class="faq-icon">▼</span></div>
-                <div class="faq-answer">No. To ensure 100% data accuracy and real-time syncing between the PC Hub and Mobile Client, a stable internet connection is required for the Supabase handshake.</div>
             </div>
         </div>
     </div>
@@ -455,6 +461,7 @@
             <button class="tab-btn active" onclick="loadRepoFile('README.md', this)">README</button>
             <button class="tab-btn" onclick="loadRepoFile('LICENSE.md', this)">LICENSE</button>
             <button class="tab-btn" onclick="loadRepoFile('USER_MANUAL.md', this)">USER MANUAL</button>
+            <button class="tab-btn" onclick="loadSecurityPolicy(this)">SECURITY POLICY</button>
         </div>
         <div class="doc-viewer" id="doc-content">
             <div style="text-align:center; padding: 40px; color: var(--text-muted);">Fetching repository data...</div>
@@ -544,7 +551,6 @@
             if (apiResp.ok) {
                 const releaseData = await apiResp.json();
                 const version = releaseData.tag_name;
-                
                 const exeAsset = releaseData.assets.find(a => a.name.endsWith('.exe'));
                 const apkAsset = releaseData.assets.find(a => a.name.endsWith('.apk'));
 
@@ -565,24 +571,20 @@
                     mobBtn.innerText = "APK Release Pending";
                     mobileBadge.innerHTML = `<span class="badge" style="background: #2a4365;">Build Pending</span>`;
                 }
-                
                 apiInfo.innerText = "Registry: Online (Encrypted)";
             }
 
             const response = await fetch(`https://raw.githubusercontent.com/AstroNutws/Attendance-QRSYS/main/CHANGELOG.md`);
             if(!response.ok) throw new Error();
             const text = await response.text();
-
             const versionMatch = text.match(/## \[(\d+\.\d+\.\d+)\][\s\S]*?(?=## \[|$)/);
             if (versionMatch) {
                 const verNum = versionMatch[1];
                 const content = versionMatch[0];
                 titleContainer.innerText = `Update Registry (v${verNum})`;
-                
                 const items = [];
                 const lines = content.split('\n');
                 let currentCategory = "Update";
-
                 lines.forEach(line => {
                     if (line.trim().startsWith('###')) {
                         currentCategory = line.replace('###', '').trim();
@@ -592,24 +594,18 @@
                         items.push({ tag: currentCategory, text: cleanText });
                     }
                 });
-
                 if (items.length > 0) {
                     listContainer.innerHTML = items.slice(0, 8).map(item => {
                         const tagClass = item.tag.toLowerCase().includes('added') ? 'tag-added' : 
                                          item.tag.toLowerCase().includes('improved') ? 'tag-improved' : 
                                          item.tag.toLowerCase().includes('fixed') ? 'tag-fixed' : 'tag-default';
-                        return `
-                            <div class="log-item">
-                                <span class="log-tag ${tagClass}">${item.tag}</span>
-                                <span class="log-text">${item.text}</span>
-                            </div>
-                        `;
+                        return `<div class="log-item"><span class="log-tag ${tagClass}">${item.tag}</span><span class="log-text">${item.text}</span></div>`;
                     }).join('');
                 }
             }
         } catch (e) {
             apiInfo.innerText = "Registry: Connection Error";
-            listContainer.innerHTML = '<div class="log-item"><span class="log-tag tag-fixed">Error</span><span class="log-text">Failed to sync live registry. Check GitHub directly.</span></div>';
+            listContainer.innerHTML = '<div class="log-item"><span class="log-tag tag-fixed">Error</span><span class="log-text">Failed to sync live registry.</span></div>';
         }
     }
 
@@ -630,7 +626,6 @@
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         if(btn) btn.classList.add('active');
         docDiv.innerHTML = `<div style="text-align:center; padding: 40px; color: var(--text-muted);">Syncing ${fileName}...</div>`;
-        
         try {
             const response = await fetch(`https://raw.githubusercontent.com/AstroNutws/Attendance-QRSYS/main/${fileName}`);
             if(!response.ok) throw new Error();
@@ -639,6 +634,23 @@
         } catch(e) {
             docDiv.innerHTML = `<p style="color:var(--maroon); text-align:center; padding: 40px;">${fileName} fetch failed. Verify file exists in main branch.</p>`;
         }
+    }
+
+    function loadSecurityPolicy(btn) {
+        const docDiv = document.getElementById('doc-content');
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        if(btn) btn.classList.add('active');
+        docDiv.innerHTML = `
+            <h2>Security & Data Ownership Policy</h2>
+            <br>
+            <p><strong>1. Data Isolation:</strong> The QrSys software acts as a middle-layer between the user interface and the cloud. At no point does the development team or system administrators hold direct ownership of the database.</p>
+            <br>
+            <p><strong>2. Client Control:</strong> The Client (Organization) remains the sole owner of the Supabase project. Database management, SQL execution, and master key control are exclusively handled by the Client via their private Supabase Dashboard.</p>
+            <br>
+            <p><strong>3. Cryptographic Integrity:</strong> All administrative and user credentials are processed via SHA-256 salted hashing. Plaintext passwords never enter the data stream.</p>
+            <br>
+            <p><strong>4. Access Scoping:</strong> Admin accounts are limited to operational tasks (logging, peer management). System management does not grant direct table-level manipulation rights.</p>
+        `;
     }
 
     const canvas = document.getElementById('bg-canvas');
