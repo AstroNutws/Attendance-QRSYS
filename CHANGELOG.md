@@ -7,14 +7,18 @@ All notable changes to the QRSYS project are documented here.
 - **Smart Checkout Tracking:** Introduced intelligent status recognition. The system now accurately distinguishes between a standard check-out (**O**), "Out Early" (**O(E)**), and "Out Late-In" (**O(L)**) for more precise attendance records.
 - **Comprehensive Time Logging:** Attendance dashboards and student logs now display both **"Time In"** and **"Time Out"** simultaneously, providing a complete picture of the school day at a glance.
 - **Enhanced Visual Cues:** Added distinct, professional color-coding for the new attendance statuses across both PC and Mobile platforms, making it easier for admins to spot irregularities visually.
+- **Parent Registration Alerts:** The system now automatically sends a "Registration Successful" email to parents immediately after a new student account is created, confirming their contact details are linked.
+- **Maroon Branding Overhaul:** Replaced the default .NET violet theme with the official QrSys Maroon and White color scheme across the entire mobile application, including the top navigation bars and startup screens.
 
 ### Improved
 - **Unified Cross-Platform Login:** Synchronized the authentication engine between the PC and Mobile apps. Users can now expect a seamless, identical login experience regardless of which device they use.
 - **Search Capabilities:** Upgraded the Mobile Student Finder to load up to 60 recent logs instantly and display precise session durations (e.g., 08:00 AM - 04:00 PM) directly in the search results.
+- **Mobile Visual Polish:** Standardized the appearance of the bottom navigation tabs and status bars to match the dark, professional aesthetic of the Admin Hub.
 
 ### Fixed
-- Resolved a routing issue in the mobile app where admin and student dashboards could occasionally cross over during login.
-- Patched a database formatting bug to ensure trailing spaces in user data no longer cause "Unknown" status errors.
+- **Theme Consistency:** Eliminated the "Violet Bar" issue on mobile devices, ensuring a consistent brand experience from the moment the app opens.
+- **Account Security:** Fixed a login routing issue where admin and student dashboards could occasionally cross over during the sign-in process.
+- **Data Reliability:** Patched a database formatting bug to ensure trailing spaces in user data no longer cause "Unknown" status errors.
 
 ---
 
