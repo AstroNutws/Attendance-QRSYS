@@ -24,6 +24,8 @@
             --tag-added: #22543d;
             --tag-improved: #2a4365;
             --tag-fixed: #744210;
+            --canvas-opacity: 0.6;
+            --node-color: rgba(128, 0, 0, 0.15);
         }
 
         [data-theme="dark"] {
@@ -36,6 +38,8 @@
             --tag-added: #48bb78;
             --tag-improved: #63b3ed;
             --tag-fixed: #f6ad55;
+            --canvas-opacity: 0.3;
+            --node-color: rgba(255, 100, 100, 0.1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: default; }
@@ -54,7 +58,8 @@
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
-            opacity: 0.4;
+            opacity: var(--canvas-opacity);
+            pointer-events: none;
         }
 
         nav {
@@ -156,6 +161,7 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.03);
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(5px);
         }
 
         .premium-card:hover {
@@ -546,6 +552,7 @@
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 <script>
+    // --- THEME & UI CONTROLS ---
     const themeBtn = document.getElementById('theme-switcher');
     const winBtn = document.getElementById('win-btn');
     const mobBtn = document.getElementById('mobile-btn');
@@ -578,6 +585,7 @@
         });
     });
 
+    // --- REPOSITORY DATA SYNCING ---
     async function syncUpdateRegistry() {
         const listContainer = document.getElementById('registry-logs');
         const titleContainer = document.getElementById('registry-title');
@@ -689,43 +697,113 @@
         `;
     }
 
+    // --- ADVANCED NEURAL MESH BACKGROUND ---
     const canvas = document.getElementById('bg-canvas');
     const ctx = canvas.getContext('2d');
-    let particles = [];
-    function initCanvas() {
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        particles = [];
-        for(let i=0; i<45; i++) {
-            particles.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                vx: (Math.random() - 0.5) * 0.35,
-                vy: (Math.random() - 0.5) * 0.35
-            });
+    let nodes = [];
+    let mouse = { x: null, y: null };
+
+    window.addEventListener('mousemove', (e) => {
+        mouse.x = e.x;
+        mouse.y = e.y;
+    });
+
+    class Node {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.baseX = this.x;
+            this.baseY = this.y;
+            this.vx = (Math.random() - 0.5) * 0.4;
+            this.vy = (Math.random() - 0.5) * 0.4;
+            this.radius = 1.5;
+            this.pulse = Math.random() * Math.PI;
+        }
+
+        update() {
+            // Parallax movement based on mouse
+            if (mouse.x != null) {
+                let dx = mouse.x - canvas.width / 2;
+                let dy = mouse.y - canvas.height / 2;
+                this.x = this.baseX + (dx * 0.02);
+                this.y = this.baseY + (dy * 0.02);
+            }
+
+            // Continuous drift
+            this.baseX += this.vx;
+            this.baseY += this.vy;
+
+            // Boundary wrap
+            if (this.baseX < 0) this.baseX = canvas.width;
+            if (this.baseX > canvas.width) this.baseX = 0;
+            if (this.baseY < 0) this.baseY = canvas.height;
+            if (this.baseY > canvas.height) this.baseY = 0;
+            
+            this.pulse += 0.01;
+        }
+
+        draw() {
+            const color = getComputedStyle(document.documentElement).getPropertyValue('--maroon');
+            ctx.fillStyle = color + "20"; // very faint
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius + Math.sin(this.pulse), 0, Math.PI * 2);
+            ctx.fill();
         }
     }
-    function drawCanvas() {
+
+    function initCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        nodes = [];
+        const nodeCount = (canvas.width * canvas.height) / 18000;
+        for (let i = 0; i < nodeCount; i++) {
+            nodes.push(new Node());
+        }
+    }
+
+    function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particles.forEach((p, i) => {
-            p.x += p.vx; p.y += p.vy;
-            if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
-            if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
-            ctx.fillStyle = '#80000012';
-            ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI*2); ctx.fill();
-            for(let j=i+1; j<particles.length; j++) {
-                let p2 = particles[j];
-                let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
-                if(dist < 180) {
-                    ctx.strokeStyle = `rgba(128, 0, 0, ${0.1 - dist/1800})`;
-                    ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+        
+        const lineColor = getComputedStyle(document.documentElement).getPropertyValue('--maroon');
+        const isDark = document.documentElement.hasAttribute('data-theme');
+        
+        for (let i = 0; i < nodes.length; i++) {
+            nodes[i].update();
+            nodes[i].draw();
+
+            for (let j = i + 1; j < nodes.length; j++) {
+                const dx = nodes[i].x - nodes[j].x;
+                const dy = nodes[i].y - nodes[j].y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < 180) {
+                    let opacity = (1 - dist / 180) * 0.15;
+                    ctx.strokeStyle = isDark ? `rgba(255, 100, 100, ${opacity})` : `rgba(128, 0, 0, ${opacity})`;
+                    ctx.lineWidth = 0.8;
+                    ctx.beginPath();
+                    ctx.moveTo(nodes[i].x, nodes[i].y);
+                    ctx.lineTo(nodes[j].x, nodes[j].y);
+                    ctx.stroke();
+                    
+                    // Small "Data Pulse" traveling along lines
+                    if (Math.random() > 0.9995) {
+                        ctx.fillStyle = lineColor;
+                        ctx.beginPath();
+                        ctx.arc(nodes[i].x, nodes[i].y, 2, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
                 }
             }
-        });
-        requestAnimationFrame(drawCanvas);
+        }
+        requestAnimationFrame(animate);
     }
 
     window.addEventListener('resize', initCanvas);
-    initCanvas(); drawCanvas(); updateUptime(); syncUpdateRegistry(); loadRepoFile('README.md');
+    initCanvas();
+    animate();
+    updateUptime();
+    syncUpdateRegistry();
+    loadRepoFile('README.md');
 </script>
 </body>
 </html>
