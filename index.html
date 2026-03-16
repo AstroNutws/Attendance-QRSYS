@@ -46,6 +46,7 @@
             color: var(--text-dark);
             overflow-x: hidden;
             line-height: 1.6;
+            padding-bottom: 50px;
             transition: background-color var(--transition), color var(--transition);
         }
 
@@ -139,7 +140,7 @@
 
         .container {
             max-width: 1100px;
-            margin: 0 auto 100px;
+            margin: 0 auto;
             padding: 0 20px;
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -162,10 +163,20 @@
             box-shadow: 0 30px 60px rgba(0,0,0,0.08);
         }
 
-        .span-full { grid-column: span 2; }
+        .span-full { grid-column: 1 / -1; }
 
         h2 { font-family: var(--font-serif); font-size: 2rem; margin-bottom: 10px; color: var(--maroon); }
-        h3 { font-family: var(--font-sans); font-size: 0.75rem; color: var(--text-muted); margin-bottom: 25px; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; }
+        h3 { 
+            font-family: var(--font-sans); 
+            font-size: 0.75rem; 
+            color: var(--text-muted); 
+            margin-bottom: 25px; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            font-weight: 800; 
+            display: block;
+            width: 100%;
+        }
 
         .badge {
             display: inline-block;
@@ -234,6 +245,12 @@
             border-top: none;
         }
 
+        .tab-container {
+            display: flex;
+            overflow-x: auto;
+            width: 100%;
+        }
+
         .tab-btn {
             background: transparent;
             border: 1px solid var(--border);
@@ -245,6 +262,7 @@
             color: var(--text-muted);
             transition: 0.2s;
             text-transform: uppercase;
+            white-space: nowrap;
         }
 
         .tab-btn.active {
@@ -284,7 +302,7 @@
             background: rgba(128, 0, 0, 0.03);
             padding: 50px;
             border-radius: 20px;
-            font-size: 3rem;
+            font-size: clamp(1.5rem, 5vw, 3rem);
             color: var(--maroon);
             text-align: center;
             font-weight: 800;
@@ -330,7 +348,6 @@
 
         @media (max-width: 850px) {
             .container { grid-template-columns: 1fr; }
-            .span-full { grid-column: span 1; }
             nav { padding: 15px 25px; }
             .log-item { flex-direction: column; gap: 8px; }
         }
@@ -471,8 +488,8 @@
         </div>
     </div>
 
-    <div class="premium-card span-full" style="background: transparent; border: none; padding: 0; box-shadow: none; transform: none;">
-        <h3>Technical Documentation</h3>
+    <div class="premium-card span-full" style="background: transparent; border: none; padding: 0; box-shadow: none; transform: none; margin-top: 20px;">
+        <h3 style="padding-left: 2px;">Technical Documentation</h3>
         <div class="tab-container">
             <button class="tab-btn active" onclick="loadRepoFile('README.md', this)">README</button>
             <button class="tab-btn" onclick="loadRepoFile('LICENSE.md', this)">LICENSE</button>
