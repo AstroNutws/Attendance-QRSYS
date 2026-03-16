@@ -4,7 +4,7 @@ All notable changes to the QRSYS project are documented here.
 
 ## [2.1.5] - Super Admin Ecosystem Update - 2026-03-15
 ### Added
-- **True Super Admin Management:** Upgraded the `super_admin_panel` to allow management of all administrator accounts, including the promotion and demotion of other Super Admins.
+- **True Super Admin Management:** Upgraded the `super admin panel` to allow management of all administrator accounts, including the promotion and demotion of other Super Admins.
 - **Granular Privilege Control:** Integrated a "Super Admin" toggle in both the registration and management forms to define account-level permissions.
 - **Safe State Handling:** Implemented `IsDBNull` checks in the management panel to prevent application crashes when encountering legacy accounts with null privilege status.
 - **Self-Modification Safety Lock:** Added a logic bridge to prevent Super Admins from accidentally demoting themselves, ensuring at least one Super Admin remains active.
