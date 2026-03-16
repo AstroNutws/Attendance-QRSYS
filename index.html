@@ -589,9 +589,10 @@
     async function syncUpdateRegistry() {
         const listContainer = document.getElementById('registry-logs');
         const titleContainer = document.getElementById('registry-title');
+        const cacheBuster = new Date().getTime();
         
         try {
-            const apiResp = await fetch('https://api.github.com/repos/AstroNutws/Attendance-QRSYS/releases/latest');
+            const apiResp = await fetch(`https://api.github.com/repos/AstroNutws/Attendance-QRSYS/releases/latest?t=${cacheBuster}`);
             if (apiResp.ok) {
                 const releaseData = await apiResp.json();
                 const version = releaseData.tag_name;
@@ -618,7 +619,7 @@
                 apiInfo.innerText = "Registry: Online (Encrypted)";
             }
 
-            const response = await fetch(`https://raw.githubusercontent.com/AstroNutws/Attendance-QRSYS/main/CHANGELOG.md`);
+            const response = await fetch(`https://raw.githubusercontent.com/AstroNutws/Attendance-QRSYS/main/CHANGELOG.md?t=${cacheBuster}`);
             if(!response.ok) throw new Error();
             const text = await response.text();
             const versionMatch = text.match(/## \[(\d+\.\d+\.\d+)\][\s\S]*?(?=## \[|$)/);
@@ -667,11 +668,12 @@
 
     async function loadRepoFile(fileName, btn) {
         const docDiv = document.getElementById('doc-content');
+        const cacheBuster = new Date().getTime();
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         if(btn) btn.classList.add('active');
         docDiv.innerHTML = `<div style="text-align:center; padding: 40px; color: var(--text-muted);">Syncing ${fileName}...</div>`;
         try {
-            const response = await fetch(`https://raw.githubusercontent.com/AstroNutws/Attendance-QRSYS/main/${fileName}`);
+            const response = await fetch(`https://raw.githubusercontent.com/AstroNutws/Attendance-QRSYS/main/${fileName}?t=${cacheBuster}`);
             if(!response.ok) throw new Error();
             const rawText = await response.text();
             docDiv.innerHTML = marked.parse(rawText);
@@ -721,7 +723,6 @@
         }
 
         update() {
-            // Parallax movement based on mouse
             if (mouse.x != null) {
                 let dx = mouse.x - canvas.width / 2;
                 let dy = mouse.y - canvas.height / 2;
@@ -729,11 +730,9 @@
                 this.y = this.baseY + (dy * 0.02);
             }
 
-            // Continuous drift
             this.baseX += this.vx;
             this.baseY += this.vy;
 
-            // Boundary wrap
             if (this.baseX < 0) this.baseX = canvas.width;
             if (this.baseX > canvas.width) this.baseX = 0;
             if (this.baseY < 0) this.baseY = canvas.height;
@@ -744,7 +743,7 @@
 
         draw() {
             const color = getComputedStyle(document.documentElement).getPropertyValue('--maroon');
-            ctx.fillStyle = color + "20"; // very faint
+            ctx.fillStyle = color + "20"; 
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.radius + Math.sin(this.pulse), 0, Math.PI * 2);
             ctx.fill();
@@ -763,7 +762,6 @@
 
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
         const lineColor = getComputedStyle(document.documentElement).getPropertyValue('--maroon');
         const isDark = document.documentElement.hasAttribute('data-theme');
         
@@ -785,7 +783,6 @@
                     ctx.lineTo(nodes[j].x, nodes[j].y);
                     ctx.stroke();
                     
-                    // Small "Data Pulse" traveling along lines
                     if (Math.random() > 0.9995) {
                         ctx.fillStyle = lineColor;
                         ctx.beginPath();
