@@ -382,7 +382,7 @@
             <tr><td class="req-label">Platform</td><td class="req-value">Windows 7 - 11</td></tr>
             <tr><td class="req-label">Input</td><td class="req-value">Webcam Interface</td></tr>
             <tr><td class="req-label">Arch</td><td class="req-value">VB.NET / Npgsql</td></tr>
-            <tr><td class="req-label">Security</td><td class="req-value">Salted Hashing</td></tr>
+            <tr><td class="req-label">Security</td><td class="req-value">Visual Masking</td></tr>
         </table>
         <a href="#" id="win-btn" class="btn">Fetching Release...</a>
         <div id="api-info" style="margin-top: 20px; font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); text-align: center;">Registry: Syncing...</div>
@@ -483,7 +483,7 @@
             </div>
             <div class="faq-item">
                 <div class="faq-question">How are passwords secured? <span class="faq-icon">▼</span></div>
-                <div class="faq-answer">All passwords undergo SHA-256 one-way hashing before transmission. The system never stores or transmits plaintext passwords, ensuring that even in the event of database access, user credentials remain unreadable.</div>
+                <div class="faq-answer">Passwords are visually masked in the application UI with circular symbols to prevent shoulder-surfing. While the system currently transmits credentials directly for authentication, future updates will include server-side cryptographic hashing for enhanced backend security.</div>
             </div>
         </div>
     </div>
@@ -683,7 +683,7 @@
             <br>
             <p><strong>2. Client Control:</strong> The Client (Organization) remains the sole owner of the Supabase project. Database management, SQL execution, and master key control are exclusively handled by the Client via their private Supabase Dashboard.</p>
             <br>
-            <p><strong>3. Cryptographic Integrity:</strong> All administrative and user credentials are processed via SHA-256 salted hashing. Plaintext passwords never enter the data stream.</p>
+            <p><strong>3. Credential Integrity:</strong> All administrative and user credentials are masked at the UI level. While the current system focuses on operational transparency, upcoming iterations are slated to incorporate one-way hashing for database storage.</p>
             <br>
             <p><strong>4. Access Scoping (RBAC):</strong> Role-Based Access Control is enforced. Standard Admin accounts are restricted to operational data. Administrative management (account creation/credential resets) is reserved for Super Admin accounts and above.</p>
         `;
