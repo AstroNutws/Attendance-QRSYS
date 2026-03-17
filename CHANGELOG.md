@@ -2,6 +2,9 @@
 
 All notable changes to the QRSYS project are documented here.
 
+## [2.1.6] - System Security Update - 2026-03-17
+### Added
+- **Updated The System Security:**Forced Auto Update Aswell As A Security Update Inside The app.
 ## [2.1.5] - Super Admin Ecosystem Update - 2026-03-15
 ### Added
 - **True Super Admin Management:** Upgraded the `super admin panel` to allow management of all administrator accounts, including the promotion and demotion of other Super Admins.
