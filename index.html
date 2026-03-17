@@ -552,7 +552,6 @@
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 <script>
-    // --- THEME & UI CONTROLS ---
     const themeBtn = document.getElementById('theme-switcher');
     const winBtn = document.getElementById('win-btn');
     const mobBtn = document.getElementById('mobile-btn');
@@ -585,33 +584,49 @@
         });
     });
 
-    // --- REPOSITORY DATA SYNCING ---
     async function syncUpdateRegistry() {
         const listContainer = document.getElementById('registry-logs');
         const titleContainer = document.getElementById('registry-title');
         const cacheBuster = new Date().getTime();
         
         try {
-            const apiResp = await fetch(`https://api.github.com/repos/AstroNutws/Attendance-QRSYS/releases/latest?t=${cacheBuster}`);
-            if (apiResp.ok) {
-                const releaseData = await apiResp.json();
-                const version = releaseData.tag_name;
-                const exeAsset = releaseData.assets.find(a => a.name.endsWith('.exe'));
-                const apkAsset = releaseData.assets.find(a => a.name.endsWith('.apk'));
+            const releasesResp = await fetch(`https://api.github.com/repos/AstroNutws/Attendance-QRSYS/releases?t=${cacheBuster}`);
+            if (releasesResp.ok) {
+                const allReleases = await releasesResp.json();
+                const latestRelease = allReleases[0];
+                const version = latestRelease.tag_name;
 
-                if (exeAsset) {
-                    winBtn.href = exeAsset.browser_download_url;
-                    winBtn.innerText = `Download PC (${version})`;
-                    desktopBadge.innerHTML = `<span class="badge">${version} Stable</span>`;
+                let latestExe = null;
+                for (const release of allReleases) {
+                    const asset = release.assets.find(a => a.name.endsWith('.exe'));
+                    if (asset) {
+                        latestExe = { url: asset.browser_download_url, tag: release.tag_name };
+                        break;
+                    }
+                }
+
+                let latestApk = null;
+                for (const release of allReleases) {
+                    const asset = release.assets.find(a => a.name.endsWith('.apk'));
+                    if (asset) {
+                        latestApk = { url: asset.browser_download_url, tag: release.tag_name };
+                        break;
+                    }
+                }
+
+                if (latestExe) {
+                    winBtn.href = latestExe.url;
+                    winBtn.innerText = `Download PC (${latestExe.tag})`;
+                    desktopBadge.innerHTML = `<span class="badge">${latestExe.tag} Stable</span>`;
                 } else {
                     winBtn.innerText = "PC Release Pending";
                     desktopBadge.innerHTML = `<span class="badge">V2.1.1 Legacy</span>`;
                 }
 
-                if (apkAsset) {
-                    mobBtn.href = apkAsset.browser_download_url;
-                    mobBtn.innerText = `Download APK (${version})`;
-                    mobileBadge.innerHTML = `<span class="badge" style="background: #2a4365;">${version} Available</span>`;
+                if (latestApk) {
+                    mobBtn.href = latestApk.url;
+                    mobBtn.innerText = `Download APK (${latestApk.tag})`;
+                    mobileBadge.innerHTML = `<span class="badge" style="background: #2a4365;">${latestApk.tag} Available</span>`;
                 } else {
                     mobBtn.innerText = "APK Release Pending";
                     mobileBadge.innerHTML = `<span class="badge" style="background: #2a4365;">Build Pending</span>`;
@@ -699,7 +714,6 @@
         `;
     }
 
-    // --- ADVANCED NEURAL MESH BACKGROUND ---
     const canvas = document.getElementById('bg-canvas');
     const ctx = canvas.getContext('2d');
     let nodes = [];
@@ -762,7 +776,6 @@
 
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        const lineColor = getComputedStyle(document.documentElement).getPropertyValue('--maroon');
         const isDark = document.documentElement.hasAttribute('data-theme');
         
         for (let i = 0; i < nodes.length; i++) {
@@ -782,13 +795,6 @@
                     ctx.moveTo(nodes[i].x, nodes[i].y);
                     ctx.lineTo(nodes[j].x, nodes[j].y);
                     ctx.stroke();
-                    
-                    if (Math.random() > 0.9995) {
-                        ctx.fillStyle = lineColor;
-                        ctx.beginPath();
-                        ctx.arc(nodes[i].x, nodes[i].y, 2, 0, Math.PI * 2);
-                        ctx.fill();
-                    }
                 }
             }
         }
