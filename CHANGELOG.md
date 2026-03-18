@@ -6,14 +6,14 @@ All notable changes to the QRSYS project are documented here.
 ### Added
 - **Automatic Security Shield:** The app now automatically checks for and installs the latest updates to ensure your account stays protected with the newest security features without you having to check manually.
 - **Easy Password Recovery:** Forget your password? You can now request a password reset directly from the mobile app login screen, making it easier to get back into your account.
-- **Admin Help on the Go:** School staff can now use their phones to quickly approve student requests, such as grade level updates, section changes, or updating parent contact emails.
-- **Improved Login Stability:** We’ve overhauled the login system for both Students and Admins to ensure it is much more reliable and less likely to "hiccup" or crash.
+- **Admin Help on the Go:** Admin staff can now use their phones to quickly approve student requests, like updating notifying emails
+- **Improved Login Stability:** We’ve overhauled the login system for both User and Admins to ensure it is much more reliable and less likely to "hiccup" or crash.
 
 ### Fixed
 - **Login "Disposed Object" Error:** Fixed a pesky technical bug that caused the app to close unexpectedly during the login process. Both Student and Admin logins are now stable.
 - **Faster Connection Loading:** Optimized how the app talks to the school database, meaning you'll spend less time looking at loading screens and more time using the app.
 - **Enhanced Email Delivery:** Fixed a small issue where some notification emails weren't reaching parents. Alerts should now arrive in inboxes instantly and reliably.
-- **Theme Polish:** Cleaned up some small visual glitches to ensure the Maroon and White school colors look perfect on every screen.
+- **Theme Polish:** Cleaned up some small visual glitches to ensure the UI colors look perfect on every screen.
 
 ---
 
