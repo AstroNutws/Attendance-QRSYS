@@ -6,7 +6,7 @@ All notable changes to the QRSYS project are documented here.
 ### Added
 - **Automatic Security Shield:** The app now automatically checks for and installs the latest updates to ensure your account stays protected with the newest security features without you having to check manually.
 - **Easy Password Recovery:** Forget your password? You can now request a password reset directly from the mobile app login screen, making it easier to get back into your account.
-- **Admin Help on the Go:** Admin staff can now use their phones to quickly approve student requests, like updating notifying emails
+- **Admin Help on the Go:** Admin staff can now use their phones to quickly approve student requests, like updating notifying emails, grade/parent organization, School Section/Organization Group
 - **Improved Login Stability:** We’ve overhauled the login system for both User and Admins to ensure it is much more reliable and less likely to "hiccup" or crash.
 
 ### Fixed
