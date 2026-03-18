@@ -10,9 +10,9 @@ All notable changes to the QRSYS project are documented here.
 - **Improved Login Stability:** We’ve overhauled the login system for both User and Admins to ensure it is much more reliable and less likely to "hiccup" or crash.
 
 ### Fixed
-- **Login "Disposed Object" Error:** Fixed a pesky technical bug that caused the app to close unexpectedly during the login process. Both Student and Admin logins are now stable.
+- **Login "Disposed Object" Error:** Fixed a pesky technical bug that caused the app to close unexpectedly during the login process. Both User and Admin logins are now stable.
 - **Faster Connection Loading:** Optimized how the app talks to the school database, meaning you'll spend less time looking at loading screens and more time using the app.
-- **Enhanced Email Delivery:** Fixed a small issue where some notification emails weren't reaching parents. Alerts should now arrive in inboxes instantly and reliably.
+- **Enhanced Email Delivery:** Fixed a small issue where some notification emails weren't reaching notifying emails. Alerts should now arrive in inboxes instantly and reliably.
 - **Theme Polish:** Cleaned up some small visual glitches to ensure the UI colors look perfect on every screen.
 
 ---
