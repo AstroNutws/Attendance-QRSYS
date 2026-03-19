@@ -1,812 +1,1829 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project QrSys | Infrastructure Portal</title>
-    <meta name="theme-color" content="#800000">
-    <link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/100/800000/university.png">
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@600;800&family=Inter:wght@300;400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --maroon: #800000;
-            --maroon-light: #a52a2a;
-            --cream: #fdfdfd;
-            --text-dark: #1a1a1a;
-            --text-muted: #666;
-            --border: #e5e5e5;
-            --card-bg: #ffffff;
-            --nav-bg: rgba(255, 255, 255, 0.8);
-            --font-serif: 'Crimson Pro', serif;
-            --font-sans: 'Inter', sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
-            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --tag-added: #22543d;
-            --tag-improved: #2a4365;
-            --tag-fixed: #744210;
-            --canvas-opacity: 0.6;
-            --node-color: rgba(128, 0, 0, 0.15);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project QrSys | Infrastructure Portal</title>
+<meta name="theme-color" content="#800000">
+<link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/100/800000/university.png">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-        [data-theme="dark"] {
-            --cream: #0a0a0a;
-            --text-dark: #f5f5f5;
-            --text-muted: #a0a0a0;
-            --border: #222222;
-            --card-bg: #141414;
-            --nav-bg: rgba(10, 10, 10, 0.8);
-            --tag-added: #48bb78;
-            --tag-improved: #63b3ed;
-            --tag-fixed: #f6ad55;
-            --canvas-opacity: 0.3;
-            --node-color: rgba(255, 100, 100, 0.1);
-        }
+<style>
+/* =============================================
+   DESIGN SYSTEM
+============================================= */
+:root {
+  --m:       #800000;
+  --m2:      #a00000;
+  --m3:      #5a0000;
+  --m4:      #c0392b;
+  --w:       #ffffff;
+  --off:     #fdf8f8;
+  --bg:      #fcf5f5;
+  --text:    #180606;
+  --muted:   #8a5a5a;
+  --border:  rgba(128,0,0,0.13);
+  --bstrong: rgba(128,0,0,0.28);
+  --glass:   rgba(255,255,255,0.72);
+  --glass2:  rgba(255,255,255,0.55);
+  --glow:    rgba(128,0,0,0.10);
+  --glow2:   rgba(128,0,0,0.06);
+  --shadow:  0 8px 40px rgba(128,0,0,0.12);
+  --shadow2: 0 32px 80px rgba(128,0,0,0.16);
+  --serif: 'Cormorant Garamond', serif;
+  --sans:  'Outfit', sans-serif;
+  --mono:  'JetBrains Mono', monospace;
+  --ease:  cubic-bezier(.4,0,.2,1);
+  --spring:cubic-bezier(.175,.885,.32,1.275);
+  --tag-added:   #15803d;
+  --tag-improv:  #1d4ed8;
+  --tag-fixed:   #b45309;
+}
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: default; }
+[data-theme="dark"] {
+  --w:      #090202;
+  --off:    #0e0404;
+  --bg:     #0a0303;
+  --text:   #f5e8e8;
+  --muted:  #9a6a6a;
+  --border: rgba(220,60,60,0.14);
+  --bstrong:rgba(220,60,60,0.30);
+  --glass:  rgba(14,4,4,0.80);
+  --glass2: rgba(14,4,4,0.60);
+  --glow:   rgba(200,40,40,0.09);
+  --glow2:  rgba(200,40,40,0.05);
+  --shadow: 0 8px 40px rgba(180,0,0,0.18);
+  --shadow2:0 32px 80px rgba(180,0,0,0.22);
+  --tag-added: #4ade80;
+  --tag-improv:#60a5fa;
+  --tag-fixed: #fbbf24;
+}
 
-        body {
-            font-family: var(--font-sans);
-            background-color: var(--cream);
-            color: var(--text-dark);
-            overflow-x: hidden;
-            line-height: 1.6;
-            padding-bottom: 50px;
-            transition: background-color var(--transition), color var(--transition);
-        }
+/* =============================================
+   BASE
+============================================= */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;font-size:16px;}
 
-        #bg-canvas {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            opacity: var(--canvas-opacity);
-            pointer-events: none;
-        }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.65;
+  cursor: none;
+  padding-bottom: 100px;
+  transition: background .5s var(--ease), color .5s var(--ease);
+}
 
-        nav {
-            position: fixed;
-            top: 0; width: 100%;
-            padding: 15px 60px;
-            backdrop-filter: blur(15px);
-            background: var(--nav-bg);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-        }
+/* =============================================
+   CURSOR
+============================================= */
+#c-dot,#c-ring,#c-trail {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  will-change: transform;
+}
+#c-dot {
+  width: 7px; height: 7px;
+  background: var(--m);
+  transform: translate(-50%,-50%);
+  transition: width .15s, height .15s, background .2s;
+}
+#c-ring {
+  width: 40px; height: 40px;
+  border: 1.5px solid var(--m);
+  transform: translate(-50%,-50%);
+  opacity: .4;
+  transition: width .3s, height .3s, opacity .3s;
+}
+#c-trail {
+  width: 120px; height: 120px;
+  background: radial-gradient(circle, rgba(128,0,0,.07) 0%, transparent 70%);
+  transform: translate(-50%,-50%);
+  pointer-events: none;
+}
+body.cursor-active #c-dot { width:12px; height:12px; background:var(--m4); }
+body.cursor-active #c-ring { width:56px; height:56px; opacity:.25; }
 
-        .nav-logo {
-            font-family: var(--font-serif);
-            font-weight: 800;
-            font-size: 1.4rem;
-            color: var(--maroon);
-            letter-spacing: -0.5px;
-        }
+/* =============================================
+   CANVAS BACKGROUND — DRAMATIC
+============================================= */
+#bg-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
 
-        .nav-controls {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
+/* Layered maroon mesh background */
+.bg-mesh {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 120% 80% at 15% 10%,  rgba(128,0,0,0.13) 0%, transparent 55%),
+    radial-gradient(ellipse 80%  100% at 90% 80%,  rgba(160,0,0,0.10) 0%, transparent 55%),
+    radial-gradient(ellipse 60%  60%  at 50% 50%,  rgba(128,0,0,0.04) 0%, transparent 70%),
+    radial-gradient(ellipse 100% 60%  at 80% 10%,  rgba(90,0,0,0.06)  0%, transparent 60%);
+}
 
-        .theme-toggle {
-            background: none;
-            border: 1px solid var(--border);
-            padding: 8px 12px;
-            border-radius: 8px;
-            color: var(--text-dark);
-            font-size: 0.8rem;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-transform: uppercase;
-        }
+/* Moving aurora stripes */
+.bg-aurora {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.aurora-stripe {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  animation: aurora-float linear infinite;
+  opacity: 0;
+}
+.aurora-stripe:nth-child(1) {
+  width: 700px; height: 300px;
+  background: rgba(128,0,0,0.12);
+  top: -80px; left: -100px;
+  animation-duration: 18s;
+  animation-delay: 0s;
+}
+.aurora-stripe:nth-child(2) {
+  width: 500px; height: 250px;
+  background: rgba(160,40,40,0.08);
+  top: 60%; right: -80px;
+  animation-duration: 22s;
+  animation-delay: -6s;
+}
+.aurora-stripe:nth-child(3) {
+  width: 600px; height: 200px;
+  background: rgba(90,0,0,0.07);
+  bottom: 10%; left: 30%;
+  animation-duration: 26s;
+  animation-delay: -12s;
+}
+.aurora-stripe:nth-child(4) {
+  width: 400px; height: 400px;
+  background: rgba(180,30,30,0.06);
+  top: 30%; left: 60%;
+  animation-duration: 20s;
+  animation-delay: -4s;
+}
 
-        header {
-            padding: 180px 20px 80px;
-            text-align: center;
-            max-width: 900px;
-            margin: 0 auto;
-        }
+@keyframes aurora-float {
+  0%   { transform: translateX(0) translateY(0) rotate(0deg);   opacity: 0; }
+  10%  { opacity: 1; }
+  50%  { transform: translateX(80px) translateY(40px) rotate(15deg); opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateX(0) translateY(0) rotate(0deg);   opacity: 0; }
+}
 
-        h1 {
-            font-family: var(--font-serif);
-            font-size: clamp(2.2rem, 8vw, 4.2rem);
-            font-weight: 800;
-            line-height: 1.1;
-            color: var(--maroon);
-            margin-bottom: 20px;
-        }
+/* Geometric grid overlay */
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(128,0,0,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(128,0,0,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
+}
 
-        .security-verify {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(128, 0, 0, 0.05);
-            padding: 8px 16px;
-            border-radius: 50px;
-            border: 1px solid var(--maroon);
-            color: var(--maroon);
-            font-size: 0.7rem;
-            font-weight: 800;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-        }
+/* Grain */
+.bg-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .45;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='.06'/%3E%3C/svg%3E");
+  background-size: 200px;
+}
 
-        .subtitle {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            max-width: 600px;
-            margin: 0 auto;
-        }
+/* =============================================
+   FLOATING ORBS (CSS-only)
+============================================= */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  animation: orb-drift ease-in-out infinite alternate;
+  filter: blur(0px);
+}
+.orb::after {
+  content:'';
+  position:absolute;
+  inset:4px;
+  border-radius:50%;
+  background: rgba(255,255,255,0.15);
+}
+.orb-1 {
+  width:180px; height:180px;
+  background: radial-gradient(circle at 35% 35%, rgba(200,50,50,0.22), rgba(128,0,0,0.08));
+  border: 1px solid rgba(128,0,0,0.18);
+  top:12%; left:5%;
+  animation-duration: 9s;
+  box-shadow: 0 0 60px rgba(128,0,0,0.08), inset 0 0 40px rgba(200,60,60,0.06);
+}
+.orb-2 {
+  width:120px; height:120px;
+  background: radial-gradient(circle at 40% 30%, rgba(180,30,30,0.20), rgba(100,0,0,0.06));
+  border: 1px solid rgba(128,0,0,0.14);
+  top:55%; right:6%;
+  animation-duration: 12s;
+  animation-delay:-4s;
+  box-shadow: 0 0 40px rgba(128,0,0,0.07), inset 0 0 30px rgba(180,40,40,0.05);
+}
+.orb-3 {
+  width:80px; height:80px;
+  background: radial-gradient(circle at 50% 30%, rgba(220,60,60,0.18), rgba(128,0,0,0.05));
+  border: 1px solid rgba(128,0,0,0.12);
+  bottom:20%; left:10%;
+  animation-duration: 7s;
+  animation-delay:-2s;
+}
+.orb-4 {
+  width:240px; height:240px;
+  background: radial-gradient(circle at 30% 40%, rgba(160,0,0,0.09), transparent 70%);
+  top: 35%; left:40%;
+  animation-duration: 15s;
+  animation-delay:-7s;
+  filter: blur(2px);
+}
 
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-        }
+@keyframes orb-drift {
+  0%   { transform: translateY(0) translateX(0) scale(1); }
+  50%  { transform: translateY(-30px) translateX(15px) scale(1.04); }
+  100% { transform: translateY(10px) translateX(-10px) scale(0.97); }
+}
 
-        .premium-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 40px;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(5px);
-        }
+/* =============================================
+   NAV
+============================================= */
+nav {
+  position: fixed;
+  top: 0; width:100%;
+  z-index: 1000;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 64px;
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  background: rgba(255,255,255,0.78);
+  border-bottom: 1px solid var(--border);
+  transition: background .4s var(--ease), border-color .4s;
+}
+[data-theme="dark"] nav {
+  background: rgba(9,2,2,0.85);
+}
 
-        .premium-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.08);
-        }
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.nav-icon {
+  width:36px; height:36px;
+  border-radius:10px;
+  background: var(--m);
+  display: flex;
+  align-items:center;
+  justify-content:center;
+  color: white;
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  font-weight:700;
+  font-style: italic;
+  box-shadow: 0 4px 16px rgba(128,0,0,0.3);
+  position: relative;
+}
+.nav-icon::after {
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:10px;
+  border: 1px solid rgba(255,255,255,0.25);
+}
+.nav-logo {
+  font-family: var(--serif);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--m);
+  letter-spacing: .3px;
+}
+.nav-logo span { font-style: italic; opacity:.6; font-size:1rem; }
 
-        .span-full { grid-column: 1 / -1; }
+.nav-center {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--glow);
+  border: 1px solid var(--border);
+  border-radius: 40px;
+  padding: 6px 16px;
+}
+.nav-pill {
+  font-family: var(--mono);
+  font-size: .58rem;
+  letter-spacing: 1.5px;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.live-dot {
+  width:6px; height:6px;
+  background: #16a34a;
+  border-radius:50%;
+  animation: blink 2s infinite;
+  box-shadow: 0 0 6px #16a34a;
+}
+@keyframes blink {
+  0%,100%{opacity:1; transform:scale(1);}
+  50%{opacity:.4; transform:scale(.8);}
+}
 
-        h2 { font-family: var(--font-serif); font-size: 2rem; margin-bottom: 10px; color: var(--maroon); }
-        h3 { 
-            font-family: var(--font-sans); 
-            font-size: 0.75rem; 
-            color: var(--text-muted); 
-            margin-bottom: 25px; 
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
-            font-weight: 800; 
-            display: block;
-            width: 100%;
-        }
+.nav-right { display:flex; align-items:center; gap:12px; }
 
-        .badge {
-            display: inline-block;
-            background: var(--maroon);
-            color: white;
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-size: 0.65rem;
-            font-weight: 800;
-            letter-spacing: 1px;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: none;
+  border: 1px solid var(--bstrong);
+  border-radius: 40px;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: .72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .25s;
+  letter-spacing: .3px;
+}
+.theme-toggle:hover {
+  background: var(--m);
+  color: white;
+  border-color: var(--m);
+  box-shadow: 0 4px 20px rgba(128,0,0,0.25);
+}
 
-        .req-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
+/* =============================================
+   HERO
+============================================= */
+header {
+  position:relative;
+  z-index:1;
+  padding: 165px 24px 120px;
+  text-align: center;
+  max-width:1000px;
+  margin:0 auto;
+}
 
-        .req-table td {
-            padding: 14px 0;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.9rem;
-        }
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  padding: 8px 20px;
+  border-radius: 40px;
+  border: 1px solid var(--bstrong);
+  color: var(--m);
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow);
+  animation: heroFadeUp .8s var(--ease) both;
+}
+.hero-badge-dot {
+  width:6px; height:6px;
+  background: var(--m);
+  border-radius:50%;
+  animation: blink 1.5s infinite;
+}
 
-        .req-label { color: var(--text-muted); font-weight: 500; }
-        .req-value { color: var(--text-dark); font-weight: 700; text-align: right; }
+h1 {
+  font-family: var(--serif);
+  font-size: clamp(3rem,8.5vw,5.8rem);
+  font-weight: 700;
+  line-height: 1.05;
+  color: var(--text);
+  margin-bottom: 12px;
+  animation: heroFadeUp .9s .08s var(--ease) both;
+}
+h1 em { color:var(--m); font-style:italic; }
+h1 .line2 {
+  display:block;
+  -webkit-text-stroke: 1px var(--m);
+  color: transparent;
+}
 
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 18px;
-            background: var(--maroon);
-            color: #fff;
-            text-decoration: none;
-            text-align: center;
-            font-weight: 700;
-            font-size: 0.9rem;
-            border-radius: 14px;
-            transition: 0.3s;
-            margin-top: 25px;
-            border: none;
-            cursor: pointer;
-        }
+.hero-sub {
+  font-size:1.05rem;
+  color: var(--muted);
+  max-width:560px;
+  margin:28px auto 0;
+  font-weight:400;
+  line-height:1.75;
+  animation: heroFadeUp 1s .18s var(--ease) both;
+}
 
-        .btn:hover {
-            background: var(--maroon-light);
-            box-shadow: 0 15px 30px rgba(128, 0, 0, 0.25);
-        }
+.hero-divider {
+  width:64px; height:3px;
+  background: linear-gradient(90deg, var(--m), var(--m4));
+  margin:32px auto;
+  border-radius:2px;
+  animation: heroFadeUp .9s .12s var(--ease) both;
+}
 
-        .faq-item { border-bottom: 1px solid var(--border); padding: 15px 0; }
-        .faq-question { display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 700; font-size: 0.9rem; }
-        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; color: var(--text-muted); font-size: 0.85rem; padding-top: 0; }
-        .faq-item.active .faq-answer { max-height: 200px; padding-top: 10px; }
-        .faq-icon { transition: transform 0.3s; font-size: 0.7rem; }
-        .faq-item.active .faq-icon { transform: rotate(180deg); }
+.hero-stats {
+  display:flex;
+  justify-content:center;
+  gap:0;
+  margin-top:48px;
+  animation: heroFadeUp 1s .28s var(--ease) both;
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  max-width:680px;
+  margin-left:auto;
+  margin-right:auto;
+}
+.stat-item {
+  flex:1;
+  padding: 24px 20px;
+  position:relative;
+  text-align:center;
+  transition: background .2s;
+}
+.stat-item:not(:last-child)::after {
+  content:'';
+  position:absolute;
+  right:0; top:20%; bottom:20%;
+  width:1px;
+  background: var(--border);
+}
+.stat-item:hover { background: var(--glow2); }
+.stat-val {
+  font-family:var(--serif);
+  font-size:2.2rem;
+  font-weight:700;
+  color:var(--m);
+  line-height:1;
+}
+.stat-label {
+  font-size:.58rem;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--muted);
+  font-weight:600;
+  margin-top:6px;
+}
 
-        .doc-viewer {
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: 0 0 20px 20px;
-            max-height: 500px;
-            overflow-y: auto;
-            border: 1px solid var(--border);
-            border-top: none;
-        }
+@keyframes heroFadeUp {
+  from{opacity:0;transform:translateY(28px);}
+  to{opacity:1;transform:translateY(0);}
+}
 
-        .tab-container {
-            display: flex;
-            overflow-x: auto;
-            width: 100%;
-        }
+/* =============================================
+   SECTION LABEL
+============================================= */
+.section-label {
+  grid-column:1/-1;
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:8px 0;
+}
+.section-label span {
+  font-size:.6rem;
+  font-weight:700;
+  letter-spacing:3.5px;
+  text-transform:uppercase;
+  color:var(--muted);
+  white-space:nowrap;
+}
+.section-label::before {
+  content:'';
+  width:24px; height:2px;
+  background: var(--m);
+  border-radius:1px;
+  flex-shrink:0;
+}
+.section-label::after {
+  content:'';
+  flex:1; height:1px;
+  background: linear-gradient(90deg, var(--border), transparent);
+}
 
-        .tab-btn {
-            background: transparent;
-            border: 1px solid var(--border);
-            padding: 12px 24px;
-            border-radius: 12px 12px 0 0;
-            cursor: pointer;
-            font-size: 0.7rem;
-            font-weight: 800;
-            color: var(--text-muted);
-            transition: 0.2s;
-            text-transform: uppercase;
-            white-space: nowrap;
-        }
+/* =============================================
+   LAYOUT
+============================================= */
+.container {
+  max-width:1160px;
+  margin:0 auto;
+  padding:0 24px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:22px;
+  position:relative;
+  z-index:1;
+}
+.span-full{grid-column:1/-1;}
 
-        .tab-btn.active {
-            background: var(--card-bg);
-            color: var(--maroon);
-            border-bottom: 2px solid var(--maroon);
-        }
+/* =============================================
+   CARDS — GLASSMORPHISM
+============================================= */
+.card {
+  background: var(--glass);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--border);
+  border-radius:28px;
+  padding:42px;
+  position:relative;
+  overflow:hidden;
+  transition:
+    transform .45s var(--spring),
+    box-shadow .4s var(--ease),
+    border-color .3s;
+  box-shadow: var(--shadow);
+  will-change: transform;
+}
 
-        .log-item {
-            padding: 18px 0;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: flex-start;
-            gap: 20px;
-        }
+/* Animated shimmer on hover */
+.card::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background: linear-gradient(
+    125deg,
+    transparent 0%,
+    rgba(255,255,255,.12) 40%,
+    transparent 80%
+  );
+  transform: translateX(-100%) skewX(-15deg);
+  transition: transform .6s var(--ease);
+  pointer-events:none;
+  z-index:0;
+}
+.card:hover::before { transform: translateX(200%) skewX(-15deg); }
 
-        .log-tag {
-            min-width: 90px;
-            padding: 5px 0;
-            border-radius: 6px;
-            font-weight: 800;
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            text-align: center;
-            letter-spacing: 0.5px;
-        }
+/* Top border gradient */
+.card::after {
+  content:'';
+  position:absolute;
+  top:0; left:20px; right:20px;
+  height:1px;
+  background: linear-gradient(90deg, transparent, rgba(128,0,0,.35), transparent);
+  pointer-events:none;
+}
 
-        .tag-added { background: rgba(34, 84, 61, 0.1); color: var(--tag-added); }
-        .tag-improved { background: rgba(42, 67, 101, 0.1); color: var(--tag-improved); }
-        .tag-fixed { background: rgba(116, 66, 16, 0.1); color: var(--tag-fixed); }
-        .tag-default { background: var(--border); color: var(--text-muted); }
+.card:hover {
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: var(--shadow2);
+  border-color: var(--bstrong);
+}
 
-        .log-text { font-size: 0.95rem; font-weight: 500; color: var(--text-dark); line-height: 1.5; }
+/* Maroon corner accent */
+.card-corner {
+  position:absolute;
+  top:0; right:0;
+  width:100px; height:100px;
+  background: radial-gradient(circle at 100% 0%, rgba(128,0,0,0.12), transparent 70%);
+  border-radius:0 28px 0 0;
+  pointer-events:none;
+}
 
-        .uptime-display {
-            font-family: var(--font-mono);
-            background: rgba(128, 0, 0, 0.03);
-            padding: 50px;
-            border-radius: 20px;
-            font-size: clamp(1.5rem, 5vw, 3rem);
-            color: var(--maroon);
-            text-align: center;
-            font-weight: 800;
-            border: 1px solid var(--border);
-        }
+/* Inner z positioning for card contents */
+.card > * { position:relative; z-index:1; }
 
-        .video-wrapper {
-            border-radius: 16px;
-            overflow: hidden;
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            background: #000;
-            border: 1px solid var(--border);
-        }
+/* Download card accent stripe */
+.card-stripe {
+  position:absolute;
+  left:0; top:30px; bottom:30px;
+  width:4px;
+  border-radius:0 4px 4px 0;
+  background: linear-gradient(180deg, var(--m), var(--m4));
+  box-shadow: 2px 0 12px rgba(128,0,0,0.2);
+}
 
-        .video-wrapper iframe {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-        }
+/* =============================================
+   CARD INTERNALS
+============================================= */
+.card-eyebrow {
+  font-size:.58rem;
+  font-weight:700;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:14px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.card-eyebrow::before {
+  content:'';
+  width:18px; height:1px;
+  background: var(--m);
+}
 
-        .perm-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-        }
-        .perm-table th { text-align: left; color: var(--maroon); text-transform: uppercase; font-size: 0.65rem; padding: 10px; border-bottom: 2px solid var(--border); }
-        .perm-table td { padding: 12px 10px; border-bottom: 1px solid var(--border); }
-        .check { color: #22c55e; font-weight: 800; }
-        .cross { color: #ef4444; font-weight: 800; }
-        .shield { color: var(--maroon); font-weight: 800; }
+h2 {
+  font-family:var(--serif);
+  font-size:2.1rem;
+  font-weight:700;
+  line-height:1.12;
+  margin-bottom:8px;
+}
+h2 em { color:var(--m); font-style:italic; }
 
-        footer {
-            text-align: center;
-            padding: 80px 20px;
-            opacity: 0.6;
-            font-size: 0.65rem;
-            font-weight: 800;
-            color: var(--maroon);
-            letter-spacing: 5px;
-            text-transform: uppercase;
-        }
+.card-desc {
+  color:var(--muted);
+  font-size:.88rem;
+  margin-bottom:0;
+  line-height:1.7;
+}
 
-        @media (max-width: 850px) {
-            .container { grid-template-columns: 1fr; }
-            nav { padding: 15px 25px; }
-            .log-item { flex-direction: column; gap: 8px; }
-        }
-    </style>
+/* =============================================
+   BADGE
+============================================= */
+.badge {
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:5px 13px;
+  border-radius:7px;
+  font-size:.6rem;
+  font-weight:800;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  margin-bottom:20px;
+}
+.badge-maroon { background:var(--m); color:#fff; box-shadow:0 3px 12px rgba(128,0,0,0.25); }
+.badge-navy   { background:#1e3a5f; color:#fff; box-shadow:0 3px 12px rgba(30,58,95,0.25); }
+.badge::before { content:''; width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,.6); animation:blink 1.5s infinite; }
+
+/* =============================================
+   SPEC TABLE
+============================================= */
+.spec-table { width:100%; border-collapse:collapse; margin:20px 0; }
+.spec-table tr { border-radius:8px; transition:background .18s; }
+.spec-table tr:hover td { background:var(--glow2); }
+.spec-table td {
+  padding:12px 8px;
+  border-bottom:1px solid var(--border);
+  font-size:.87rem;
+}
+.spec-label { color:var(--muted); font-weight:500; }
+.spec-val {
+  color:var(--text);
+  font-weight:700;
+  text-align:right;
+  font-family:var(--mono);
+  font-size:.78rem;
+  letter-spacing:.5px;
+}
+
+/* =============================================
+   PILLS
+============================================= */
+.pills { display:flex; flex-wrap:wrap; gap:8px; margin:20px 0 24px; }
+.pill {
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:7px 14px;
+  background:var(--glow);
+  border:1px solid var(--border);
+  border-radius:40px;
+  font-size:.73rem;
+  font-weight:600;
+  color:var(--text);
+  transition:all .22s;
+}
+.pill:hover { background:var(--m); color:#fff; border-color:var(--m); transform:translateY(-2px); box-shadow:0 6px 20px rgba(128,0,0,0.2); }
+.pill-ico { font-size:.9rem; }
+
+/* =============================================
+   DOWNLOAD BUTTON
+============================================= */
+.dl-btn {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  width:100%;
+  padding:17px 24px;
+  background: linear-gradient(135deg, var(--m) 0%, var(--m2) 100%);
+  color:#fff;
+  text-decoration:none;
+  font-weight:700;
+  font-size:.88rem;
+  border-radius:16px;
+  border:none;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  transition:all .3s var(--ease);
+  box-shadow:0 6px 24px rgba(128,0,0,0.25);
+  letter-spacing:.3px;
+}
+.dl-btn::before {
+  content:'';
+  position:absolute;
+  top:0; left:-75%;
+  width:50%; height:100%;
+  background:linear-gradient(120deg, transparent, rgba(255,255,255,.2), transparent);
+  animation:btn-shine 3s infinite 1s;
+}
+@keyframes btn-shine {
+  0%{left:-75%;}
+  100%{left:150%;}
+}
+.dl-btn:hover {
+  background:linear-gradient(135deg, var(--m3) 0%, var(--m) 100%);
+  transform:translateY(-3px);
+  box-shadow:0 16px 40px rgba(128,0,0,0.35);
+}
+.dl-btn.secondary {
+  background:linear-gradient(135deg, #1a2a4a 0%, #1e3a5f 100%);
+  box-shadow:0 6px 24px rgba(30,58,95,0.25);
+}
+.dl-btn.secondary:hover {
+  background:linear-gradient(135deg, #0f1a2e 0%, #1a2a4a 100%);
+  box-shadow:0 16px 40px rgba(30,58,95,0.35);
+}
+.dl-btn-dark {
+  background:linear-gradient(135deg, #180606 0%, #2d0a0a 100%);
+  box-shadow:0 6px 24px rgba(0,0,0,0.2);
+}
+
+.api-status-bar {
+  display:flex;
+  align-items:center;
+  gap:7px;
+  justify-content:center;
+  margin-top:16px;
+  font-family:var(--mono);
+  font-size:.58rem;
+  color:var(--muted);
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+.api-status-bar .live-dot { width:5px; height:5px; }
+
+/* =============================================
+   PERMISSIONS TABLE
+============================================= */
+.perm-wrap { overflow-x:auto; margin-top:24px; border-radius:16px; border:1px solid var(--border); }
+.perm-table {
+  width:100%;
+  border-collapse:collapse;
+  font-size:.84rem;
+}
+.perm-table thead tr {
+  background:linear-gradient(90deg, rgba(128,0,0,.07), rgba(128,0,0,.03));
+}
+.perm-table th {
+  text-align:left;
+  color:var(--m);
+  text-transform:uppercase;
+  font-size:.58rem;
+  letter-spacing:1.8px;
+  padding:16px 14px;
+  font-weight:700;
+  border-bottom:2px solid rgba(128,0,0,.18);
+  white-space:nowrap;
+}
+.perm-table td {
+  padding:14px 14px;
+  border-bottom:1px solid var(--border);
+  transition:background .18s;
+}
+.perm-table tr:last-child td { border-bottom:none; }
+.perm-table tbody tr:hover td { background:var(--glow2); }
+.check  { color:#16a34a; font-weight:800; text-align:center; font-size:1.1rem; }
+.cross  { color:#dc2626; font-weight:800; text-align:center; font-size:1.1rem; }
+.shield {
+  color:var(--m); font-weight:800; text-align:center;
+  font-size:.62rem; letter-spacing:1.5px;
+  font-family:var(--mono);
+}
+
+/* =============================================
+   VIDEO
+============================================= */
+.video-wrapper {
+  border-radius:18px;
+  overflow:hidden;
+  position:relative;
+  padding-bottom:56.25%;
+  height:0;
+  background:#0a0202;
+  border:1px solid var(--border);
+  margin-top:18px;
+  box-shadow:0 12px 40px rgba(0,0,0,0.15);
+}
+.video-wrapper iframe { position:absolute; inset:0; width:100%; height:100%; }
+
+/* =============================================
+   FAQ
+============================================= */
+.faq-item { border-bottom:1px solid var(--border); }
+.faq-question {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  cursor:pointer;
+  font-weight:600;
+  font-size:.92rem;
+  padding:20px 0;
+  gap:24px;
+  transition:color .2s;
+  user-select:none;
+}
+.faq-question:hover { color:var(--m); }
+.faq-chevron {
+  width:28px; height:28px;
+  border-radius:50%;
+  border:1.5px solid var(--bstrong);
+  display:flex; align-items:center; justify-content:center;
+  font-size:.65rem;
+  flex-shrink:0;
+  color:var(--m);
+  transition:all .3s;
+  background:var(--glow2);
+}
+.faq-item.active .faq-chevron {
+  background:var(--m); color:#fff; border-color:var(--m);
+  transform:rotate(180deg);
+  box-shadow:0 4px 16px rgba(128,0,0,0.2);
+}
+.faq-answer {
+  max-height:0; overflow:hidden;
+  transition:max-height .4s ease-out, padding .3s;
+  color:var(--muted); font-size:.88rem; line-height:1.75;
+}
+.faq-item.active .faq-answer { max-height:300px; padding-bottom:20px; }
+
+/* =============================================
+   DOCS
+============================================= */
+.tab-row { display:flex; gap:4px; overflow-x:auto; padding-bottom:1px; }
+.tab-btn {
+  padding:10px 20px;
+  border-radius:12px 12px 0 0;
+  border:1px solid var(--border);
+  border-bottom:none;
+  background:transparent;
+  font-family:var(--sans);
+  font-size:.62rem;
+  font-weight:700;
+  color:var(--muted);
+  cursor:pointer;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  white-space:nowrap;
+  transition:all .2s;
+}
+.tab-btn.active {
+  background:var(--glass);
+  color:var(--m);
+  border-top:2px solid var(--m);
+  backdrop-filter:blur(12px);
+}
+.tab-btn:not(.active):hover { background:var(--glow2); color:var(--text); }
+
+.doc-viewer {
+  background:var(--glass);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border:1px solid var(--border);
+  border-top:none;
+  border-radius:0 16px 20px 20px;
+  padding:36px;
+  max-height:540px;
+  overflow-y:auto;
+  font-size:.88rem;
+  line-height:1.82;
+}
+.doc-viewer::-webkit-scrollbar { width:3px; }
+.doc-viewer::-webkit-scrollbar-thumb { background:var(--bstrong); border-radius:3px; }
+.doc-viewer h1,.doc-viewer h2,.doc-viewer h3 { font-family:var(--serif); color:var(--m); margin:20px 0 10px; }
+.doc-viewer p { margin-bottom:12px; color:var(--muted); }
+.doc-viewer code { background:var(--glow); padding:2px 6px; border-radius:4px; font-family:var(--mono); font-size:.78rem; }
+.doc-viewer pre { background:var(--glow); padding:16px; border-radius:10px; overflow-x:auto; margin:12px 0; }
+.doc-viewer a { color:var(--m); text-decoration:none; }
+.doc-viewer a:hover { text-decoration:underline; }
+
+/* =============================================
+   CHANGELOG
+============================================= */
+.log-item {
+  display:flex;
+  align-items:flex-start;
+  gap:16px;
+  padding:16px 0;
+  border-bottom:1px solid var(--border);
+  transition:all .2s;
+}
+.log-item:hover { padding-left:10px; background:var(--glow2); border-radius:10px; }
+.log-tag {
+  min-width:88px; padding:4px 10px; border-radius:7px;
+  font-size:.58rem; font-weight:800; text-transform:uppercase; letter-spacing:1px;
+  text-align:center; flex-shrink:0;
+}
+.tag-added    { background:rgba(21,128,61,.12);  color:var(--tag-added); }
+.tag-improved { background:rgba(29,78,216,.12);  color:var(--tag-improv); }
+.tag-fixed    { background:rgba(180,83,9,.12);   color:var(--tag-fixed); }
+.tag-default  { background:var(--glow); color:var(--muted); }
+.log-text { font-size:.9rem; font-weight:500; color:var(--text); line-height:1.6; }
+
+/* =============================================
+   UPTIME
+============================================= */
+.uptime-block {
+  position:relative;
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:24px;
+  border:1px solid var(--bstrong);
+  background:var(--glow2);
+}
+.uptime-inner {
+  font-family:var(--mono);
+  font-size:clamp(1.7rem,5vw,3.4rem);
+  font-weight:500;
+  color:var(--m);
+  text-align:center;
+  padding:52px 30px;
+  letter-spacing:.08em;
+  position:relative;
+  z-index:1;
+}
+.uptime-scanlines {
+  position:absolute; inset:0;
+  background:repeating-linear-gradient(
+    0deg, transparent, transparent 3px,
+    rgba(128,0,0,.018) 3px, rgba(128,0,0,.018) 4px
+  );
+  pointer-events:none;
+}
+.uptime-label {
+  text-align:center;
+  color:var(--muted);
+  font-size:.58rem;
+  letter-spacing:4px;
+  font-weight:700;
+  text-transform:uppercase;
+  margin-top:20px;
+}
+
+/* =============================================
+   SECURITY HIGHLIGHT CARD
+============================================= */
+.security-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-top:24px;
+}
+.sec-item {
+  background:var(--glow2);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:20px;
+  transition:all .25s;
+}
+.sec-item:hover {
+  background:var(--glow);
+  border-color:var(--bstrong);
+  transform:translateY(-3px);
+  box-shadow:0 8px 24px rgba(128,0,0,0.1);
+}
+.sec-icon {
+  font-size:1.5rem;
+  margin-bottom:10px;
+}
+.sec-title {
+  font-weight:700;
+  font-size:.88rem;
+  margin-bottom:5px;
+  color:var(--text);
+}
+.sec-desc {
+  font-size:.78rem;
+  color:var(--muted);
+  line-height:1.6;
+}
+
+/* =============================================
+   CTA CARD
+============================================= */
+.cta-card {
+  text-align:center;
+  background: linear-gradient(135deg,
+    rgba(128,0,0,0.06) 0%,
+    rgba(128,0,0,0.02) 100%
+  );
+  border:2px solid var(--m);
+  position:relative;
+  overflow:hidden;
+}
+.cta-watermark {
+  position:absolute;
+  font-family:var(--serif);
+  font-size:20rem;
+  font-weight:700;
+  color:rgba(128,0,0,.025);
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  white-space:nowrap;
+  letter-spacing:-8px;
+  font-style:italic;
+  user-select:none;
+}
+.cta-title {
+  font-family:var(--serif);
+  font-size:2.8rem;
+  font-weight:700;
+  margin-bottom:12px;
+  line-height:1.1;
+}
+.cta-title em { color:var(--m); }
+.cta-sub { color:var(--muted); font-size:.92rem; margin-bottom:36px; line-height:1.7; }
+.cta-row {
+  display:flex;
+  gap:14px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+.cta-row .dl-btn { max-width:240px; margin:0; }
+.cta-links {
+  margin-top:36px;
+  padding-top:28px;
+  border-top:1px solid var(--border);
+  display:flex;
+  justify-content:center;
+  gap:50px;
+  flex-wrap:wrap;
+}
+.cta-link-group { text-align:center; }
+.cta-link-label {
+  font-size:.56rem; letter-spacing:2.5px; text-transform:uppercase;
+  color:var(--muted); font-weight:700; margin-bottom:10px;
+}
+.cta-link-group a {
+  display:inline-block;
+  font-size:.82rem;
+  color:var(--m); font-weight:700;
+  text-decoration:none;
+  margin:0 8px;
+  transition:opacity .2s;
+}
+.cta-link-group a:hover { opacity:.65; }
+
+/* =============================================
+   SCROLL REVEAL
+============================================= */
+.reveal {
+  opacity:0;
+  transform:translateY(32px);
+  transition:opacity .7s var(--ease), transform .7s var(--ease);
+}
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+/* =============================================
+   FOOTER
+============================================= */
+footer {
+  position:relative; z-index:1;
+  text-align:center;
+  padding:80px 24px 40px;
+}
+.footer-brand {
+  font-family:var(--serif);
+  font-size:3.5rem;
+  font-weight:700;
+  font-style:italic;
+  color:var(--m);
+  opacity:.12;
+  letter-spacing:-1px;
+  line-height:1;
+  margin-bottom:16px;
+}
+.footer-text {
+  font-size:.6rem;
+  font-weight:700;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+
+/* =============================================
+   RESPONSIVE
+============================================= */
+@media(max-width:880px){
+  .container{grid-template-columns:1fr;}
+  nav{padding:0 20px;}
+  .nav-center{display:none;}
+  .hero-stats{border-radius:16px;}
+  .stat-item{padding:18px 12px;}
+  .security-grid{grid-template-columns:1fr;}
+  .cta-title{font-size:2rem;}
+  .log-item{flex-direction:column; gap:8px;}
+  .orb{display:none;}
+}
+</style>
 </head>
 <body>
 
-<nav>
-    <div class="nav-logo">PROJECT QRSYS</div>
-    <div class="nav-controls">
-        <button class="theme-toggle" id="theme-switcher">
-            <span id="theme-icon">🌙</span> Dark Mode
-        </button>
-    </div>
-</nav>
+<!-- Cursor -->
+<div id="c-dot"></div>
+<div id="c-ring"></div>
+<div id="c-trail"></div>
 
+<!-- Layered Background -->
+<div class="bg-mesh"></div>
+<div class="bg-aurora">
+  <div class="aurora-stripe"></div>
+  <div class="aurora-stripe"></div>
+  <div class="aurora-stripe"></div>
+  <div class="aurora-stripe"></div>
+</div>
+<div class="bg-grid"></div>
+<div class="bg-grain"></div>
+
+<!-- Floating Orbs -->
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="orb orb-4"></div>
+
+<!-- Particle Canvas -->
 <canvas id="bg-canvas"></canvas>
 
+<!-- =============================================
+     NAVIGATION
+============================================= -->
+<nav>
+  <div class="nav-brand">
+    <div class="nav-icon">Q</div>
+    <div class="nav-logo">PROJECT <span>QrSys</span></div>
+  </div>
+
+  <div class="nav-center">
+    <div class="live-dot"></div>
+    <span class="nav-pill">Infrastructure Portal · Online</span>
+  </div>
+
+  <div class="nav-right">
+    <button class="theme-toggle" id="theme-switcher">
+      <span id="theme-icon">🌙</span> Dark Mode
+    </button>
+  </div>
+</nav>
+
+<!-- =============================================
+     HERO
+============================================= -->
 <header>
-    <div class="security-verify">
-        <span style="font-size: 1rem;">🛡️</span> Secured Database | Postgresql
+  <div class="hero-badge">
+    <div class="hero-badge-dot"></div>
+    Secured PostgreSQL Cloud Infrastructure
+  </div>
+
+  <h1>
+    Infrastructure for
+    <em> Modern Attendance.</em>
+    <span class="line2">Built Different.</span>
+  </h1>
+
+  <div class="hero-divider"></div>
+
+  <p class="hero-sub">
+    A secure, cloud-integrated QR ecosystem engineered for academic institutions — real-time sync, multi-tier access control, and zero-compromise security.
+  </p>
+
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-val">2</div>
+      <div class="stat-label">Platforms</div>
     </div>
-    <h1>Infrastructure for Modern Attendance Logging.</h1>
-    <p class="subtitle">A secure, cloud-integrated ecosystem for academic institutions.</p>
+    <div class="stat-item">
+      <div class="stat-val">3</div>
+      <div class="stat-label">Access Tiers</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">∞</div>
+      <div class="stat-label">QR Scans</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">E2E</div>
+      <div class="stat-label">Encrypted</div>
+    </div>
+  </div>
 </header>
 
+<!-- =============================================
+     MAIN CONTENT
+============================================= -->
 <div class="container">
-    <div class="premium-card">
-        <div id="desktop-badge-container"><span class="badge">Syncing Version...</span></div>
-        <h2>Desktop Edition</h2>
-        <table class="req-table">
-            <tr><td class="req-label">Platform</td><td class="req-value">Windows 7 - 11</td></tr>
-            <tr><td class="req-label">Input</td><td class="req-value">Webcam Interface</td></tr>
-            <tr><td class="req-label">Arch</td><td class="req-value">VB.NET / Npgsql</td></tr>
-            <tr><td class="req-label">Security</td><td class="req-value">Visual Masking</td></tr>
-        </table>
-        <a href="#" id="win-btn" class="btn">Fetching Release...</a>
-        <div id="api-info" style="margin-top: 20px; font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); text-align: center;">Registry: Syncing...</div>
-    </div>
 
-    <div class="premium-card">
-        <div id="mobile-badge-container"><span class="badge" style="background: #2a4365;">Syncing Version...</span></div>
-        <h2>Mobile Client</h2>
-        <table class="req-table">
-            <tr><td class="req-label">OS</td><td class="req-value">Android 8.0+</td></tr>
-            <tr><td class="req-label">Framework</td><td class="req-value">.NET MAUI</td></tr>
-            <tr><td class="req-label">Sync</td><td class="req-value">Real-time Sync</td></tr>
-            <tr><td class="req-label">Storage</td><td class="req-value">~60MB</td></tr>
-        </table>
-        <a href="#" id="mobile-btn" class="btn">Fetching Release...</a>
-    </div>
+  <!-- DOWNLOADS -->
+  <div class="section-label reveal"><span>Download Clients</span></div>
 
-    <div class="premium-card span-full">
-        <h3>Administrative Hierarchy (RBAC)</h3>
-        <table class="perm-table">
-            <thead>
-                <tr>
-                    <th>Privilege</th>
-                    <th>Standard Admin</th>
-                    <th>Super Admin</th>
-                    <th>Client (School/Org)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Create New Admin Peers</td>
-                    <td class="cross">✕</td>
-                    <td class="check">✓</td>
-                    <td class="check">✓</td>
-                </tr>
-                <tr>
-                    <td>Update Peer Details (Username/Email/Pass)</td>
-                    <td class="cross">✕</td>
-                    <td class="check">✓</td>
-                    <td class="check">✓</td>
-                </tr>
-                <tr>
-                    <td>Manage Sections & Student and many more on admin panel!</td>
-                    <td class="check">✓</td>
-                    <td class="check">✓</td>
-                    <td class="check">✓</td>
-                </tr>
-                <tr>
-                    <td>View Attendance logs & Announcements</td>
-                    <td class="check">✓</td>
-                    <td class="check">✓</td>
-                    <td class="check">✓</td>
-                </tr>
-                <tr>
-                    <td>Access Super Admin Panel</td>
-                    <td class="cross">✕</td>
-                    <td class="check">✓</td>
-                    <td class="check">✓</td>
-                </tr>
-                <tr>
-                    <td>Direct Database (Postgresql) Access</td>
-                    <td class="cross">✕</td>
-                    <td class="cross">✕</td>
-                    <td class="shield">SHIELDED</td>
-                </tr>
-            </tbody>
-        </table>
+  <!-- Desktop Card -->
+  <div class="card reveal">
+    <div class="card-corner"></div>
+    <div class="card-stripe"></div>
+    <div id="desktop-badge-container">
+      <span class="badge badge-maroon">Syncing version…</span>
     </div>
+    <div class="card-eyebrow">Windows Client</div>
+    <h2>Desktop <em>Edition</em></h2>
+    <p class="card-desc">Full-featured attendance management with webcam-based QR scanning and cloud sync.</p>
+    <table class="spec-table">
+      <tr><td class="spec-label">Platform</td>    <td class="spec-val">Windows 7 – 11</td></tr>
+      <tr><td class="spec-label">Input</td>        <td class="spec-val">Webcam Interface</td></tr>
+      <tr><td class="spec-label">Architecture</td> <td class="spec-val">VB.NET / Npgsql</td></tr>
+      <tr><td class="spec-label">Security</td>     <td class="spec-val">Visual Masking</td></tr>
+    </table>
+    <div class="pills">
+      <span class="pill"><span class="pill-ico">📷</span> QR Scanner</span>
+      <span class="pill"><span class="pill-ico">☁️</span> Cloud Sync</span>
+      <span class="pill"><span class="pill-ico">🔒</span> RBAC</span>
+    </div>
+    <a href="#" id="win-btn" class="dl-btn">⬇ Fetching Release…</a>
+    <div class="api-status-bar">
+      <div class="live-dot"></div>
+      <span id="api-info">Registry: Syncing…</span>
+    </div>
+  </div>
 
-    <div class="premium-card">
-        <h3>Desktop Preview</h3>
-        <div class="video-wrapper">
-            <iframe src="https://www.youtube.com/embed/ZcIJaQYzTzw" title="QrSys Desktop Preview" frameborder="0" allowfullscreen></iframe>
+  <!-- Mobile Card -->
+  <div class="card reveal">
+    <div class="card-corner"></div>
+    <div class="card-stripe" style="background:linear-gradient(180deg,#1e3a5f,#2563eb);box-shadow:2px 0 12px rgba(30,58,95,0.2);"></div>
+    <div id="mobile-badge-container">
+      <span class="badge badge-navy">Syncing version…</span>
+    </div>
+    <div class="card-eyebrow">Android Client</div>
+    <h2>Mobile <em>Client</em></h2>
+    <p class="card-desc">Lightweight Android companion app with real-time cloud synchronization and offline support.</p>
+    <table class="spec-table">
+      <tr><td class="spec-label">OS</td>         <td class="spec-val">Android 8.0+</td></tr>
+      <tr><td class="spec-label">Framework</td>  <td class="spec-val">.NET MAUI</td></tr>
+      <tr><td class="spec-label">Sync</td>        <td class="spec-val">Real-time</td></tr>
+      <tr><td class="spec-label">Storage</td>     <td class="spec-val">~60 MB</td></tr>
+    </table>
+    <div class="pills">
+      <span class="pill"><span class="pill-ico">📱</span> Native MAUI</span>
+      <span class="pill"><span class="pill-ico">⚡</span> Real-time</span>
+      <span class="pill"><span class="pill-ico">🌐</span> Offline Ready</span>
+    </div>
+    <a href="#" id="mobile-btn" class="dl-btn secondary">⬇ Fetching Release…</a>
+  </div>
+
+  <!-- PERMISSIONS -->
+  <div class="section-label reveal"><span>Access Control · RBAC</span></div>
+
+  <div class="card span-full reveal">
+    <div class="card-corner"></div>
+    <div class="card-eyebrow">Administrative Hierarchy</div>
+    <h2>Role-Based <em>Permissions</em></h2>
+    <p class="card-desc" style="margin-bottom:0;">Granular access tiers ensure complete data isolation at every operational level.</p>
+    <div class="perm-wrap">
+      <table class="perm-table">
+        <thead>
+          <tr>
+            <th>Privilege</th>
+            <th style="text-align:center">Standard Admin</th>
+            <th style="text-align:center">Super Admin</th>
+            <th style="text-align:center">Client (School / Org)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Create New Admin Peers</td>
+            <td class="cross">✕</td><td class="check">✓</td><td class="check">✓</td>
+          </tr>
+          <tr>
+            <td>Update Peer Details (Username / Email / Password)</td>
+            <td class="cross">✕</td><td class="check">✓</td><td class="check">✓</td>
+          </tr>
+          <tr>
+            <td>Manage Sections, Students &amp; Admin Panel</td>
+            <td class="check">✓</td><td class="check">✓</td><td class="check">✓</td>
+          </tr>
+          <tr>
+            <td>View Attendance Logs &amp; Announcements</td>
+            <td class="check">✓</td><td class="check">✓</td><td class="check">✓</td>
+          </tr>
+          <tr>
+            <td>Access Super Admin Panel</td>
+            <td class="cross">✕</td><td class="check">✓</td><td class="check">✓</td>
+          </tr>
+          <tr>
+            <td>Direct Database (PostgreSQL) Access</td>
+            <td class="cross">✕</td><td class="cross">✕</td><td class="shield">⚔ SHIELDED</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECURITY FEATURES -->
+  <div class="section-label reveal"><span>Security Architecture</span></div>
+
+  <div class="card span-full reveal">
+    <div class="card-corner"></div>
+    <div class="card-eyebrow">Zero-Trust Design</div>
+    <h2>Security <em>Framework</em></h2>
+    <p class="card-desc">Every layer of QrSys is designed with data isolation and access control as first principles.</p>
+    <div class="security-grid">
+      <div class="sec-item">
+        <div class="sec-icon">🛡️</div>
+        <div class="sec-title">Data Isolation</div>
+        <div class="sec-desc">QrSys acts as a middleware layer. The dev team holds zero direct ownership of the database at any point.</div>
+      </div>
+      <div class="sec-item">
+        <div class="sec-icon">🔑</div>
+        <div class="sec-title">Client Control</div>
+        <div class="sec-desc">The organization retains full ownership of the Supabase project — SQL, master keys, and dashboard access.</div>
+      </div>
+      <div class="sec-item">
+        <div class="sec-icon">👁️</div>
+        <div class="sec-title">Credential Integrity</div>
+        <div class="sec-desc">Credentials are masked at UI level. Upcoming iterations will incorporate one-way cryptographic hashing.</div>
+      </div>
+      <div class="sec-item">
+        <div class="sec-icon">⚙️</div>
+        <div class="sec-title">RBAC Enforcement</div>
+        <div class="sec-desc">Strict role-based scoping. Standard admins handle operations; only Super Admins manage account creation.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PREVIEWS -->
+  <div class="section-label reveal"><span>Live Demonstrations</span></div>
+
+  <div class="card reveal">
+    <div class="card-corner"></div>
+    <div class="card-eyebrow">Demo</div>
+    <h2>Desktop <em>Preview</em></h2>
+    <div class="video-wrapper">
+      <iframe src="https://www.youtube.com/embed/ZcIJaQYzTzw" title="QrSys Desktop Preview" frameborder="0" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <div class="card reveal">
+    <div class="card-corner"></div>
+    <div class="card-eyebrow">Demo</div>
+    <h2>Mobile <em>Preview</em></h2>
+    <div class="video-wrapper">
+      <iframe src="https://www.youtube.com/embed/hnoCBZ3_GgQ" title="QrSys Mobile Preview" frameborder="0" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section-label reveal"><span>Frequently Asked</span></div>
+
+  <div class="card span-full reveal">
+    <div class="card-corner"></div>
+    <div class="card-eyebrow">Common Questions</div>
+    <h2>FAQ & <em>Support</em></h2>
+    <div style="margin-top:28px;">
+      <div class="faq-item">
+        <div class="faq-question">
+          What is the difference between Admin types?
+          <span class="faq-chevron">▼</span>
         </div>
+        <div class="faq-answer">Standard Admins handle daily operations like monitoring and student lookup. Super Admins act as system overseers with exclusive authority to create admin accounts, update credentials, and access the Super Admin management panel.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          What exclusive powers does the Super Admin have?
+          <span class="faq-chevron">▼</span>
+        </div>
+        <div class="faq-answer">Super Admins access the Super Admin Panel to register new administrators, modify peer details (emails, usernames), reset passwords, and toggle Super Admin status for others to delegate authority effectively.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          Who has direct access to the database?
+          <span class="faq-chevron">▼</span>
+        </div>
+        <div class="faq-answer">Neither Standard nor Super Admins have direct database access. Ownership is strictly isolated to the Client (Database Owner) via their private Supabase Dashboard — ensuring system management remains separated from data storage for maximum security.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          How are passwords and credentials protected?
+          <span class="faq-chevron">▼</span>
+        </div>
+        <div class="faq-answer">Passwords are visually masked in the application UI with circular symbols to prevent shoulder-surfing. Future updates will include server-side cryptographic hashing for enhanced backend security and complete one-way protection.</div>
+      </div>
     </div>
+  </div>
 
-    <div class="premium-card">
-        <h3>Mobile Preview</h3>
-        <div class="video-wrapper">
-            <iframe src="https://www.youtube.com/embed/hnoCBZ3_GgQ" title="QrSys Mobile Preview" frameborder="0" allowfullscreen></iframe>
-        </div>
-    </div>
+  <!-- DOCS -->
+  <div class="section-label reveal"><span>Technical Documentation</span></div>
 
-    <div class="premium-card span-full">
-        <h3>Frequently Asked Questions</h3>
-        <div class="faq-list">
-            <div class="faq-item">
-                <div class="faq-question">What is the difference between Admins? <span class="faq-icon">▼</span></div>
-                <div class="faq-answer">Standard Admins handle daily operations like monitoring and student finding. Super Admins act as system overseers with the exclusive power to create other admin accounts, update credentials (emails/passwords), and access the specialized Super Admin management panel.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">What can the Super Admin do? <span class="faq-icon">▼</span></div>
-                <div class="faq-answer">The Super Admin is now fully implemented as the system's high-level moderator. They can access the "Super Admin Panel" to register new administrator accounts, modify existing peer details (emails and usernames), reset administrative passwords, and toggle Super Admin status for other users to delegate authority.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">Who has access to the database? <span class="faq-icon">▼</span></div>
-                <div class="faq-answer">Neither Standard nor Super Admins have direct database access. Ownership is strictly isolated to the Client (Database Owner) via the Supabase Dashboard. This ensures that system-level management remains separated from core data storage for maximum security.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">How are passwords secured? <span class="faq-icon">▼</span></div>
-                <div class="faq-answer">Passwords are visually masked in the application UI with circular symbols to prevent shoulder-surfing. While the system currently transmits credentials directly for authentication, future updates will include server-side cryptographic hashing for enhanced backend security.</div>
-            </div>
-        </div>
+  <div class="card span-full reveal" style="background:transparent;border:none;padding:0;box-shadow:none;backdrop-filter:none;">
+    <div class="tab-row">
+      <button class="tab-btn active" onclick="loadRepoFile('README.md',this)">README</button>
+      <button class="tab-btn" onclick="loadRepoFile('LICENSE.md',this)">LICENSE</button>
+      <button class="tab-btn" onclick="loadRepoFile('USER_MANUAL.md',this)">User Manual</button>
+      <button class="tab-btn" onclick="loadSecurityPolicy(this)">Security Policy</button>
     </div>
+    <div class="doc-viewer" id="doc-content">
+      <div style="text-align:center;padding:50px;color:var(--muted);font-family:var(--mono);font-size:.7rem;letter-spacing:2px;">
+        ⟳ Syncing repository…
+      </div>
+    </div>
+  </div>
 
-    <div class="premium-card span-full" style="background: transparent; border: none; padding: 0; box-shadow: none; transform: none; margin-top: 20px;">
-        <h3 style="padding-left: 2px;">Technical Documentation</h3>
-        <div class="tab-container">
-            <button class="tab-btn active" onclick="loadRepoFile('README.md', this)">README</button>
-            <button class="tab-btn" onclick="loadRepoFile('LICENSE.md', this)">LICENSE</button>
-            <button class="tab-btn" onclick="loadRepoFile('USER_MANUAL.md', this)">USER MANUAL</button>
-            <button class="tab-btn" onclick="loadSecurityPolicy(this)">SECURITY POLICY</button>
-        </div>
-        <div class="doc-viewer" id="doc-content">
-            <div style="text-align:center; padding: 40px; color: var(--text-muted);">Fetching repository data...</div>
-        </div>
-    </div>
+  <!-- UPTIME -->
+  <div class="section-label reveal"><span>System Status</span></div>
 
-    <div class="premium-card span-full">
-        <h3>System Uptime</h3>
-        <div class="uptime-display" id="uptime-counter">00:00:00:00</div>
-        <p style="text-align: center; color: var(--text-muted); font-size: 0.65rem; margin-top: 25px; letter-spacing: 4px; font-weight: 800;">ENCRYPTED CLOUD CONNECTION: ACTIVE</p>
+  <div class="card span-full reveal">
+    <div class="card-corner"></div>
+    <div class="card-eyebrow">Live Metrics</div>
+    <h2>System <em>Uptime</em></h2>
+    <div class="uptime-block">
+      <div class="uptime-scanlines"></div>
+      <div class="uptime-inner" id="uptime-counter">00d 00h 00m 00s</div>
     </div>
+    <p class="uptime-label">Encrypted Cloud Connection: Active</p>
+  </div>
 
-    <div class="premium-card span-full">
-        <h3 id="registry-title">Update Registry</h3>
-        <div id="registry-logs" class="log-list">
-            <div class="log-item"><span class="log-tag tag-default">Syncing</span><span class="log-text">Pulling latest deployment logs...</span></div>
-        </div>
-    </div>
+  <!-- CHANGELOG -->
+  <div class="section-label reveal"><span>Deployment Logs</span></div>
 
-    <div class="premium-card span-full" style="text-align: center; border: 2px solid var(--maroon); background: rgba(128, 0, 0, 0.01);">
-        <h2>Official Implementation</h2>
-        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 25px;">Acquire a license or view a full-scale demonstration.</p>
-        
-        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-            <a href="mailto:samongud@gmail.com?subject=Sandbox%20Access%20Request&body=Inquiry%20Type:%20Sandbox%20Access%0A%0APlease%20provide%20the%20details%20of%20your%20request%20below:%0A" class="btn" style="max-width: 260px; margin: 0; background: var(--text-dark);">Request Admin Account For Test</a>
-            <a href="mailto:samongud@gmail.com?subject=Live%20Demo%20Inquiry&body=Inquiry%20Type:%20System%20Demo%0A%0ADescribe%20your%20organization%20and%20preferred%20demo%20time:%0A" class="btn" style="max-width: 260px; margin: 0;">Schedule a System Demo</a>
-        </div>
-        
-        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: center; gap: 40px;">
-            <div style="text-align: center;">
-                <p style="font-size: 0.65rem; color: var(--text-muted); letter-spacing: 2px; font-weight: 800;">SUPPORT</p>
-                <div style="display: flex; gap: 15px;">
-                   <a href="https://discord.gg/BRTWwm2k" target="_blank" style="font-size: 0.8rem; color: var(--maroon); font-weight: 700; text-decoration: none;">Discord Support →</a>
-                   <a href="mailto:samongud@gmail.com?subject=Technical%20Assistance%20Required&body=Inquiry%20Type%20(Issue/Inquiry):%0A%0ADescription%20of%20Issue:%0A" style="font-size: 0.8rem; color: var(--maroon); font-weight: 700; text-decoration: none;">Email Assistance →</a>
-                </div>
-            </div>
-            <div style="text-align: center;">
-                <p style="font-size: 0.65rem; color: var(--text-muted); letter-spacing: 2px; font-weight: 800;">REGISTRY</p>
-                <a href="https://github.com/AstroNutws/Attendance-QRSYS" target="_blank" style="font-size: 0.8rem; color: var(--maroon); font-weight: 700; text-decoration: none;">GitHub Source →</a>
-            </div>
-        </div>
+  <div class="card span-full reveal">
+    <div class="card-corner"></div>
+    <div class="card-eyebrow">Changelog</div>
+    <h2 id="registry-title">Update <em>Registry</em></h2>
+    <div id="registry-logs" class="log-list" style="margin-top:24px;">
+      <div class="log-item">
+        <span class="log-tag tag-default">Syncing</span>
+        <span class="log-text">Pulling latest deployment logs…</span>
+      </div>
     </div>
-</div>
+  </div>
+
+  <!-- CTA -->
+  <div class="section-label reveal"><span>Get Started</span></div>
+
+  <div class="card span-full cta-card reveal">
+    <div class="cta-watermark">QrSys</div>
+    <div class="card-eyebrow" style="justify-content:center;">Official Implementation</div>
+    <div class="cta-title">Ready to <em>Deploy?</em></div>
+    <p class="cta-sub">Acquire a license or schedule a full-scale demonstration with our team. Built for schools, designed to scale.</p>
+    <div class="cta-row">
+      <a href="#" class="dl-btn dl-btn-dark" style="max-width:260px;margin:0;">Request Admin Account</a>
+      <a href="#" class="dl-btn" style="max-width:260px;margin:0;">Schedule a System Demo</a>
+    </div>
+    <div class="cta-links">
+      <div class="cta-link-group">
+        <p class="cta-link-label">Support Channels</p>
+        <a href="https://discord.gg/BRTWwm2k" target="_blank">Discord →</a>
+        <a href="#" target="_blank">Email Support →</a>
+      </div>
+      <div class="cta-link-group">
+        <p class="cta-link-label">Source Registry</p>
+        <a href="https://github.com/AstroNutws/Attendance-QRSYS" target="_blank">GitHub Repository →</a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
 
 <footer>
-    &copy; 2026 Project QrSys Development Lab
+  <div class="footer-brand">QrSys</div>
+  <div class="footer-text">&copy; 2026 Project QrSys Development Lab — All rights reserved.</div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
+<!-- =============================================
+     JAVASCRIPT
+============================================= -->
 <script>
-    const themeBtn = document.getElementById('theme-switcher');
-    const winBtn = document.getElementById('win-btn');
-    const mobBtn = document.getElementById('mobile-btn');
-    const apiInfo = document.getElementById('api-info');
-    const desktopBadge = document.getElementById('desktop-badge-container');
-    const mobileBadge = document.getElementById('mobile-badge-container');
+/* ==========================================
+   CURSOR
+========================================== */
+const cDot   = document.getElementById('c-dot');
+const cRing  = document.getElementById('c-ring');
+const cTrail = document.getElementById('c-trail');
+let mx=0,my=0,rx=0,ry=0,tx=0,ty=0;
 
-    function applyTheme(theme) {
-        if (theme === 'dark') {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            themeBtn.innerHTML = '<span id="theme-icon">☀️</span> Light Mode';
-        } else {
-            document.documentElement.removeAttribute('data-theme');
-            themeBtn.innerHTML = '<span id="theme-icon">🌙</span> Dark Mode';
-        }
+document.addEventListener('mousemove', e=>{
+  mx=e.clientX; my=e.clientY;
+  cDot.style.left=mx+'px'; cDot.style.top=my+'px';
+});
+
+(function loop(){
+  rx+=(mx-rx)*.1; ry+=(my-ry)*.1;
+  tx+=(mx-tx)*.05; ty+=(my-ty)*.05;
+  cRing.style.left=rx+'px'; cRing.style.top=ry+'px';
+  cTrail.style.left=tx+'px'; cTrail.style.top=ty+'px';
+  requestAnimationFrame(loop);
+})();
+
+document.querySelectorAll('a,button,.faq-question,.tab-btn,.pill,.stat-item,.sec-item').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-active'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-active'));
+});
+
+/* ==========================================
+   PARTICLE NETWORK CANVAS — DRAMATIC
+========================================== */
+const canvas=document.getElementById('bg-canvas');
+const ctx=canvas.getContext('2d');
+let nodes=[], animId;
+
+class Node {
+  constructor(){this.init();}
+  init(){
+    this.x=Math.random()*canvas.width;
+    this.y=Math.random()*canvas.height;
+    this.bx=this.x; this.by=this.y;
+    this.vx=(Math.random()-.5)*.6;
+    this.vy=(Math.random()-.5)*.6;
+    this.r=Math.random()*2.5+1;
+    this.pulse=Math.random()*Math.PI*2;
+    this.speed=Math.random()*.015+.005;
+    this.alpha=Math.random()*.7+.3;
+  }
+  update(mx,my){
+    if(mx!==null){
+      const dx=(mx-canvas.width*.5)*.025;
+      const dy=(my-canvas.height*.5)*.025;
+      this.x=this.bx+dx; this.y=this.by+dy;
+    }
+    this.bx+=this.vx; this.by+=this.vy;
+    if(this.bx<0)this.bx=canvas.width;
+    if(this.bx>canvas.width)this.bx=0;
+    if(this.by<0)this.by=canvas.height;
+    if(this.by>canvas.height)this.by=0;
+    this.pulse+=this.speed;
+  }
+  draw(){
+    const isDark=document.documentElement.hasAttribute('data-theme');
+    const r=isDark?'220,60,60':'128,0,0';
+    const a=this.alpha*(0.28+Math.sin(this.pulse)*.12);
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,this.r+Math.sin(this.pulse)*.6,0,Math.PI*2);
+    ctx.fillStyle=`rgba(${r},${a})`;
+    ctx.fill();
+    /* glow ring around some nodes */
+    if(this.r>2){
+      ctx.beginPath();
+      ctx.arc(this.x,this.y,this.r*3,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${r},${a*.15})`;
+      ctx.fill();
+    }
+  }
+}
+
+let mousePos={x:null,y:null};
+window.addEventListener('mousemove',e=>{mousePos.x=e.clientX;mousePos.y=e.clientY;});
+
+function initCanvas(){
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+  nodes=[];
+  const count=Math.floor(canvas.width*canvas.height/9000);
+  for(let i=0;i<count;i++) nodes.push(new Node());
+}
+
+function drawLines(){
+  const isDark=document.documentElement.hasAttribute('data-theme');
+  const rgb=isDark?'220,60,60':'128,0,0';
+  for(let i=0;i<nodes.length;i++){
+    for(let j=i+1;j<nodes.length;j++){
+      const dx=nodes[i].x-nodes[j].x;
+      const dy=nodes[i].y-nodes[j].y;
+      const d=Math.sqrt(dx*dx+dy*dy);
+      if(d<140){
+        const o=(1-d/140)*(isDark?.12:.18);
+        ctx.strokeStyle=`rgba(${rgb},${o})`;
+        ctx.lineWidth=.8;
+        ctx.beginPath();
+        ctx.moveTo(nodes[i].x,nodes[i].y);
+        ctx.lineTo(nodes[j].x,nodes[j].y);
+        ctx.stroke();
+      }
+    }
+    /* mouse repel lines */
+    if(mousePos.x!==null){
+      const dx=nodes[i].x-mousePos.x;
+      const dy=nodes[i].y-mousePos.y;
+      const d=Math.sqrt(dx*dx+dy*dy);
+      if(d<120){
+        const o=(1-d/120)*.3;
+        ctx.strokeStyle=`rgba(${rgb},${o})`;
+        ctx.lineWidth=.5;
+        ctx.beginPath();
+        ctx.moveTo(nodes[i].x,nodes[i].y);
+        ctx.lineTo(mousePos.x,mousePos.y);
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  nodes.forEach(n=>n.update(mousePos.x,mousePos.y));
+  drawLines();
+  nodes.forEach(n=>n.draw());
+  animId=requestAnimationFrame(animate);
+}
+
+initCanvas(); animate();
+window.addEventListener('resize',()=>{cancelAnimationFrame(animId);initCanvas();animate();});
+
+/* ==========================================
+   THEME
+========================================== */
+const themeBtn=document.getElementById('theme-switcher');
+
+function applyTheme(t){
+  if(t==='dark'){
+    document.documentElement.setAttribute('data-theme','dark');
+    themeBtn.innerHTML='<span>☀️</span> Light Mode';
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+    themeBtn.innerHTML='<span>🌙</span> Dark Mode';
+  }
+}
+applyTheme(localStorage.getItem('theme')||'light');
+themeBtn.addEventListener('click',()=>{
+  const isDark=document.documentElement.hasAttribute('data-theme');
+  const n=isDark?'light':'dark';
+  applyTheme(n); localStorage.setItem('theme',n);
+});
+
+/* ==========================================
+   FAQ
+========================================== */
+document.querySelectorAll('.faq-question').forEach(q=>{
+  q.addEventListener('click',()=>{
+    const item=q.parentElement;
+    const was=item.classList.contains('active');
+    document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('active'));
+    if(!was) item.classList.add('active');
+  });
+});
+
+/* ==========================================
+   SCROLL REVEAL
+========================================== */
+const ro=new IntersectionObserver((entries)=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('visible'),i*55);
+    }
+  });
+},{threshold:.07});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+/* ==========================================
+   GITHUB RELEASE SYNC
+========================================== */
+async function syncUpdateRegistry(){
+  const logs    =document.getElementById('registry-logs');
+  const title   =document.getElementById('registry-title');
+  const winBtn  =document.getElementById('win-btn');
+  const mobBtn  =document.getElementById('mobile-btn');
+  const apiInfo =document.getElementById('api-info');
+  const dBadge  =document.getElementById('desktop-badge-container');
+  const mBadge  =document.getElementById('mobile-badge-container');
+  const cb      =new Date().getTime();
+
+  try {
+    const rResp=await fetch(`https://api.github.com/repos/AstroNutws/Attendance-QRSYS/releases?t=${cb}`);
+    if(rResp.ok){
+      const all=await rResp.json();
+      let exe=null,apk=null;
+      for(const r of all){const a=r.assets.find(a=>a.name.endsWith('.exe'));if(a){exe={url:a.browser_download_url,tag:r.tag_name};break;}}
+      for(const r of all){const a=r.assets.find(a=>a.name.endsWith('.apk'));if(a){apk={url:a.browser_download_url,tag:r.tag_name};break;}}
+
+      if(exe){
+        winBtn.href=exe.url;
+        winBtn.innerHTML=`⬇ Download PC (${exe.tag})`;
+        dBadge.innerHTML=`<span class="badge badge-maroon">${exe.tag} Stable</span>`;
+      } else {
+        winBtn.innerHTML='PC Release Pending';
+        dBadge.innerHTML=`<span class="badge badge-maroon">V2.1.1 Legacy</span>`;
+      }
+      if(apk){
+        mobBtn.href=apk.url;
+        mobBtn.innerHTML=`⬇ Download APK (${apk.tag})`;
+        mBadge.innerHTML=`<span class="badge badge-navy">${apk.tag} Available</span>`;
+      } else {
+        mobBtn.innerHTML='APK Release Pending';
+        mBadge.innerHTML=`<span class="badge badge-navy">Build Pending</span>`;
+      }
+      apiInfo.textContent='Registry: Online (Encrypted)';
     }
 
-    applyTheme(localStorage.getItem('theme') || 'light');
-    themeBtn.addEventListener('click', () => {
-        const isDark = document.documentElement.hasAttribute('data-theme');
-        const newTheme = isDark ? 'light' : 'dark';
-        applyTheme(newTheme);
-        localStorage.setItem('theme', newTheme);
-    });
-
-    document.querySelectorAll('.faq-question').forEach(q => {
-        q.addEventListener('click', () => {
-            const item = q.parentElement;
-            item.classList.toggle('active');
-        });
-    });
-
-    async function syncUpdateRegistry() {
-        const listContainer = document.getElementById('registry-logs');
-        const titleContainer = document.getElementById('registry-title');
-        const cacheBuster = new Date().getTime();
-        
-        try {
-            const releasesResp = await fetch(`https://api.github.com/repos/AstroNutws/Attendance-QRSYS/releases?t=${cacheBuster}`);
-            if (releasesResp.ok) {
-                const allReleases = await releasesResp.json();
-                const latestRelease = allReleases[0];
-                const version = latestRelease.tag_name;
-
-                let latestExe = null;
-                for (const release of allReleases) {
-                    const asset = release.assets.find(a => a.name.endsWith('.exe'));
-                    if (asset) {
-                        latestExe = { url: asset.browser_download_url, tag: release.tag_name };
-                        break;
-                    }
-                }
-
-                let latestApk = null;
-                for (const release of allReleases) {
-                    const asset = release.assets.find(a => a.name.endsWith('.apk'));
-                    if (asset) {
-                        latestApk = { url: asset.browser_download_url, tag: release.tag_name };
-                        break;
-                    }
-                }
-
-                if (latestExe) {
-                    winBtn.href = latestExe.url;
-                    winBtn.innerText = `Download PC (${latestExe.tag})`;
-                    desktopBadge.innerHTML = `<span class="badge">${latestExe.tag} Stable</span>`;
-                } else {
-                    winBtn.innerText = "PC Release Pending";
-                    desktopBadge.innerHTML = `<span class="badge">V2.1.1 Legacy</span>`;
-                }
-
-                if (latestApk) {
-                    mobBtn.href = latestApk.url;
-                    mobBtn.innerText = `Download APK (${latestApk.tag})`;
-                    mobileBadge.innerHTML = `<span class="badge" style="background: #2a4365;">${latestApk.tag} Available</span>`;
-                } else {
-                    mobBtn.innerText = "APK Release Pending";
-                    mobileBadge.innerHTML = `<span class="badge" style="background: #2a4365;">Build Pending</span>`;
-                }
-                apiInfo.innerText = "Registry: Online (Encrypted)";
-            }
-
-            const response = await fetch(`https://raw.githubusercontent.com/AstroNutws/Attendance-QRSYS/main/CHANGELOG.md?t=${cacheBuster}`);
-            if(!response.ok) throw new Error();
-            const text = await response.text();
-            const versionMatch = text.match(/## \[(\d+\.\d+\.\d+)\][\s\S]*?(?=## \[|$)/);
-            if (versionMatch) {
-                const verNum = versionMatch[1];
-                const content = versionMatch[0];
-                titleContainer.innerText = `System ChangeLogs (v${verNum})`;
-                const items = [];
-                const lines = content.split('\n');
-                let currentCategory = "Update";
-                lines.forEach(line => {
-                    if (line.trim().startsWith('###')) {
-                        currentCategory = line.replace('###', '').trim();
-                    } else if (line.trim().startsWith('-')) {
-                        let cleanText = line.trim().replace('-', '').trim();
-                        cleanText = cleanText.replace(/\*\*/g, '').replace(/__/g, '');
-                        items.push({ tag: currentCategory, text: cleanText });
-                    }
-                });
-                if (items.length > 0) {
-                    listContainer.innerHTML = items.slice(0, 8).map(item => {
-                        const tagClass = item.tag.toLowerCase().includes('added') ? 'tag-added' : 
-                                         item.tag.toLowerCase().includes('improved') ? 'tag-improved' : 
-                                         item.tag.toLowerCase().includes('fixed') ? 'tag-fixed' : 'tag-default';
-                        return `<div class="log-item"><span class="log-tag ${tagClass}">${item.tag}</span><span class="log-text">${item.text}</span></div>`;
-                    }).join('');
-                }
-            }
-        } catch (e) {
-            apiInfo.innerText = "Registry: Connection Error";
-            listContainer.innerHTML = '<div class="log-item"><span class="log-tag tag-fixed">Error</span><span class="log-text">Failed to sync live registry.</span></div>';
+    const mdResp=await fetch(`https://raw.githubusercontent.com/AstroNutws/Attendance-QRSYS/main/CHANGELOG.md?t=${cb}`);
+    if(!mdResp.ok)throw new Error();
+    const text=await mdResp.text();
+    const vm=text.match(/## \[(\d+\.\d+\.\d+)\][\s\S]*?(?=## \[|$)/);
+    if(vm){
+      const ver=vm[1];
+      const content=vm[0];
+      title.innerHTML=`Update <em>Registry</em> <span style="font-size:.72rem;color:var(--muted);font-family:var(--mono);font-weight:400;">(v${ver})</span>`;
+      const items=[];
+      let cat='Update';
+      content.split('\n').forEach(line=>{
+        if(line.trim().startsWith('###')) cat=line.replace('###','').trim();
+        else if(line.trim().startsWith('-')){
+          let t=line.trim().replace('-','').trim().replace(/\*\*/g,'').replace(/__/g,'');
+          items.push({tag:cat,text:t});
         }
+      });
+      if(items.length>0){
+        logs.innerHTML=items.slice(0,8).map(item=>{
+          const tc=item.tag.toLowerCase().includes('added')?'tag-added':
+                   item.tag.toLowerCase().includes('improved')?'tag-improved':
+                   item.tag.toLowerCase().includes('fixed')?'tag-fixed':'tag-default';
+          return `<div class="log-item"><span class="log-tag ${tc}">${item.tag}</span><span class="log-text">${item.text}</span></div>`;
+        }).join('');
+      }
     }
+  } catch(e){
+    apiInfo.textContent='Registry: Connection Error';
+    logs.innerHTML='<div class="log-item"><span class="log-tag tag-fixed">Error</span><span class="log-text">Failed to sync live registry.</span></div>';
+  }
+}
+syncUpdateRegistry();
 
-    function updateUptime() {
-        const startTime = new Date("2026-01-08T00:00:00");
-        setInterval(() => {
-            const diff = new Date() - startTime;
-            const d = Math.floor(diff / 86400000);
-            const h = Math.floor((diff / 3600000) % 24);
-            const m = Math.floor((diff / 60000) % 60);
-            const s = Math.floor((diff / 1000) % 60);
-            document.getElementById('uptime-counter').innerText = `${d}d ${h.toString().padStart(2, '0')}h ${m.toString().padStart(2, '0')}m ${s.toString().padStart(2, '0')}s`;
-        }, 1000);
-    }
+/* ==========================================
+   UPTIME
+========================================== */
+(function uptimeLoop(){
+  const start=new Date('2026-01-08T00:00:00');
+  const el=document.getElementById('uptime-counter');
+  setInterval(()=>{
+    const diff=Date.now()-start;
+    const d=Math.floor(diff/86400000);
+    const h=Math.floor((diff/3600000)%24);
+    const m=Math.floor((diff/60000)%60);
+    const s=Math.floor((diff/1000)%60);
+    el.textContent=`${d}d ${String(h).padStart(2,'0')}h ${String(m).padStart(2,'0')}m ${String(s).padStart(2,'0')}s`;
+  },1000);
+})();
 
-    async function loadRepoFile(fileName, btn) {
-        const docDiv = document.getElementById('doc-content');
-        const cacheBuster = new Date().getTime();
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        if(btn) btn.classList.add('active');
-        docDiv.innerHTML = `<div style="text-align:center; padding: 40px; color: var(--text-muted);">Syncing ${fileName}...</div>`;
-        try {
-            const response = await fetch(`https://raw.githubusercontent.com/AstroNutws/Attendance-QRSYS/main/${fileName}?t=${cacheBuster}`);
-            if(!response.ok) throw new Error();
-            const rawText = await response.text();
-            docDiv.innerHTML = marked.parse(rawText);
-        } catch(e) {
-            docDiv.innerHTML = `<p style="color:var(--maroon); text-align:center; padding: 40px;">${fileName} fetch failed. Verify file exists in main branch.</p>`;
-        }
-    }
+/* ==========================================
+   DOCS VIEWER
+========================================== */
+async function loadRepoFile(file,btn){
+  const doc=document.getElementById('doc-content');
+  const cb=new Date().getTime();
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  doc.innerHTML=`<div style="text-align:center;padding:50px;color:var(--muted);font-family:var(--mono);font-size:.7rem;letter-spacing:2px;">⟳ Syncing ${file}…</div>`;
+  try{
+    const r=await fetch(`https://raw.githubusercontent.com/AstroNutws/Attendance-QRSYS/main/${file}?t=${cb}`);
+    if(!r.ok)throw new Error();
+    doc.innerHTML=marked.parse(await r.text());
+  }catch(e){
+    doc.innerHTML=`<p style="color:var(--m);text-align:center;padding:40px;font-family:var(--mono);font-size:.8rem;">${file} fetch failed. Verify file exists in main branch.</p>`;
+  }
+}
 
-    function loadSecurityPolicy(btn) {
-        const docDiv = document.getElementById('doc-content');
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        if(btn) btn.classList.add('active');
-        docDiv.innerHTML = `
-            <h2>Security & Data Ownership Policy</h2>
-            <br>
-            <p><strong>1. Data Isolation:</strong> The QrSys software acts as a middle-layer between the user interface and the cloud. At no point does the development team or system administrators hold direct ownership of the database.</p>
-            <br>
-            <p><strong>2. Client Control:</strong> The Client (Organization) remains the sole owner of the Supabase project. Database management, SQL execution, and master key control are exclusively handled by the Client via their private Supabase Dashboard.</p>
-            <br>
-            <p><strong>3. Credential Integrity:</strong> All administrative and user credentials are masked at the UI level. While the current system focuses on operational transparency, upcoming iterations are slated to incorporate one-way hashing for database storage.</p>
-            <br>
-            <p><strong>4. Access Scoping (RBAC):</strong> Role-Based Access Control is enforced. Standard Admin accounts are restricted to operational data. Administrative management (account creation/credential resets) is reserved for Super Admin accounts and above.</p>
-        `;
-    }
+function loadSecurityPolicy(btn){
+  const doc=document.getElementById('doc-content');
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  doc.innerHTML=`
+    <h2>Security &amp; Data Ownership Policy</h2><br>
+    <p><strong>1. Data Isolation:</strong> The QrSys software acts as a middleware layer between the user interface and the cloud. At no point does the development team or system administrators hold direct ownership of the database.</p><br>
+    <p><strong>2. Client Control:</strong> The Client (Organization) retains sole ownership of the Supabase project. Database management, SQL execution, and master key control are exclusively handled by the Client via their private Supabase Dashboard.</p><br>
+    <p><strong>3. Credential Integrity:</strong> All administrative and user credentials are masked at the UI level. Upcoming iterations will incorporate one-way hashing for database-level storage protection.</p><br>
+    <p><strong>4. Access Scoping (RBAC):</strong> Role-Based Access Control is enforced throughout. Standard Admin accounts are restricted to operational data. Account creation and credential management is reserved exclusively for Super Admin accounts and above.</p>
+  `;
+}
 
-    const canvas = document.getElementById('bg-canvas');
-    const ctx = canvas.getContext('2d');
-    let nodes = [];
-    let mouse = { x: null, y: null };
-
-    window.addEventListener('mousemove', (e) => {
-        mouse.x = e.x;
-        mouse.y = e.y;
-    });
-
-    class Node {
-        constructor() {
-            this.x = Math.random() * canvas.width;
-            this.y = Math.random() * canvas.height;
-            this.baseX = this.x;
-            this.baseY = this.y;
-            this.vx = (Math.random() - 0.5) * 0.4;
-            this.vy = (Math.random() - 0.5) * 0.4;
-            this.radius = 1.5;
-            this.pulse = Math.random() * Math.PI;
-        }
-
-        update() {
-            if (mouse.x != null) {
-                let dx = mouse.x - canvas.width / 2;
-                let dy = mouse.y - canvas.height / 2;
-                this.x = this.baseX + (dx * 0.02);
-                this.y = this.baseY + (dy * 0.02);
-            }
-
-            this.baseX += this.vx;
-            this.baseY += this.vy;
-
-            if (this.baseX < 0) this.baseX = canvas.width;
-            if (this.baseX > canvas.width) this.baseX = 0;
-            if (this.baseY < 0) this.baseY = canvas.height;
-            if (this.baseY > canvas.height) this.baseY = 0;
-            
-            this.pulse += 0.01;
-        }
-
-        draw() {
-            const color = getComputedStyle(document.documentElement).getPropertyValue('--maroon');
-            ctx.fillStyle = color + "20"; 
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius + Math.sin(this.pulse), 0, Math.PI * 2);
-            ctx.fill();
-        }
-    }
-
-    function initCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        nodes = [];
-        const nodeCount = (canvas.width * canvas.height) / 18000;
-        for (let i = 0; i < nodeCount; i++) {
-            nodes.push(new Node());
-        }
-    }
-
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        const isDark = document.documentElement.hasAttribute('data-theme');
-        
-        for (let i = 0; i < nodes.length; i++) {
-            nodes[i].update();
-            nodes[i].draw();
-
-            for (let j = i + 1; j < nodes.length; j++) {
-                const dx = nodes[i].x - nodes[j].x;
-                const dy = nodes[i].y - nodes[j].y;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-
-                if (dist < 180) {
-                    let opacity = (1 - dist / 180) * 0.15;
-                    ctx.strokeStyle = isDark ? `rgba(255, 100, 100, ${opacity})` : `rgba(128, 0, 0, ${opacity})`;
-                    ctx.lineWidth = 0.8;
-                    ctx.beginPath();
-                    ctx.moveTo(nodes[i].x, nodes[i].y);
-                    ctx.lineTo(nodes[j].x, nodes[j].y);
-                    ctx.stroke();
-                }
-            }
-        }
-        requestAnimationFrame(animate);
-    }
-
-    window.addEventListener('resize', initCanvas);
-    initCanvas();
-    animate();
-    updateUptime();
-    syncUpdateRegistry();
-    loadRepoFile('README.md');
+loadRepoFile('README.md', document.querySelector('.tab-btn'));
 </script>
 </body>
 </html>
