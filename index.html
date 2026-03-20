@@ -863,7 +863,7 @@ footer { position:relative; z-index:1; border-top:1px solid var(--line); padding
       <span class="stat-label">Platforms</span>
     </div>
     <div class="stat">
-      <span class="stat-n" data-t="3">0</span>
+      <span class="stat-n" data-t="4">0</span>
       <span class="stat-label">Access Tiers</span>
     </div>
     <div class="stat">
@@ -977,22 +977,28 @@ footer { position:relative; z-index:1; border-top:1px solid var(--line); padding
     <div class="card-label">Role-Based Access Control</div>
     <h2>Who Can Do <em>What</em></h2>
     <p class="card-desc" style="margin-bottom:22px;">
-      Three distinct access tiers ensure operational data stays separated from system management — whether you're running a school, a company, or a large enterprise. No admin can access what they shouldn't, by design.
+      Four distinct roles ensure every user has exactly the access they need — nothing more, nothing less. Every action is scoped and approval-gated by design.
     </p>
     <table class="perm-table">
       <thead><tr>
         <th>Privilege</th>
-        <th style="text-align:center">Standard Admin</th>
+        <th style="text-align:center">Normal User</th>
+        <th style="text-align:center">Admin</th>
         <th style="text-align:center">Super Admin</th>
-        <th style="text-align:center">Client (Owner / Org)</th>
+        <th style="text-align:center">Owner</th>
       </tr></thead>
       <tbody>
-        <tr><td>Create New Admin Accounts</td><td class="cx">✕</td><td class="ck">✓</td><td class="ck">✓</td></tr>
-        <tr><td>Update Peer Credentials (Username / Email / Password)</td><td class="cx">✕</td><td class="ck">✓</td><td class="ck">✓</td></tr>
-        <tr><td>Manage Sections, Students &amp; Admin Panel</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td></tr>
-        <tr><td>View Attendance Logs &amp; Announcements</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td></tr>
-        <tr><td>Access Super Admin Panel</td><td class="cx">✕</td><td class="ck">✓</td><td class="ck">✓</td></tr>
-        <tr><td>Direct Database (PostgreSQL) Access</td><td class="cx">✕</td><td class="cx">✕</td><td class="sh">⚔ SHIELDED</td></tr>
+        <tr><td>Scan QR Code to Mark Attendance</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td></tr>
+        <tr><td>View Own Attendance Records</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td></tr>
+        <tr><td>Request Own Info Change (pending approval)</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td></tr>
+        <tr><td>Scan QR Code on Behalf of User</td><td class="cx">✕</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td></tr>
+        <tr><td>Manage Sections &amp; Members</td><td class="cx">✕</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td></tr>
+        <tr><td>Approve User Info Change Requests</td><td class="cx">✕</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td></tr>
+        <tr><td>Access Admin Panel</td><td class="cx">✕</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td></tr>
+        <tr><td>Create New Admin Accounts</td><td class="cx">✕</td><td class="cx">✕</td><td class="ck">✓</td><td class="ck">✓</td></tr>
+        <tr><td>Update Peer Credentials (Username / Email / Password)</td><td class="cx">✕</td><td class="cx">✕</td><td class="ck">✓</td><td class="ck">✓</td></tr>
+        <tr><td>Access Super Admin Panel</td><td class="cx">✕</td><td class="cx">✕</td><td class="ck">✓</td><td class="ck">✓</td></tr>
+        <tr><td>Direct Database (PostgreSQL) Access</td><td class="cx">✕</td><td class="cx">✕</td><td class="cx">✕</td><td class="sh">⚔ SHIELDED</td></tr>
       </tbody>
     </table>
   </div>
@@ -1016,7 +1022,7 @@ footer { position:relative; z-index:1; border-top:1px solid var(--line); padding
       <div class="sec-item"><div class="sec-ico">🛡️</div><div class="sec-title">Data Isolation</div><div class="sec-desc">Project QrSys is middleware only. The dev team holds zero direct ownership of your database at any point.</div></div>
       <div class="sec-item"><div class="sec-ico">🔑</div><div class="sec-title">Client Control</div><div class="sec-desc">Your organization — school, company, or team — retains full Supabase ownership. SQL and master keys stay exclusively with you.</div></div>
       <div class="sec-item"><div class="sec-ico">👁️</div><div class="sec-title">Credential Integrity</div><div class="sec-desc">Admin credentials are masked at the UI level. Upcoming iterations will add one-way cryptographic hashing.</div></div>
-      <div class="sec-item"><div class="sec-ico">⚙️</div><div class="sec-title">RBAC Enforcement</div><div class="sec-desc">Strict role scoping throughout. Only Super Admins can create accounts or modify peer credentials.</div></div>
+      <div class="sec-item"><div class="sec-ico">⚙️</div><div class="sec-title">RBAC Enforcement</div><div class="sec-desc">Normal User → Admin → Super Admin → Owner. Users can only request their own info changes — Admins approve them. No role exceeds its scope.</div></div>
     </div>
   </div>
 
@@ -1043,20 +1049,24 @@ footer { position:relative; z-index:1; border-top:1px solid var(--line); padding
     <h2>Questions &amp; <em>Answers</em></h2>
     <div style="margin-top:24px;">
       <div class="faq-item">
-        <div class="faq-q">What is the difference between Admin types? <span class="faq-icon">▼</span></div>
-        <div class="faq-ans">Standard Admins handle daily operations like monitoring attendance and managing students. Super Admins are system overseers with the exclusive authority to create new admin accounts, update credentials, and access the Super Admin management panel.</div>
+        <div class="faq-q">What are the four roles in Project QrSys? <span class="faq-icon">▼</span></div>
+        <div class="faq-ans"><strong>Normal User</strong> — scans QR codes, views their own attendance, and can request changes to their own info pending admin approval. <strong>Admin</strong> — handles daily operations: scanning QR codes for users, managing sections and members, and approving user info change requests. <strong>Super Admin</strong> — system overseer who creates admin accounts and manages credentials. <strong>Owner</strong> — holds the database with full system authority.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q">What can the Super Admin do that Standard Admins cannot? <span class="faq-icon">▼</span></div>
-        <div class="faq-ans">Super Admins can register new administrator accounts, modify peer details such as email addresses and usernames, reset passwords, and delegate Super Admin status to other accounts — all through the dedicated Super Admin Panel.</div>
+        <div class="faq-q">What exactly can a Normal User do? <span class="faq-icon">▼</span></div>
+        <div class="faq-ans">Normal Users can scan a QR code to mark their own attendance and view their own attendance records. They can also submit a request to update their own personal information — but this change is not applied immediately. It goes through an approval process handled by an Admin before it takes effect.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Can Admins scan QR codes for users? <span class="faq-icon">▼</span></div>
+        <div class="faq-ans">Yes. Admins can scan QR codes on behalf of users — useful in situations where a user cannot scan themselves. Admins also manage sections and members, approve user info change requests, and have full access to the Admin Panel.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What is the difference between Admin and Super Admin? <span class="faq-icon">▼</span></div>
+        <div class="faq-ans">Admins handle day-to-day operations — scanning QR codes, managing members, and approving requests. Super Admins go a level higher: they can create new admin accounts, modify peer credentials (email, username, password), reset passwords, and delegate Super Admin status to others via the dedicated Super Admin Panel.</div>
       </div>
       <div class="faq-item">
         <div class="faq-q">Who has direct access to the database? <span class="faq-icon">▼</span></div>
-        <div class="faq-ans">Neither Standard nor Super Admins have direct database access. Database ownership is strictly isolated to the Client (your organization) via their private Supabase Dashboard. System management and data storage are fully separated — regardless of whether your org is a school, company, or corporate group.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q">How are passwords and credentials protected? <span class="faq-icon">▼</span></div>
-        <div class="faq-ans">Passwords are visually masked in the application UI to prevent shoulder-surfing. Future versions will introduce server-side cryptographic hashing for complete backend protection of all stored credentials.</div>
+        <div class="faq-ans">Only the Owner has database-level authority, exclusively through their private Supabase Dashboard. Normal Users, Admins, and Super Admins have zero direct database access. System management and raw data are fully separated at every tier.</div>
       </div>
     </div>
   </div>
@@ -1110,14 +1120,14 @@ footer { position:relative; z-index:1; border-top:1px solid var(--line); padding
       <div class="cta-title">Ready to Deploy <em>Project QrSys?</em></div>
       <p class="cta-sub">Whether you're a school, a company, a corporate team, or any group that tracks attendance — request a test account or schedule a live demo. We'll walk you through everything.</p>
       <div class="cta-btns">
-        <a href="mailto:samongud@gmail.com?subject=Project%20QrSys%20%E2%80%94%20Admin%20Account%20Request&body=Hi%20there%2C%0A%0AI%20would%20like%20to%20request%20a%20test%20admin%20account%20for%20Project%20QrSys.%0A%0AOrganization%20Name%3A%20%5BYour%20Organization%5D%0AOrganization%20Type%3A%20%5BSchool%20%2F%20Company%20%2F%20Corporate%20Team%20%2F%20Other%5D%0ANumber%20of%20Users%3A%20%5BApproximate%20count%5D%0AContact%20Person%3A%20%5BYour%20Name%5D%0AContact%20Email%3A%20%5BYour%20Email%5D%0A%0AAdditional%20Notes%3A%0A%5BAny%20specific%20requirements%20or%20questions%5D%0A%0ALooking%20forward%20to%20hearing%20from%20you.%0A%0AThank%20you!" class="btn btn-dark">Request Admin Account</a>
-        <a href="mailto:samongud@gmail.com?subject=Project%20QrSys%20%E2%80%94%20Demo%20Request&body=Hi%20there%2C%0A%0AI%20would%20like%20to%20schedule%20a%20live%20demonstration%20of%20Project%20QrSys.%0A%0AOrganization%20Name%3A%20%5BYour%20Organization%5D%0AOrganization%20Type%3A%20%5BSchool%20%2F%20Company%20%2F%20Corporate%20Team%20%2F%20Other%5D%0APreferred%20Date%20%26%20Time%3A%20%5BYour%20preferred%20schedule%5D%0AContact%20Person%3A%20%5BYour%20Name%5D%0AContact%20Email%3A%20%5BYour%20Email%5D%0A%0AWhat%20are%20you%20most%20interested%20in%3A%0A%5B%20%5D%20Desktop%20Client%20Demo%0A%5B%20%5D%20Mobile%20Client%20Demo%0A%5B%20%5D%20Both%0A%0AAdditional%20Questions%3A%0A%5BAny%20specific%20features%20you%20want%20to%20see%5D%0A%0AThank%20you!" class="btn">Schedule a Demo</a>
+        <a href="/cdn-cgi/l/email-protection#d5a6b4b8babbb2a0b195b2b8b4bcb9fbb6bab8eaa6a0b7bfb0b6a1e885a7babfb0b6a1f0e7e584a786aca6f0e7e5f090e7f0ede5f0ece1f0e7e594b1b8bcbbf0e7e594b6b6baa0bba1f0e7e587b0a4a0b0a6a1f3b7bab1ace89dbcf0e7e5a1bdb0a7b0f0e796f0e594f0e5949cf0e7e5a2baa0b9b1f0e7e5b9bcbeb0f0e7e5a1baf0e7e5a7b0a4a0b0a6a1f0e7e5b4f0e7e5a1b0a6a1f0e7e5b4b1b8bcbbf0e7e5b4b6b6baa0bba1f0e7e5b3baa7f0e7e585a7babfb0b6a1f0e7e584a786aca6fbf0e594f0e5949aa7b2b4bbbcafb4a1bcbabbf0e7e59bb4b8b0f0e694f0e7e5f0e0978cbaa0a7f0e7e59aa7b2b4bbbcafb4a1bcbabbf0e091f0e5949aa7b2b4bbbcafb4a1bcbabbf0e7e581aca5b0f0e694f0e7e5f0e09786b6bdbabab9f0e7e5f0e793f0e7e596bab8a5b4bbacf0e7e5f0e793f0e7e596baa7a5baa7b4a1b0f0e7e581b0b4b8f0e7e5f0e793f0e7e59aa1bdb0a7f0e091f0e5949ba0b8b7b0a7f0e7e5bab3f0e7e580a6b0a7a6f0e694f0e7e5f0e09794a5a5a7baadbcb8b4a1b0f0e7e5b6baa0bba1f0e091f0e59496babba1b4b6a1f0e7e585b0a7a6babbf0e694f0e7e5f0e0978cbaa0a7f0e7e59bb4b8b0f0e091f0e59496babba1b4b6a1f0e7e590b8b4bcb9f0e694f0e7e5f0e0978cbaa0a7f0e7e590b8b4bcb9f0e091f0e594f0e59494b1b1bca1bcbabbb4b9f0e7e59bbaa1b0a6f0e694f0e594f0e09794bbacf0e7e5a6a5b0b6bcb3bcb6f0e7e5a7b0a4a0bca7b0b8b0bba1a6f0e7e5baa7f0e7e5a4a0b0a6a1bcbabba6f0e091f0e594f0e59499bababebcbbb2f0e7e5b3baa7a2b4a7b1f0e7e5a1baf0e7e5bdb0b4a7bcbbb2f0e7e5b3a7bab8f0e7e5acbaa0fbf0e594f0e59481bdb4bbbef0e7e5acbaa0f4" class="btn btn-dark">Request Admin Account</a>
+        <a href="/cdn-cgi/l/email-protection#f98a989496979e8c9db99e94989095d79a9694c68a8c9b939c9a8dc4a98b96939c9a8ddccbc9a88baa808adccbc9dcbccbdcc1c9dcc0cddccbc9bd9c9496dccbc9ab9c888c9c8a8ddf9b969d80c4b190dccbc98d919c8b9cdccbbadcc9b8dcc9b8b0dccbc98e968c959ddccbc99590929cdccbc98d96dccbc98a9a919c9d8c959cdccbc998dccbc995908f9cdccbc99d9c9496978a8d8b988d909697dccbc9969fdccbc9a98b96939c9a8ddccbc9a88baa808ad7dcc9b8dcc9b8b68b9e98979083988d909697dccbc9b798949cdccab8dccbc9dcccbba0968c8bdccbc9b68b9e98979083988d909697dcccbddcc9b8b68b9e98979083988d909697dccbc9ad80899cdccab8dccbc9dcccbbaa9a91969695dccbc9dccbbfdccbc9ba969489989780dccbc9dccbbfdccbc9ba968b89968b988d9cdccbc9ad9c9894dccbc9dccbbfdccbc9b68d919c8bdcccbddcc9b8a98b9c9f9c8b8b9c9ddccbc9bd988d9cdccbc9dccbcfdccbc9ad90949cdccab8dccbc9dcccbba0968c8bdccbc9898b9c9f9c8b8b9c9ddccbc98a9a919c9d8c959cdcccbddcc9b8ba96978d989a8ddccbc9a99c8b8a9697dccab8dccbc9dcccbba0968c8bdccbc9b798949cdcccbddcc9b8ba96978d989a8ddccbc9bc94989095dccab8dccbc9dcccbba0968c8bdccbc9bc94989095dcccbddcc9b8dcc9b8ae91988ddccbc9988b9cdccbc980968cdccbc994968a8ddccbc990978d9c8b9c8a8d9c9ddccbc99097dccab8dcc9b8dcccbbdccbc9dcccbddccbc9bd9c8a928d9689dccbc9ba95909c978ddccbc9bd9c9496dcc9b8dcccbbdccbc9dcccbddccbc9b4969b90959cdccbc9ba95909c978ddccbc9bd9c9496dcc9b8dcccbbdccbc9dcccbddccbc9bb968d91dcc9b8dcc9b8b89d9d908d9096979895dccbc9a88c9c8a8d9096978adccab8dcc9b8dcccbbb89780dccbc98a899c9a909f909adccbc99f9c988d8c8b9c8adccbc980968cdccbc98e98978ddccbc98d96dccbc98a9c9cdcccbddcc9b8dcc9b8ad91989792dccbc980968cd8" class="btn">Schedule a Demo</a>
       </div>
       <div class="cta-links">
         <div class="link-group">
           <p class="link-label">Support Channels</p>
           <a href="https://discord.gg/BRTWwm2k" target="_blank">Discord →</a>
-          <a href="mailto:samongud@gmail.com?subject=Project%20QrSys%20%E2%80%94%20Support%20Request&body=Hi%20there%2C%0A%0AI%20need%20support%20with%20Project%20QrSys.%0A%0AIssue%20Type%3A%20%5BBug%20%2F%20Question%20%2F%20Feature%20Request%20%2F%20Other%5D%0AOrganization%3A%20%5BYour%20Organization%5D%0AVersion%20%28PC%20%2F%20APK%29%3A%20%5BVersion%20number%5D%0A%0ADescription%20of%20Issue%3A%0A%5BPlease%20describe%20your%20issue%20or%20question%20in%20detail%5D%0A%0ASteps%20to%20Reproduce%20%28if%20bug%29%3A%0A1.%20%0A2.%20%0A3.%20%0A%0AThank%20you!">Email Support →</a>
+          <a href="/cdn-cgi/l/email-protection#7a091b1715141d0f1e3a1d171b13165419151745090f18101f190e472a0815101f190e5f484a2b082903095f484a5f3f485f424a5f434e5f484a290f0a0a15080e5f484a281f0b0f1f090e5c18151e034732135f484a0e121f081f5f48395f4a3b5f4a3b335f484a141f1f1e5f484a090f0a0a15080e5f484a0d130e125f484a2a0815101f190e5f484a2b08290309545f4a3b5f4a3b3309090f1f5f484a2e030a1f5f493b5f484a5f4f38380f1d5f484a5f483c5f484a2b0f1f090e1315145f484a5f483c5f484a3c1f1b0e0f081f5f484a281f0b0f1f090e5f484a5f483c5f484a350e121f085f4f3e5f4a3b35081d1b1413001b0e1315145f493b5f484a5f4f3823150f085f484a35081d1b1413001b0e1315145f4f3e5f4a3b2c1f08091315145f484a5f48422a395f484a5f483c5f484a3b2a315f48435f493b5f484a5f4f382c1f08091315145f484a140f17181f085f4f3e5f4a3b5f4a3b3e1f091908130a0e1315145f484a151c5f484a3309090f1f5f493b5f4a3b5f4f382a161f1b091f5f484a1e1f09190813181f5f484a03150f085f484a1309090f1f5f484a15085f484a0b0f1f090e1315145f484a13145f484a1e1f0e1b13165f4f3e5f4a3b5f4a3b290e1f0a095f484a0e155f484a281f0a08151e0f191f5f484a5f4842131c5f484a180f1d5f48435f493b5f4a3b4b545f484a5f4a3b48545f484a5f4a3b49545f484a5f4a3b5f4a3b2e121b14115f484a03150f5b">Email Support →</a>
         </div>
         <div class="link-group">
           <p class="link-label">Source Code</p>
@@ -1134,7 +1144,7 @@ footer { position:relative; z-index:1; border-top:1px solid var(--line); padding
   <span class="foot-copy">&copy; 2026 Project QrSys Development Lab &middot; All rights reserved</span>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 'use strict';
 
 /* ── LOW-END DETECTION ── */
@@ -1239,7 +1249,7 @@ const msgs = [
   'Schools &middot; Companies &middot; Corporate Teams &middot; Any Group',
   '<b>RBAC Enforced</b> &middot; Zero Privilege Leakage',
   'Windows Desktop + Android Mobile &middot; SaaS &middot; Deploy Today',
-  '<b>Super Admin</b> &middot; Standard Admin &middot; Client Database Owner',
+  '<b>4 Roles</b> &middot; Normal User &middot; Admin &middot; Super Admin &middot; Owner',
   'QR Scanning &middot; Webcam Interface &middot; .NET MAUI Framework',
   '<b>Live Since</b> January 8, 2026 &middot; Encrypted Connection Active'
 ];
@@ -1390,7 +1400,7 @@ async function loadFile(name, btn){
   const div = document.getElementById('doc-content');
   document.querySelectorAll('.tab').forEach(b => b.classList.remove('on'));
   if(btn) btn.classList.add('on');
-  div.innerHTML = `<div style="text-align:center;padding:40px;color:var(--faint);font-family:var(--f-code);font-size:12px;letter-spacing:2px;">⟳ Syncing ${name}&hellip;</div>`;
+  div.innerHTML = `<div style="text-align:center;padding:40px;color:var(--faint);font-family:var(--f-code);font-size:12px;letter-spacing:2px;">⟳ Syncing ${name}…</div>`;
   try {
     const r = await fetch(`https://raw.githubusercontent.com/AstroNutws/Attendance-QRSYS/main/${name}?t=${Date.now()}`);
     if(!r.ok) throw 0;
@@ -1407,8 +1417,8 @@ function loadSec(btn){
     <h2>Security &amp; Data Ownership Policy</h2><br>
     <p><strong>1. Data Isolation:</strong> Project QrSys acts as middleware. The development team holds zero database ownership at any point in the system lifecycle.</p><br>
     <p><strong>2. Client Control:</strong> The Client (your organization — school, company, or corporate team) is the sole Supabase project owner. SQL execution and master key control remain exclusively with you.</p><br>
-    <p><strong>3. Credential Integrity:</strong> All administrative credentials are masked at the UI level. Upcoming versions will introduce one-way cryptographic hashing for database storage.</p><br>
-    <p><strong>4. Access Scoping (RBAC):</strong> Standard Admin accounts are restricted to operational data only. Account creation and credential management are reserved for Super Admin accounts and above.</p>
+    <p><strong>3. Credential Integrity:</strong> All credentials are masked at the UI level across all roles. Upcoming versions will introduce one-way cryptographic hashing for database storage.</p><br>
+    <p><strong>4. Access Scoping (RBAC):</strong> Four distinct roles are enforced throughout the system. Normal Users can view their own attendance and submit info change requests — which require Admin approval before taking effect. Admins handle operations and can scan QR codes on behalf of users. Super Admins manage accounts and credentials. Only the Owner has database-level authority via their private Supabase Dashboard.</p>
   `;
 }
 loadFile('README.md', document.querySelector('.tab.on'));
