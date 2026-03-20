@@ -959,7 +959,7 @@ document.querySelectorAll('.rv,.rvl,.rvr').forEach(el=>ro.observe(el));
       else{winT.textContent='PC Release Pending';winV.textContent='V2.1.1 Legacy';dbEl.innerHTML='<span class="badge">V2.1.1 Legacy</span>';}
       if(apk){mobBtn.href=apk.url;mobT.textContent=`Download APK (${apk.tag})`;mobV.textContent=`${apk.tag} \u00b7 Available`;mbEl.innerHTML=`<span class="badge badge-navy">${apk.tag} Available</span>`;}
       else{mobT.textContent='APK Release Pending';mobV.textContent='Build Pending';mbEl.innerHTML='<span class="badge badge-navy">Build Pending</span>';}
-      apiInfo.innerHTML='Registry: Online (Encrypted)';
+      apiInfo.innerHTML='';
     }
     const cl=await fetch(`https://raw.githubusercontent.com/AstroNutws/Attendance-QRSYS/main/CHANGELOG.md?t=${cb}`);
     if(!cl.ok)throw 0;
@@ -978,7 +978,7 @@ document.querySelectorAll('.rv,.rvl,.rvr').forEach(el=>ro.observe(el));
       }).join('');
     }
   }catch{
-    apiInfo.innerHTML='Registry: Connection Error';
+    apiInfo.innerHTML='';}
     logs.innerHTML='<div class="log-row"><span class="log-tag tg-fix">Error</span><span class="log-text">Failed to sync live registry.</span></div>';
   }
 })();
