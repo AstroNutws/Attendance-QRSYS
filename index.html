@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QrSys — SaaS Attendance Management Platform</title>
+<title>Project QrSys — SaaS Attendance Management Platform</title>
 <meta name="description" content="A secure, cloud-integrated QR attendance SaaS platform for schools, companies, corporate teams, and any organization. Windows Desktop and Android Mobile.">
 <meta name="theme-color" content="#800000">
 <link rel="icon" type="image/png" href="123.png">
@@ -494,6 +494,93 @@ h2 em { color: var(--red); font-style: italic; }
 .btn-navy { background: linear-gradient(135deg,#1a2a4a,#1e3a5f); box-shadow: 0 4px 18px rgba(30,58,95,.22); }
 .btn-navy:hover { background: linear-gradient(135deg,#0f1a2e,#1a2a4a); }
 
+/* ── FUN DOWNLOAD BUTTONS ── */
+.dl-wrap { margin-top: 20px; position: relative; }
+
+/* The main button — bigger, bolder */
+.dl-btn {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%; padding: 16px 22px;
+  border-radius: 14px; border: none;
+  font-family: var(--f-body); font-weight: 700; font-size: 15px;
+  position: relative; overflow: hidden;
+  transition: transform .2s var(--pop), box-shadow .2s var(--ease), filter .2s;
+  will-change: transform; cursor: none;
+  text-decoration: none;
+}
+.dl-btn-pc {
+  background: linear-gradient(135deg, #800000 0%, #a33 60%, #700 100%);
+  color: #fff;
+  box-shadow: 0 6px 24px rgba(128,0,0,.30), 0 1px 0 rgba(255,255,255,.15) inset;
+}
+.dl-btn-apk {
+  background: linear-gradient(135deg, #1a2a4a 0%, #1e3a5f 60%, #0f1a30 100%);
+  color: #fff;
+  box-shadow: 0 6px 24px rgba(30,58,95,.30), 0 1px 0 rgba(255,255,255,.10) inset;
+}
+.dl-btn:hover { transform: translateY(-3px) scale(1.01); filter: brightness(1.08); }
+.dl-btn:active { transform: translateY(0) scale(.99); }
+
+/* Shine sweep */
+.dl-btn::before {
+  content: '';
+  position: absolute; top: 0; left: -80%;
+  width: 60%; height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,.18), transparent);
+  animation: dl-shine 3.5s ease-in-out infinite 1s;
+}
+@keyframes dl-shine { 0%,100%{left:-80%;} 42%{left:130%;} 43%{left:-80%;} }
+
+/* Left side: icon + text */
+.dl-left { display: flex; align-items: center; gap: 13px; position: relative; z-index: 1; }
+.dl-icon {
+  width: 42px; height: 42px; border-radius: 10px;
+  background: rgba(255,255,255,.14);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; flex-shrink: 0;
+  transition: transform .25s var(--pop);
+}
+.dl-btn:hover .dl-icon { transform: scale(1.15) rotate(-6deg); }
+.dl-title { font-size: 15px; font-weight: 700; line-height: 1.2; }
+.dl-sub { font-size: 11px; font-weight: 400; opacity: .72; margin-top: 2px; letter-spacing: .3px; }
+
+/* Right side: arrow bouncing */
+.dl-arrow {
+  font-size: 1.2rem; position: relative; z-index: 1;
+  animation: dl-bounce 1.8s ease-in-out infinite;
+  transition: transform .2s;
+}
+.dl-btn:hover .dl-arrow { animation: none; transform: translateY(3px) scale(1.2); }
+@keyframes dl-bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(4px);} }
+
+/* Ripple on click */
+.dl-btn .ripple {
+  position: absolute; border-radius: 50%;
+  background: rgba(255,255,255,.28);
+  transform: scale(0); animation: ripple-go .55s ease-out forwards;
+  pointer-events: none;
+}
+@keyframes ripple-go { to { transform: scale(4); opacity: 0; } }
+
+/* Fun version pill below button */
+.dl-meta {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 10px; padding: 0 4px;
+}
+.dl-version {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--f-code); font-size: 11px; color: var(--faint);
+  letter-spacing: .8px;
+}
+.dl-version::before {
+  content: ''; width: 5px; height: 5px; border-radius: 50%;
+  background: #22c55e; box-shadow: 0 0 5px #22c55e;
+  animation: pulse-ring 2s ease-out infinite;
+}
+.dl-size {
+  font-family: var(--f-code); font-size: 11px; color: var(--faint);
+}
+
 .api-status {
   display: inline-flex; align-items: center; gap: 6px;
   margin-top: 13px; font-family: var(--f-code);
@@ -745,9 +832,9 @@ footer { position:relative; z-index:1; border-top:1px solid var(--line); padding
 <!-- ═══ NAV ═══ -->
 <nav>
   <div class="nav-brand">
-    <img src="123.png" alt="QrSys" class="nav-logo" onerror="this.style.display='none'">
+    <img src="123.png" alt="Project QrSys" class="nav-logo" onerror="this.style.display='none'">
     <span class="nav-dot"></span>
-    <span class="nav-wordmark">QrSys</span>
+    <span class="nav-wordmark">Project QrSys</span>
   </div>
   <div class="nav-status">System Online &middot; Encrypted Cloud Active</div>
   <div class="nav-right">
@@ -821,8 +908,23 @@ footer { position:relative; z-index:1; border-top:1px solid var(--line); padding
       <span class="chip">🔒 RBAC Auth</span>
       <span class="chip">📊 Audit Logs</span>
     </div>
-    <a href="#" id="win-btn" class="btn">⬇ Fetching Release&hellip;</a>
-    <div class="api-status" id="api-info">Registry: Syncing&hellip;</div>
+    <div class="dl-wrap">
+      <a href="#" id="win-btn" class="dl-btn dl-btn-pc">
+        <div class="dl-left">
+          <div class="dl-icon">🖥️</div>
+          <div>
+            <div class="dl-title" id="win-btn-title">Fetching Latest Release…</div>
+            <div class="dl-sub">Windows 7 – 11 &middot; VB.NET</div>
+          </div>
+        </div>
+        <span class="dl-arrow">⬇</span>
+      </a>
+      <div class="dl-meta">
+        <span class="dl-version" id="win-version">Syncing registry…</span>
+        <span class="dl-size">Setup .exe</span>
+      </div>
+    </div>
+    <div class="api-status" id="api-info">Registry: Syncing…</div>
   </div>
 
   <div class="card rvr">
@@ -850,7 +952,22 @@ footer { position:relative; z-index:1; border-top:1px solid var(--line); padding
       <span class="chip">🔔 Notifications</span>
       <span class="chip">🌐 Online Sync</span>
     </div>
-    <a href="#" id="mob-btn" class="btn btn-navy">⬇ Fetching Release&hellip;</a>
+    <div class="dl-wrap">
+      <a href="#" id="mob-btn" class="dl-btn dl-btn-apk">
+        <div class="dl-left">
+          <div class="dl-icon">📱</div>
+          <div>
+            <div class="dl-title" id="mob-btn-title">Fetching Latest Release…</div>
+            <div class="dl-sub">Android 8.0+ &middot; .NET MAUI</div>
+          </div>
+        </div>
+        <span class="dl-arrow">⬇</span>
+      </a>
+      <div class="dl-meta">
+        <span class="dl-version" id="mob-version">Syncing registry…</span>
+        <span class="dl-size">~60 MB .apk</span>
+      </div>
+    </div>
   </div>
 
   <!-- ── RBAC ── -->
@@ -887,7 +1004,7 @@ footer { position:relative; z-index:1; border-top:1px solid var(--line); padding
     <div class="card-label">Zero-Trust Design</div>
     <h2>Your Data Stays <em>Yours.</em></h2>
     <p class="card-desc">
-      QrSys operates as pure middleware. The development team holds zero ownership of your database — ever. Whether you're a school, a corporation, or a startup, your data stays exclusively yours.
+      Project QrSys operates as pure middleware. The development team holds zero ownership of your database — ever. Whether you're a school, a corporation, or a startup, your data stays exclusively yours.
     </p>
     <div style="margin:22px 0 26px;">
       <div class="bar-row"><span class="bar-lbl">Data Isolation</span><div class="bar-track"><div class="bar-fill" data-w="1"></div></div><span class="bar-pct">100%</span></div>
@@ -896,7 +1013,7 @@ footer { position:relative; z-index:1; border-top:1px solid var(--line); padding
       <div class="bar-row" style="margin-top:10px;"><span class="bar-lbl">Client Control</span><div class="bar-track"><div class="bar-fill" data-w="1"></div></div><span class="bar-pct">100%</span></div>
     </div>
     <div class="sec-grid">
-      <div class="sec-item"><div class="sec-ico">🛡️</div><div class="sec-title">Data Isolation</div><div class="sec-desc">QrSys is middleware only. The dev team holds zero direct ownership of your database at any point.</div></div>
+      <div class="sec-item"><div class="sec-ico">🛡️</div><div class="sec-title">Data Isolation</div><div class="sec-desc">Project QrSys is middleware only. The dev team holds zero direct ownership of your database at any point.</div></div>
       <div class="sec-item"><div class="sec-ico">🔑</div><div class="sec-title">Client Control</div><div class="sec-desc">Your organization — school, company, or team — retains full Supabase ownership. SQL and master keys stay exclusively with you.</div></div>
       <div class="sec-item"><div class="sec-ico">👁️</div><div class="sec-title">Credential Integrity</div><div class="sec-desc">Admin credentials are masked at the UI level. Upcoming iterations will add one-way cryptographic hashing.</div></div>
       <div class="sec-item"><div class="sec-ico">⚙️</div><div class="sec-title">RBAC Enforcement</div><div class="sec-desc">Strict role scoping throughout. Only Super Admins can create accounts or modify peer credentials.</div></div>
@@ -987,10 +1104,10 @@ footer { position:relative; z-index:1; border-top:1px solid var(--line); padding
   <div class="sec-head rv"><span>Get Started</span></div>
 
   <div class="card s2 cta-card rv">
-    <div class="cta-wm">QrSys</div>
-    <div class="cta-inner">
+    <div class="cta-wm">Project QrSys</div>
+    <div class="ctai">
       <div class="card-label" style="justify-content:center;">Official Implementation</div>
-      <div class="cta-title">Ready to Deploy <em>QrSys?</em></div>
+      <div class="cta-title">Ready to Deploy <em>Project QrSys?</em></div>
       <p class="cta-sub">Whether you're a school, a company, a corporate team, or any group that tracks attendance — request a test account or schedule a live demo. We'll walk you through everything.</p>
       <div class="cta-btns">
         <a href="#" class="btn btn-dark">Request Admin Account</a>
@@ -1013,7 +1130,7 @@ footer { position:relative; z-index:1; border-top:1px solid var(--line); padding
 </div><!-- /wrap -->
 
 <footer>
-  <span class="foot-brand">QrSys</span>
+  <span class="foot-brand">Project QrSys</span>
   <span class="foot-copy">&copy; 2026 Project QrSys Development Lab &middot; All rights reserved</span>
 </footer>
 
@@ -1118,7 +1235,7 @@ document.querySelectorAll('a,button,.faq-q,.tab,.chip,.sec-item').forEach(el => 
 
 /* ── TICKER ── */
 const msgs = [
-  '<b>QrSys</b> &middot; SaaS Attendance Platform for Any Organization',
+  '<b>Project QrSys</b> &middot; SaaS Attendance Platform for Any Organization',
   'Schools &middot; Companies &middot; Corporate Teams &middot; Any Group',
   '<b>RBAC Enforced</b> &middot; Zero Privilege Leakage',
   'Windows Desktop + Android Mobile &middot; SaaS &middot; Deploy Today',
@@ -1182,6 +1299,10 @@ document.querySelectorAll('.rv,.rvl,.rvr').forEach(el => ro.observe(el));
   const apiInfo  = document.getElementById('api-info');
   const dbEl     = document.getElementById('db');
   const mbEl     = document.getElementById('mb');
+  const winTitle = document.getElementById('win-btn-title');
+  const mobTitle = document.getElementById('mob-btn-title');
+  const winVer   = document.getElementById('win-version');
+  const mobVer   = document.getElementById('mob-version');
   const logs     = document.getElementById('regl');
   const titleEl  = document.getElementById('regt');
   const cb       = Date.now();
@@ -1195,10 +1316,26 @@ document.querySelectorAll('.rv,.rvl,.rvr').forEach(el => ro.observe(el));
         if(!apk){ const a=r.assets.find(a=>a.name.endsWith('.apk')); if(a) apk={url:a.browser_download_url,tag:r.tag_name}; }
         if(exe&&apk) break;
       }
-      if(exe){ winBtn.href=exe.url; winBtn.innerHTML=`⬇ Download PC (${exe.tag})`; dbEl.innerHTML=`<span class="badge">● ${exe.tag} Stable</span>`; }
-      else   { winBtn.innerHTML='PC Release Pending'; dbEl.innerHTML=`<span class="badge">V2.1.1 Legacy</span>`; }
-      if(apk){ mobBtn.href=apk.url; mobBtn.innerHTML=`⬇ Download APK (${apk.tag})`; mbEl.innerHTML=`<span class="badge badge-navy">● ${apk.tag} Available</span>`; }
-      else   { mobBtn.innerHTML='APK Release Pending'; mbEl.innerHTML=`<span class="badge badge-navy">Build Pending</span>`; }
+      if(exe){
+        winBtn.href=exe.url;
+        winTitle.textContent=`Download for Windows (${exe.tag})`;
+        winVer.textContent=`${exe.tag} · Stable Release`;
+        dbEl.innerHTML=`<span class="badge">● ${exe.tag} Stable</span>`;
+      } else {
+        winTitle.textContent='PC Release Pending';
+        winVer.textContent='V2.1.1 Legacy';
+        dbEl.innerHTML=`<span class="badge">V2.1.1 Legacy</span>`;
+      }
+      if(apk){
+        mobBtn.href=apk.url;
+        mobTitle.textContent=`Download APK (${apk.tag})`;
+        mobVer.textContent=`${apk.tag} · Available`;
+        mbEl.innerHTML=`<span class="badge badge-navy">● ${apk.tag} Available</span>`;
+      } else {
+        mobTitle.textContent='APK Release Pending';
+        mobVer.textContent='Build Pending';
+        mbEl.innerHTML=`<span class="badge badge-navy">Build Pending</span>`;
+      }
       apiInfo.innerHTML = 'Registry: Online (Encrypted)';
     }
 
@@ -1255,7 +1392,7 @@ function loadSec(btn){
   if(btn) btn.classList.add('on');
   div.innerHTML = `
     <h2>Security &amp; Data Ownership Policy</h2><br>
-    <p><strong>1. Data Isolation:</strong> QrSys acts as middleware. The development team holds zero database ownership at any point in the system lifecycle.</p><br>
+    <p><strong>1. Data Isolation:</strong> Project QrSys acts as middleware. The development team holds zero database ownership at any point in the system lifecycle.</p><br>
     <p><strong>2. Client Control:</strong> The Client (your organization — school, company, or corporate team) is the sole Supabase project owner. SQL execution and master key control remain exclusively with you.</p><br>
     <p><strong>3. Credential Integrity:</strong> All administrative credentials are masked at the UI level. Upcoming versions will introduce one-way cryptographic hashing for database storage.</p><br>
     <p><strong>4. Access Scoping (RBAC):</strong> Standard Admin accounts are restricted to operational data only. Account creation and credential management are reserved for Super Admin accounts and above.</p>
