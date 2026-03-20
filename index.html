@@ -529,187 +529,136 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
    4. BG MUSIC        : ambient lo-fi loop that plays after entry
 ══════════════════════════════════════════════════════ */
 const AUDIO = (function(){
-  let ctx = null;
-  let masterGain = null;   // single master volume node
-  let bgGain = null;
-  let bgPlaying = false;
-  let bgNodes = [];
-  let musicEnabled = true;
-  let currentVol = 0.7;    // default volume 0-1
+  /* ── Shared AudioContext — created once on first user gesture ── */
+  let _ac = null;
+  let _master = null;
+  let _vol = 0.8;
+  let _musicEnabled = true;
 
-  function getCtx(){
-    try{
-      if(!ctx){
-        ctx = new (window.AudioContext || window.webkitAudioContext)();
-        masterGain = ctx.createGain();
-        masterGain.gain.value = currentVol;
-        masterGain.connect(ctx.destination);
-      }
-      if(ctx.state === 'suspended') ctx.resume();
-      return ctx;
-    }catch(e){ return null; }
+  /* ── MP3 background player ── */
+  let _audio = null;   // HTMLAudioElement for main.mp3
+
+  const MP3_URL = 'https://raw.githubusercontent.com/AstroNutws/Attendance-QRSYS/main/main.mp3';
+
+  function _getAC(){
+    if(!_ac){
+      try{
+        _ac = new (window.AudioContext || window.webkitAudioContext)();
+        _master = _ac.createGain();
+        _master.gain.value = _vol;
+        _master.connect(_ac.destination);
+      }catch(e){ return null; }
+    }
+    if(_ac.state === 'suspended') _ac.resume().catch(()=>{});
+    return _ac;
   }
 
-  function setVolume(v){
-    currentVol = Math.max(0, Math.min(1, v));
-    if(masterGain) masterGain.gain.setTargetAtTime(currentVol, ctx.currentTime, 0.05);
-  }
-  function getVolume(){ return currentVol; }
-
-  /* ── tiny beep — now LOUD and audible ── */
-  function beep(freq, dur, vol, type){
+  /* ── tiny synth beep ── */
+  function _beep(freq, dur, vol, type){
     try{
-      const ac = getCtx();
-      if(!ac) return;
-      const o = ac.createOscillator();
-      const g = ac.createGain();
-      o.connect(g); g.connect(masterGain);
-      o.type = type || 'sine';
+      const ac = _getAC(); if(!ac) return;
+      const o = ac.createOscillator(), g = ac.createGain();
+      o.connect(g); g.connect(_master);
+      o.type = type||'square';
       o.frequency.setValueAtTime(freq, ac.currentTime);
-      g.gain.setValueAtTime(vol || 0.45, ac.currentTime);
+      g.gain.setValueAtTime(vol||0.5, ac.currentTime);
       g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + dur);
-      o.start(ac.currentTime);
-      o.stop(ac.currentTime + dur);
+      o.start(); o.stop(ac.currentTime + dur);
     }catch(e){}
   }
 
-  /* ── pixel build tick: every pixel makes a clear click ── */
+  /* ── QR pixel tick ── */
   function pixelTick(){
-    if(Math.random() > 0.35) return;   // ~35% of pixels, very audible
-    const freq = 800 + Math.random() * 1400;
-    beep(freq, 0.055, 0.5, 'square');
+    if(Math.random() > 0.35) return;
+    _beep(900 + Math.random()*1200, 0.055, 0.55, 'square');
   }
 
-  /* ── scan sweep: loud rising sweep ── */
+  /* ── scan line sweep ── */
   function scanSweep(){
     try{
-      const ac = getCtx();
-      if(!ac) return;
-      const o = ac.createOscillator();
-      const g = ac.createGain();
-      o.connect(g); g.connect(masterGain);
+      const ac = _getAC(); if(!ac) return;
+      const o = ac.createOscillator(), g = ac.createGain();
+      o.connect(g); g.connect(_master);
       o.type = 'sine';
-      o.frequency.setValueAtTime(300, ac.currentTime);
-      o.frequency.linearRampToValueAtTime(2400, ac.currentTime + 0.68);
-      g.gain.setValueAtTime(0.75, ac.currentTime);
+      o.frequency.setValueAtTime(280, ac.currentTime);
+      o.frequency.linearRampToValueAtTime(2600, ac.currentTime + 0.68);
+      g.gain.setValueAtTime(0.8, ac.currentTime);
       g.gain.linearRampToValueAtTime(0.0, ac.currentTime + 0.72);
-      o.start(ac.currentTime);
-      o.stop(ac.currentTime + 0.75);
+      o.start(); o.stop(ac.currentTime + 0.75);
     }catch(e){}
   }
 
-  /* ── access granted chord: loud and satisfying ── */
+  /* ── access granted chord ── */
   function grantedChord(){
     [[440,0],[554,0.09],[660,0.18]].forEach(([f,d])=>{
       try{
-        const ac = getCtx();
-        if(!ac) return;
-        const o = ac.createOscillator();
-        const g = ac.createGain();
-        o.connect(g); g.connect(masterGain);
-        o.type = 'sine';
-        o.frequency.value = f;
-        g.gain.setValueAtTime(0, ac.currentTime + d);
-        g.gain.linearRampToValueAtTime(0.7, ac.currentTime + d + 0.02);
-        g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + d + 0.55);
-        o.start(ac.currentTime + d);
-        o.stop(ac.currentTime + d + 0.6);
+        const ac = _getAC(); if(!ac) return;
+        const o = ac.createOscillator(), g = ac.createGain();
+        o.connect(g); g.connect(_master);
+        o.type = 'sine'; o.frequency.value = f;
+        g.gain.setValueAtTime(0, ac.currentTime+d);
+        g.gain.linearRampToValueAtTime(0.75, ac.currentTime+d+0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime+d+0.55);
+        o.start(ac.currentTime+d); o.stop(ac.currentTime+d+0.65);
       }catch(e){}
     });
   }
 
-  /* ── background ambient music (louder, richer) ── */
+  /* ── background music via HTMLAudio (main.mp3 from GitHub) ── */
+  function _createPlayer(){
+    if(_audio) return;
+    _audio = new Audio();
+    _audio.src = MP3_URL;
+    _audio.loop = true;
+    _audio.volume = Math.min(1, _vol * 1.1);
+    _audio.preload = 'auto';
+  }
+
   function startBGMusic(){
-    if(bgPlaying || !musicEnabled) return;
-    bgPlaying = true;
-    try{
-      const ac = getCtx();
-      if(!ac){ bgPlaying=false; return; }
-      bgGain = ac.createGain();
-      bgGain.gain.setValueAtTime(0, ac.currentTime);
-      bgGain.gain.linearRampToValueAtTime(0.85, ac.currentTime + 2.5);  // loud fade-in
-      bgGain.connect(masterGain);
-
-      /* Bass drone */
-      const bass = ac.createOscillator();
-      const bassG = ac.createGain();
-      bass.type = 'sine';
-      bass.frequency.value = 55;
-      bassG.gain.value = 0.55;
-      bass.connect(bassG); bassG.connect(bgGain);
-      bass.start();
-      bgNodes.push(bass);
-
-      /* Sub harmonic */
-      const sub = ac.createOscillator();
-      const subG = ac.createGain();
-      sub.type = 'sine';
-      sub.frequency.value = 27.5;
-      subG.gain.value = 0.3;
-      sub.connect(subG); subG.connect(bgGain);
-      sub.start();
-      bgNodes.push(sub);
-
-      /* Warm pad: noise through lowpass */
-      const bufSize = ac.sampleRate * 4;
-      const noiseBuffer = ac.createBuffer(1, bufSize, ac.sampleRate);
-      const nd = noiseBuffer.getChannelData(0);
-      for(let i=0;i<bufSize;i++) nd[i] = (Math.random()*2-1) * 0.25;
-      const noiseSrc = ac.createBufferSource();
-      noiseSrc.buffer = noiseBuffer;
-      noiseSrc.loop = true;
-      const lpf = ac.createBiquadFilter();
-      lpf.type = 'lowpass'; lpf.frequency.value = 320; lpf.Q.value = 1.5;
-      noiseSrc.connect(lpf); lpf.connect(bgGain);
-      noiseSrc.start();
-      bgNodes.push(noiseSrc);
-
-      /* Melody — pentatonic */
-      const melody = [261.63, 293.66, 329.63, 392, 440, 392, 329.63, 293.66];
-      let noteIdx = 0;
-      function scheduleNote(){
-        if(!bgPlaying) return;
-        try{
-          const ac2 = getCtx();
-          if(!ac2) return;
-          const o = ac2.createOscillator();
-          const g = ac2.createGain();
-          o.type = 'sine';
-          o.frequency.value = melody[noteIdx % melody.length];
-          noteIdx++;
-          g.gain.setValueAtTime(0, ac2.currentTime);
-          g.gain.linearRampToValueAtTime(0.38, ac2.currentTime + 0.08);
-          g.gain.exponentialRampToValueAtTime(0.0001, ac2.currentTime + 1.6);
-          o.connect(g); g.connect(bgGain);
-          o.start(ac2.currentTime);
-          o.stop(ac2.currentTime + 1.7);
-        }catch(e){}
-        setTimeout(scheduleNote, 900 + Math.random()*350);
-      }
-      setTimeout(scheduleNote, 600);
-
-    }catch(e){ bgPlaying = false; }
+    if(!_musicEnabled) return;
+    _createPlayer();
+    /* resume AudioContext so synth sounds also work */
+    _getAC();
+    const p = _audio.play();
+    if(p && p.catch) p.catch(()=>{
+      /* autoplay blocked — retry on next user interaction */
+      const retry = ()=>{ _audio.play().catch(()=>{}); };
+      document.addEventListener('click',   retry, {once:true});
+      document.addEventListener('keydown', retry, {once:true});
+    });
   }
 
   function stopBGMusic(){
-    bgPlaying = false;
-    bgNodes.forEach(n=>{ try{ n.stop(); }catch(e){} });
-    bgNodes = [];
-    if(bgGain){
-      try{ bgGain.gain.linearRampToValueAtTime(0, getCtx().currentTime + 0.8); }catch(e){}
-      bgGain = null;
-    }
+    if(_audio){ _audio.pause(); _audio.currentTime = 0; }
   }
 
   function toggleMusic(){
-    musicEnabled = !musicEnabled;
-    if(musicEnabled){ startBGMusic(); }
-    else{ stopBGMusic(); }
-    return musicEnabled;
+    _musicEnabled = !_musicEnabled;
+    if(_musicEnabled){ startBGMusic(); }
+    else { stopBGMusic(); }
+    return _musicEnabled;
   }
 
+  function setVolume(v){
+    _vol = Math.max(0, Math.min(1, v));
+    if(_master) _master.gain.setTargetAtTime(_vol, _ac.currentTime, 0.05);
+    if(_audio)  _audio.volume = Math.min(1, _vol * 1.1);
+  }
+
+  /* ── unlock AudioContext on first user gesture ── */
+  function _unlock(){
+    _getAC();
+    /* if music should be playing and isn't, start it */
+    if(_musicEnabled && _audio && _audio.paused){
+      _audio.play().catch(()=>{});
+    }
+  }
+  document.addEventListener('click',    _unlock, {passive:true});
+  document.addEventListener('keydown',  _unlock, {passive:true});
+  document.addEventListener('touchend', _unlock, {passive:true});
+
   return { pixelTick, scanSweep, grantedChord, startBGMusic, stopBGMusic, toggleMusic,
-           isMusicOn: ()=>musicEnabled, setVolume, getVolume };
+           setVolume, getVolume:()=>_vol, isMusicOn:()=>_musicEnabled };
 })();
 
 /* ══════════════════════════════════════════════════════
@@ -731,19 +680,26 @@ volSlider.addEventListener('input', ()=>{
 });
 
 /* ══════════════════════════════════════════════════════
-   INTRO QR RITUAL  (with sounds)
+   INTRO QR RITUAL — fully bulletproof, no dependencies
+   Canvas runs in its own isolated scope.
+   Audio is deferred until user interacts.
 ══════════════════════════════════════════════════════ */
 (function(){
-  const intro    = document.getElementById('intro');
-  const canvas   = document.getElementById('qr-canvas');
-  const ctx      = canvas.getContext('2d');
-  const scanEl   = document.getElementById('scan-line');
-  const statusEl = document.getElementById('intro-status');
-  const barEl    = document.getElementById('intro-bar');
-  const wrap     = document.getElementById('qr-wrap');
+  /* ── grab elements ── */
+  var intro    = document.getElementById('intro');
+  var canvas   = document.getElementById('qr-canvas');
+  var scanEl   = document.getElementById('scan-line');
+  var statusEl = document.getElementById('intro-status');
+  var barEl    = document.getElementById('intro-bar');
+  var wrap     = document.getElementById('qr-wrap');
 
-  const SIZE = 21, CELL = Math.floor(180/SIZE);
-  const PAT = [
+  if(!canvas){ return; }
+  var ctx2d = canvas.getContext('2d');
+
+  /* ── QR pattern 21×21 ── */
+  var SIZE = 21;
+  var CELL = Math.floor(180 / SIZE);
+  var PAT = [
     [1,1,1,1,1,1,1,0,1,0,1,0,1,0,1,1,1,1,1,1,1],
     [1,0,0,0,0,0,1,0,0,1,0,1,0,0,1,0,0,0,0,0,1],
     [1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,1,1,0,1],
@@ -767,96 +723,199 @@ volSlider.addEventListener('input', ()=>{
     [1,1,1,1,1,1,1,0,1,0,1,1,1,0,1,1,1,0,1,0,1]
   ];
 
-  const isCorner = (r,c) => (r<8&&c<8)||(r<8&&c>=SIZE-8)||(r>=SIZE-8&&c<8);
-  const all=[], corners=[], rest=[];
-  for(let r=0;r<SIZE;r++) for(let c=0;c<SIZE;c++){
-    const cell={r,c};
-    isCorner(r,c)?corners.push(cell):rest.push(cell);
-    all.push(cell);
+  /* ── build reveal order: corners first, rest shuffled ── */
+  var corners = [], rest2 = [];
+  for(var r=0;r<SIZE;r++) for(var co=0;co<SIZE;co++){
+    var isC = (r<8&&co<8)||(r<8&&co>=SIZE-8)||(r>=SIZE-8&&co<8);
+    isC ? corners.push({r:r,c:co}) : rest2.push({r:r,c:co});
   }
-  for(let i=rest.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[rest[i],rest[j]]=[rest[j],rest[i]];}
-  const ordered=[...corners,...rest];
-  const revealed=PAT.map(row=>row.map(()=>false));
-  const BG='#050101', DARK='#f0e8e8', EMPTY='#0d0303';
+  /* Fisher-Yates shuffle */
+  for(var i=rest2.length-1;i>0;i--){
+    var j=Math.floor(Math.random()*(i+1));
+    var tmp=rest2[i]; rest2[i]=rest2[j]; rest2[j]=tmp;
+  }
+  var ordered = corners.concat(rest2);
+  var revealed = [];
+  for(var ri=0;ri<SIZE;ri++){ revealed[ri]=[]; for(var ci2=0;ci2<SIZE;ci2++) revealed[ri][ci2]=false; }
+
+  var COL_BG='#050101', COL_DARK='#f0e8e8', COL_EMPTY='#0d0303';
 
   function drawAll(){
-    ctx.fillStyle=BG; ctx.fillRect(0,0,180,180);
-    for(let r=0;r<SIZE;r++) for(let c=0;c<SIZE;c++){
-      const x=c*CELL,y=r*CELL;
-      if(PAT[r][c]===1){
-        ctx.fillStyle=EMPTY; ctx.fillRect(x,y,CELL,CELL);
-        if(revealed[r][c]){ ctx.fillStyle=DARK; ctx.fillRect(x+1,y+1,CELL-2,CELL-2); }
-      } else {
-        ctx.fillStyle=BG; ctx.fillRect(x,y,CELL,CELL);
+    ctx2d.fillStyle=COL_BG; ctx2d.fillRect(0,0,180,180);
+    for(var rr=0;rr<SIZE;rr++){
+      for(var cc=0;cc<SIZE;cc++){
+        var x=cc*CELL, y=rr*CELL;
+        if(PAT[rr][cc]===1){
+          ctx2d.fillStyle=COL_EMPTY; ctx2d.fillRect(x,y,CELL,CELL);
+          if(revealed[rr][cc]){ ctx2d.fillStyle=COL_DARK; ctx2d.fillRect(x+1,y+1,CELL-2,CELL-2); }
+        } else {
+          ctx2d.fillStyle=COL_BG; ctx2d.fillRect(x,y,CELL,CELL);
+        }
       }
     }
   }
 
-  ctx.fillStyle=BG; ctx.fillRect(0,0,180,180);
-  document.body.style.overflow='hidden';
+  /* initial dark fill */
+  ctx2d.fillStyle=COL_BG; ctx2d.fillRect(0,0,180,180);
+  if(document.body) document.body.style.overflow='hidden';
 
-  const MSGS=[{at:0,t:'Initializing\u2026'},{at:.22,t:'Building matrix\u2026'},{at:.55,t:'Encoding payload\u2026'},{at:.84,t:'Scanning\u2026'}];
-  const ASSEMBLE=1850;
-  let start=null, done=false, prevN=0;
+  /* ── AUDIO UNLOCK + QUEUE ─────────────────────────────────────────────
+     Problem: AudioContext can't start before a user gesture.
+     Solution: queue sounds during the silent phase; drain + replay
+     them the instant the user first touches/clicks the intro screen.
+  ─────────────────────────────────────────────────────────────────── */
+  var _audioUnlocked = false;
+  var _soundQueue    = [];   // fns queued before gesture
+  var _pixelsMissed  = 0;    // pixel ticks that were silenced
+
+  function _tryUnlockAudio(){
+    if(_audioUnlocked) return;
+    _audioUnlocked = true;
+    /* Force AudioContext creation & resume */
+    try{
+      var AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if(AudioCtx){
+        var ac = new AudioCtx();
+        if(ac.state === 'suspended') ac.resume();
+        /* Store it so AUDIO engine reuses the same context */
+        /* (AUDIO._ac is private, so we just call _getAC via a dummy beep) */
+        var o = ac.createOscillator(), g = ac.createGain();
+        g.gain.value = 0;  /* silent — just to warm up */
+        o.connect(g); g.connect(ac.destination);
+        o.start(); o.stop(ac.currentTime + 0.001);
+      }
+    }catch(e){}
+    /* Drain queued sounds */
+    for(var qi = 0; qi < _soundQueue.length; qi++){
+      try{ _soundQueue[qi](); }catch(e){}
+    }
+    _soundQueue = [];
+    /* Play a short burst of pixel ticks for the missed pixels */
+    var burst = Math.min(_pixelsMissed, 18);
+    for(var bi = 0; bi < burst; bi++){
+      (function(delay){
+        setTimeout(function(){
+          try{ AUDIO.pixelTick(); }catch(e){}
+        }, delay);
+      })(bi * 28);
+    }
+    _pixelsMissed = 0;
+  }
+
+  /* Attach unlock to the intro overlay immediately on mousedown/touchstart
+     so audio is ready before the click fully fires */
+  if(intro){
+    intro.addEventListener('mousedown',  _tryUnlockAudio, {once:true, passive:true});
+    intro.addEventListener('touchstart', _tryUnlockAudio, {once:true, passive:true});
+    intro.addEventListener('keydown',    _tryUnlockAudio, {once:true, passive:true});
+  }
+
+  function safePixelTick(){
+    if(_audioUnlocked){
+      try{ AUDIO.pixelTick(); }catch(e){}
+    } else {
+      _pixelsMissed++;  /* count silenced ticks for burst replay */
+    }
+  }
+
+  function safeScanSweep(){
+    if(_audioUnlocked){
+      try{ AUDIO.scanSweep(); }catch(e){}
+    } else {
+      _soundQueue.push(function(){ try{ AUDIO.scanSweep(); }catch(e){}; });
+    }
+  }
+
+  function safeGranted(){
+    if(_audioUnlocked){
+      try{ AUDIO.grantedChord(); }catch(e){}
+    } else {
+      _soundQueue.push(function(){ try{ AUDIO.grantedChord(); }catch(e){}; });
+    }
+  }
+
+  /* ── animation ── */
+  var MSGS=[
+    {at:0,   t:'Initializing\u2026'},
+    {at:.22, t:'Building matrix\u2026'},
+    {at:.55, t:'Encoding payload\u2026'},
+    {at:.84, t:'Scanning\u2026'}
+  ];
+  var ASSEMBLE=1850, tStart=null, done=false, prevN=0;
 
   function step(ts){
-    if(!start) start=ts;
-    const p=Math.min((ts-start)/ASSEMBLE,1);
-    barEl.style.width=(p*74)+'%';
-    MSGS.forEach(m=>{ if(p>=m.at) statusEl.textContent=m.t; });
-    const n=Math.floor(p*ordered.length);
-    /* ── SOUND: beep for each newly revealed pixel (safe - never blocks canvas) ── */
-    for(let i=prevN;i<n;i++){
-      revealed[ordered[i].r][ordered[i].c]=true;
-      try{ AUDIO.pixelTick(); }catch(e){}
+    if(!tStart) tStart=ts;
+    var p = Math.min((ts-tStart)/ASSEMBLE, 1);
+
+    /* progress bar */
+    if(barEl) barEl.style.width=(p*74)+'%';
+    /* status text */
+    for(var mi=0;mi<MSGS.length;mi++){ if(p>=MSGS[mi].at && statusEl) statusEl.textContent=MSGS[mi].t; }
+
+    /* reveal pixels */
+    var n = Math.floor(p * ordered.length);
+    for(var oi=prevN;oi<n;oi++){
+      revealed[ordered[oi].r][ordered[oi].c]=true;
+      safePixelTick();
     }
     prevN=n;
     drawAll();
+
     if(p<1){ requestAnimationFrame(step); }
     else if(!done){ done=true; finalize(); }
   }
 
   function finalize(){
-    for(let r=0;r<SIZE;r++) for(let c=0;c<SIZE;c++) revealed[r][c]=true;
+    for(var fr=0;fr<SIZE;fr++) for(var fc=0;fc<SIZE;fc++) revealed[fr][fc]=true;
     drawAll();
-    wrap.classList.add('corners-show');
-    setTimeout(doScan,100);
+    if(wrap) wrap.classList.add('corners-show');
+    setTimeout(doScan, 100);
   }
 
   function doScan(){
-    barEl.style.transition='width .75s cubic-bezier(.4,0,.2,1)';
-    barEl.style.width='100%';
-    statusEl.textContent='Scanning\u2026';
-    /* ── SOUND: sweep as the scan line moves ── */
-    try{ AUDIO.scanSweep(); }catch(e){}
-    scanEl.classList.add('scanning');
-    scanEl.addEventListener('animationend',()=>{
-      ctx.fillStyle='rgba(139,0,0,.18)'; ctx.fillRect(0,0,180,180);
-      setTimeout(()=>{
+    if(barEl){ barEl.style.transition='width .75s cubic-bezier(.4,0,.2,1)'; barEl.style.width='100%'; }
+    if(statusEl) statusEl.textContent='Scanning\u2026';
+    safeScanSweep();
+    if(scanEl){
+      scanEl.classList.add('scanning');
+      scanEl.addEventListener('animationend', function(){
+        ctx2d.fillStyle='rgba(139,0,0,.18)'; ctx2d.fillRect(0,0,180,180);
+        setTimeout(function(){
+          drawAll();
+          if(statusEl){ statusEl.textContent='Access Granted'; statusEl.classList.add('status-granted'); }
+          safeGranted();
+          setTimeout(doExit, 480);
+        },150);
+      },{once:true});
+    } else {
+      /* fallback if no scan line element */
+      setTimeout(function(){
         drawAll();
-        statusEl.textContent='Access Granted';
-        statusEl.classList.add('status-granted');
-        /* ── SOUND: granted chord ── */
-        try{ AUDIO.grantedChord(); }catch(e){}
-        setTimeout(doExit,480);
-      },150);
-    },{once:true});
+        if(statusEl){ statusEl.textContent='Access Granted'; statusEl.classList.add('status-granted'); }
+        safeGranted();
+        setTimeout(doExit, 480);
+      }, 800);
+    }
   }
 
   function doExit(){
-    intro.classList.add('intro-exit');
-    setTimeout(()=>{
-      intro.classList.add('intro-gone');
-      document.body.style.overflow='';
-      /* ── SOUND: start background music after entry ── */
+    if(intro) intro.classList.add('intro-exit');
+    setTimeout(function(){
+      if(intro) intro.classList.add('intro-gone');
+      if(document.body) document.body.style.overflow='';
+      /* start background music — deferred so it works even without prior gesture */
       try{ AUDIO.startBGMusic(); }catch(e){}
-      musicBtn.classList.add('playing');
-    },580);
+      var mb = document.getElementById('music-btn');
+      if(mb) mb.classList.add('playing');
+    }, 580);
   }
 
-  setTimeout(()=>requestAnimationFrame(step),150);
-  intro.addEventListener('click', ()=>{ if(!done){ done=true; doExit(); } });
-  document.addEventListener('keydown', e=>{ if(e.key==='Escape'&&!done){ done=true; doExit(); } });
+  /* start animation immediately */
+  requestAnimationFrame(step);
+
+  /* skip handlers */
+  intro.addEventListener('click',   function(){ if(!done){ done=true; doExit(); } });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape'&&!done){ done=true; doExit(); } });
 })();
 
 /* ── CURSOR ── */
@@ -1053,4 +1112,9 @@ function loadSec(btn){
   const div=document.getElementById('doc-content');
   document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
   if(btn)btn.classList.add('on');
-  div.innerHTML='<h2>Security &amp; Data Ownership Policy</h2><br><p><strong>1. Data Isolation:</strong> Project QrSys acts as middleware. The development team holds zero database ownership at any point.</p><br><p><strong>2. Client Control:</strong> The Client is the sole Supabase project owner. SQL execution and master keys remain exclusively with you.</p><br><p><strong>3. Credential Integrity:</strong> All credentials are masked at the UI level. Upcoming versions will introduce one-way cryptographic hashing.</p><br><p><strong>4. RBAC Scoping:</strong> Four distinct roles enforced throughout. Normal Users submit info
+  div.innerHTML='<h2>Security &amp; Data Ownership Policy</h2><br><p><strong>1. Data Isolation:</strong> Project QrSys acts as middleware. The development team holds zero database ownership at any point.</p><br><p><strong>2. Client Control:</strong> The Client is the sole Supabase project owner. SQL execution and master keys remain exclusively with you.</p><br><p><strong>3. Credential Integrity:</strong> All credentials are masked at the UI level. Upcoming versions will introduce one-way cryptographic hashing.</p><br><p><strong>4. RBAC Scoping:</strong> Four distinct roles enforced throughout. Normal Users submit info change requests requiring Admin approval. Only the Owner has database-level authority via their private Supabase Dashboard.</p>';
+}
+loadFile('README.md',document.querySelector('.tab.on'));
+</script>
+</body>
+</html>
