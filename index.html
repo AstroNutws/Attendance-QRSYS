@@ -8,7 +8,24 @@
 <meta name="theme-color" content="#8b0000">
 <link rel="icon" type="image/png" href="123.png">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js">/* ── MUSIC BUTTON + VOLUME SLIDER ── */
+const musicBtn  = document.getElementById('music-btn');
+const volSlider = document.getElementById('vol-slider');
+if(musicBtn){
+  musicBtn.addEventListener('click', function(){
+    const on = AUDIO.toggleMusic();
+    musicBtn.innerHTML = on ? '&#127925; Music' : '&#128263; Muted';
+    musicBtn.classList.toggle('playing', on);
+    if(volSlider){ volSlider.disabled = !on; volSlider.style.opacity = on ? '.8' : '.3'; }
+  });
+}
+if(volSlider){
+  volSlider.addEventListener('input', function(){
+    AUDIO.setVolume(volSlider.value / 100);
+  });
+}
+
+</script>
 <style>
 #intro{position:fixed;inset:0;z-index:99999;background:#050101;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .55s cubic-bezier(.4,0,.2,1),transform .55s cubic-bezier(.4,0,.2,1);will-change:opacity,transform;}
 #intro.intro-exit{opacity:0;transform:scale(1.025);pointer-events:none;}
@@ -528,177 +545,161 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
    3. GRANTED SOUND   : satisfying confirmation chord
    4. BG MUSIC        : ambient lo-fi loop that plays after entry
 ══════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════
+   AUDIO ENGINE
+   ─ One shared AudioContext, created on first genuine click.
+   ─ All sounds route through a master gain (volume slider).
+   ─ BG music is an HTMLAudioElement (main.mp3 from GitHub).
+   ─ Synth sounds (QR beeps, sweep, chord) use the Web Audio API.
+══════════════════════════════════════════════════════════════ */
 const AUDIO = (function(){
-  /* ── Shared AudioContext — created once on first user gesture ── */
-  let _ac = null;
-  let _master = null;
-  let _vol = 0.8;
-  let _musicEnabled = true;
+  var _ac      = null;
+  var _master  = null;
+  var _vol     = 0.75;
+  var _on      = true;
+  var _bgEl    = null;   /* HTMLAudioElement */
+  var _bgReady = false;
+  var _unlocked = false;
 
-  /* ── MP3 background player ── */
-  let _audio = null;   // HTMLAudioElement for main.mp3
+  var MP3 = 'https://raw.githubusercontent.com/AstroNutws/Attendance-QRSYS/main/main.mp3';
 
-  const MP3_URL = 'https://raw.githubusercontent.com/AstroNutws/Attendance-QRSYS/main/main.mp3';
-
-  function _getAC(){
-    if(!_ac){
-      try{
-        _ac = new (window.AudioContext || window.webkitAudioContext)();
-        _master = _ac.createGain();
-        _master.gain.value = _vol;
-        _master.connect(_ac.destination);
-      }catch(e){ return null; }
-    }
-    if(_ac.state === 'suspended') _ac.resume().catch(()=>{});
-    return _ac;
+  /* ── called once on the first real click ── */
+  function unlock(){
+    if(_unlocked) return;
+    _unlocked = true;
+    try{
+      _ac = new (window.AudioContext || window.webkitAudioContext)();
+      _master = _ac.createGain();
+      _master.gain.value = _vol;
+      _master.connect(_ac.destination);
+      if(_ac.state === 'suspended') _ac.resume();
+    }catch(e){ _ac = null; }
   }
 
-  /* ── tiny synth beep ── */
+  /* ── low-level synth ── */
   function _beep(freq, dur, vol, type){
+    if(!_ac) return;
     try{
-      const ac = _getAC(); if(!ac) return;
-      const o = ac.createOscillator(), g = ac.createGain();
+      var o = _ac.createOscillator();
+      var g = _ac.createGain();
       o.connect(g); g.connect(_master);
-      o.type = type||'square';
-      o.frequency.setValueAtTime(freq, ac.currentTime);
-      g.gain.setValueAtTime(vol||0.5, ac.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + dur);
-      o.start(); o.stop(ac.currentTime + dur);
+      o.type = type || 'square';
+      o.frequency.setValueAtTime(freq, _ac.currentTime);
+      g.gain.setValueAtTime(vol, _ac.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.0001, _ac.currentTime + dur);
+      o.start(_ac.currentTime);
+      o.stop(_ac.currentTime + dur);
     }catch(e){}
   }
 
-  /* ── QR pixel tick ── */
+  /* ── public sound functions ── */
   function pixelTick(){
-    if(Math.random() > 0.35) return;
-    _beep(900 + Math.random()*1200, 0.055, 0.55, 'square');
+    if(!_ac || Math.random() > 0.4) return;
+    _beep(700 + Math.random()*1500, 0.06, 0.6, 'square');
   }
 
-  /* ── scan line sweep ── */
   function scanSweep(){
+    if(!_ac) return;
     try{
-      const ac = _getAC(); if(!ac) return;
-      const o = ac.createOscillator(), g = ac.createGain();
+      var o = _ac.createOscillator();
+      var g = _ac.createGain();
       o.connect(g); g.connect(_master);
       o.type = 'sine';
-      o.frequency.setValueAtTime(280, ac.currentTime);
-      o.frequency.linearRampToValueAtTime(2600, ac.currentTime + 0.68);
-      g.gain.setValueAtTime(0.8, ac.currentTime);
-      g.gain.linearRampToValueAtTime(0.0, ac.currentTime + 0.72);
-      o.start(); o.stop(ac.currentTime + 0.75);
+      o.frequency.setValueAtTime(200, _ac.currentTime);
+      o.frequency.linearRampToValueAtTime(3000, _ac.currentTime + 0.65);
+      g.gain.setValueAtTime(0.85, _ac.currentTime);
+      g.gain.linearRampToValueAtTime(0.0001, _ac.currentTime + 0.7);
+      o.start(_ac.currentTime);
+      o.stop(_ac.currentTime + 0.72);
     }catch(e){}
   }
 
-  /* ── access granted chord ── */
   function grantedChord(){
-    [[440,0],[554,0.09],[660,0.18]].forEach(([f,d])=>{
+    if(!_ac) return;
+    [[440,0],[554,0.1],[660,0.2]].forEach(function(nd){
+      var f=nd[0], d=nd[1];
       try{
-        const ac = _getAC(); if(!ac) return;
-        const o = ac.createOscillator(), g = ac.createGain();
+        var o = _ac.createOscillator();
+        var g = _ac.createGain();
         o.connect(g); g.connect(_master);
         o.type = 'sine'; o.frequency.value = f;
-        g.gain.setValueAtTime(0, ac.currentTime+d);
-        g.gain.linearRampToValueAtTime(0.75, ac.currentTime+d+0.02);
-        g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime+d+0.55);
-        o.start(ac.currentTime+d); o.stop(ac.currentTime+d+0.65);
+        g.gain.setValueAtTime(0.001, _ac.currentTime + d);
+        g.gain.linearRampToValueAtTime(0.8, _ac.currentTime + d + 0.03);
+        g.gain.exponentialRampToValueAtTime(0.0001, _ac.currentTime + d + 0.6);
+        o.start(_ac.currentTime + d);
+        o.stop(_ac.currentTime + d + 0.65);
       }catch(e){}
     });
   }
 
-  /* ── background music via HTMLAudio (main.mp3 from GitHub) ── */
-  function _createPlayer(){
-    if(_audio) return;
-    _audio = new Audio();
-    _audio.src = MP3_URL;
-    _audio.loop = true;
-    _audio.volume = Math.min(1, _vol * 1.1);
-    _audio.preload = 'auto';
+  /* ── background music (HTMLAudio loops main.mp3) ── */
+  function _initBG(){
+    if(_bgEl) return;
+    _bgEl = new Audio(MP3);
+    _bgEl.loop    = true;
+    _bgEl.volume  = Math.min(1, _vol);
+    _bgEl.preload = 'auto';
   }
 
-  function startBGMusic(){
-    if(!_musicEnabled) return;
-    _createPlayer();
-    /* resume AudioContext so synth sounds also work */
-    _getAC();
-    const p = _audio.play();
-    if(p && p.catch) p.catch(()=>{
-      /* autoplay blocked — retry on next user interaction */
-      const retry = ()=>{ _audio.play().catch(()=>{}); };
-      document.addEventListener('click',   retry, {once:true});
-      document.addEventListener('keydown', retry, {once:true});
-    });
+  function startBG(){
+    if(!_on) return;
+    _initBG();
+    var p = _bgEl.play();
+    if(p && typeof p.catch === 'function') p.catch(function(){});
   }
 
-  function stopBGMusic(){
-    if(_audio){ _audio.pause(); _audio.currentTime = 0; }
+  function stopBG(){
+    if(_bgEl){ _bgEl.pause(); _bgEl.currentTime = 0; }
   }
 
   function toggleMusic(){
-    _musicEnabled = !_musicEnabled;
-    if(_musicEnabled){ startBGMusic(); }
-    else { stopBGMusic(); }
-    return _musicEnabled;
+    _on = !_on;
+    if(_on){ startBG(); }
+    else   { stopBG();  }
+    return _on;
   }
 
   function setVolume(v){
     _vol = Math.max(0, Math.min(1, v));
     if(_master) _master.gain.setTargetAtTime(_vol, _ac.currentTime, 0.05);
-    if(_audio)  _audio.volume = Math.min(1, _vol * 1.1);
+    if(_bgEl)   _bgEl.volume = Math.min(1, _vol);
   }
 
-  /* ── unlock AudioContext on first user gesture ── */
-  function _unlock(){
-    _getAC();
-    /* if music should be playing and isn't, start it */
-    if(_musicEnabled && _audio && _audio.paused){
-      _audio.play().catch(()=>{});
-    }
-  }
-  document.addEventListener('click',    _unlock, {passive:true});
-  document.addEventListener('keydown',  _unlock, {passive:true});
-  document.addEventListener('touchend', _unlock, {passive:true});
-
-  return { pixelTick, scanSweep, grantedChord, startBGMusic, stopBGMusic, toggleMusic,
-           setVolume, getVolume:()=>_vol, isMusicOn:()=>_musicEnabled };
+  return {
+    unlock      : unlock,
+    pixelTick   : pixelTick,
+    scanSweep   : scanSweep,
+    grantedChord: grantedChord,
+    startBG     : startBG,
+    stopBG      : stopBG,
+    toggleMusic : toggleMusic,
+    setVolume   : setVolume,
+    isOn        : function(){ return _on; }
+  };
 })();
 
-/* ══════════════════════════════════════════════════════
-   MUSIC BUTTON
-══════════════════════════════════════════════════════ */
-const musicBtn  = document.getElementById('music-btn');
-const volSlider = document.getElementById('vol-slider');
-
-musicBtn.addEventListener('click', ()=>{
-  const on = AUDIO.toggleMusic();
-  musicBtn.innerHTML = on ? '&#127925; Music' : '&#128263; Muted';
-  musicBtn.classList.toggle('playing', on);
-  volSlider.disabled = !on;
-  volSlider.style.opacity = on ? '.8' : '.3';
-});
-
-volSlider.addEventListener('input', ()=>{
-  AUDIO.setVolume(volSlider.value / 100);
-});
-
-/* ══════════════════════════════════════════════════════
-   INTRO QR RITUAL — fully bulletproof, no dependencies
-   Canvas runs in its own isolated scope.
-   Audio is deferred until user interacts.
-══════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════
+   INTRO — Two-phase:
+   PHASE 1 · "CLICK TO SCAN" splash  (forces user gesture)
+   PHASE 2 · QR build + scan animation WITH SOUND
+   
+   Why two phases? Browser autoplay policy requires a genuine
+   click/tap before AudioContext can start. Phase 1 gives us
+   that click, then Phase 2 runs with audio fully unlocked.
+══════════════════════════════════════════════════════════════ */
 (function(){
-  /* ── grab elements ── */
-  var intro    = document.getElementById('intro');
+  var introEl  = document.getElementById('intro');
   var canvas   = document.getElementById('qr-canvas');
   var scanEl   = document.getElementById('scan-line');
   var statusEl = document.getElementById('intro-status');
   var barEl    = document.getElementById('intro-bar');
-  var wrap     = document.getElementById('qr-wrap');
+  var wrapEl   = document.getElementById('qr-wrap');
+  var hintEl   = document.getElementById('intro-hint');
+  if(!introEl || !canvas) return;
 
-  if(!canvas){ return; }
   var ctx2d = canvas.getContext('2d');
+  var SIZE = 21, CELL = Math.floor(180/SIZE);
 
-  /* ── QR pattern 21×21 ── */
-  var SIZE = 21;
-  var CELL = Math.floor(180 / SIZE);
   var PAT = [
     [1,1,1,1,1,1,1,0,1,0,1,0,1,0,1,1,1,1,1,1,1],
     [1,0,0,0,0,0,1,0,0,1,0,1,0,0,1,0,0,0,0,0,1],
@@ -723,199 +724,144 @@ volSlider.addEventListener('input', ()=>{
     [1,1,1,1,1,1,1,0,1,0,1,1,1,0,1,1,1,0,1,0,1]
   ];
 
-  /* ── build reveal order: corners first, rest shuffled ── */
-  var corners = [], rest2 = [];
-  for(var r=0;r<SIZE;r++) for(var co=0;co<SIZE;co++){
-    var isC = (r<8&&co<8)||(r<8&&co>=SIZE-8)||(r>=SIZE-8&&co<8);
-    isC ? corners.push({r:r,c:co}) : rest2.push({r:r,c:co});
+  /* shuffle reveal order — corners first */
+  var corners=[], rest=[];
+  for(var r=0;r<SIZE;r++) for(var cc=0;cc<SIZE;cc++){
+    var isC=(r<8&&cc<8)||(r<8&&cc>=SIZE-8)||(r>=SIZE-8&&cc<8);
+    (isC?corners:rest).push({r:r,c:cc});
   }
-  /* Fisher-Yates shuffle */
-  for(var i=rest2.length-1;i>0;i--){
-    var j=Math.floor(Math.random()*(i+1));
-    var tmp=rest2[i]; rest2[i]=rest2[j]; rest2[j]=tmp;
+  for(var si=rest.length-1;si>0;si--){
+    var sj=Math.floor(Math.random()*(si+1));
+    var st=rest[si]; rest[si]=rest[sj]; rest[sj]=st;
   }
-  var ordered = corners.concat(rest2);
+  var ordered = corners.concat(rest);
+
   var revealed = [];
-  for(var ri=0;ri<SIZE;ri++){ revealed[ri]=[]; for(var ci2=0;ci2<SIZE;ci2++) revealed[ri][ci2]=false; }
+  for(var ri=0;ri<SIZE;ri++){ revealed[ri]=[]; for(var ci=0;ci<SIZE;ci++) revealed[ri][ci]=false; }
 
-  var COL_BG='#050101', COL_DARK='#f0e8e8', COL_EMPTY='#0d0303';
+  var C_BG='#050101', C_LIT='#f0e8e8', C_DIM='#0d0303';
 
-  function drawAll(){
-    ctx2d.fillStyle=COL_BG; ctx2d.fillRect(0,0,180,180);
-    for(var rr=0;rr<SIZE;rr++){
-      for(var cc=0;cc<SIZE;cc++){
-        var x=cc*CELL, y=rr*CELL;
-        if(PAT[rr][cc]===1){
-          ctx2d.fillStyle=COL_EMPTY; ctx2d.fillRect(x,y,CELL,CELL);
-          if(revealed[rr][cc]){ ctx2d.fillStyle=COL_DARK; ctx2d.fillRect(x+1,y+1,CELL-2,CELL-2); }
-        } else {
-          ctx2d.fillStyle=COL_BG; ctx2d.fillRect(x,y,CELL,CELL);
-        }
+  function drawQR(){
+    ctx2d.fillStyle=C_BG; ctx2d.fillRect(0,0,180,180);
+    for(var r=0;r<SIZE;r++) for(var c=0;c<SIZE;c++){
+      var x=c*CELL, y=r*CELL;
+      if(PAT[r][c]){
+        ctx2d.fillStyle=C_DIM; ctx2d.fillRect(x,y,CELL,CELL);
+        if(revealed[r][c]){ ctx2d.fillStyle=C_LIT; ctx2d.fillRect(x+1,y+1,CELL-2,CELL-2); }
+      } else {
+        ctx2d.fillStyle=C_BG; ctx2d.fillRect(x,y,CELL,CELL);
       }
     }
   }
 
-  /* initial dark fill */
-  ctx2d.fillStyle=COL_BG; ctx2d.fillRect(0,0,180,180);
-  if(document.body) document.body.style.overflow='hidden';
+  /* ── PHASE 1: show "TAP TO SCAN" and wait for click ── */
+  document.body.style.overflow = 'hidden';
+  ctx2d.fillStyle = C_BG; ctx2d.fillRect(0,0,180,180);
+  if(statusEl) statusEl.textContent = 'TAP TO SCAN';
+  if(hintEl)   hintEl.textContent   = 'Click anywhere to scan';
+  if(barEl)    barEl.style.width    = '0%';
 
-  /* ── AUDIO UNLOCK + QUEUE ─────────────────────────────────────────────
-     Problem: AudioContext can't start before a user gesture.
-     Solution: queue sounds during the silent phase; drain + replay
-     them the instant the user first touches/clicks the intro screen.
-  ─────────────────────────────────────────────────────────────────── */
-  var _audioUnlocked = false;
-  var _soundQueue    = [];   // fns queued before gesture
-  var _pixelsMissed  = 0;    // pixel ticks that were silenced
+  /* draw a ghost (dim) QR so they know what to expect */
+  for(var gr=0;gr<SIZE;gr++) for(var gc=0;gc<SIZE;gc++) revealed[gr][gc]=false;
+  /* draw just the finder patterns dimly */
+  ctx2d.fillStyle = C_BG; ctx2d.fillRect(0,0,180,180);
+  for(var pr=0;pr<SIZE;pr++) for(var pc=0;pc<SIZE;pc++){
+    if(PAT[pr][pc]===1){
+      ctx2d.fillStyle = 'rgba(139,0,0,0.18)';
+      ctx2d.fillRect(pc*CELL, pr*CELL, CELL, CELL);
+    }
+  }
 
-  function _tryUnlockAudio(){
-    if(_audioUnlocked) return;
-    _audioUnlocked = true;
-    /* Force AudioContext creation & resume */
-    try{
-      var AudioCtx = window.AudioContext || window.webkitAudioContext;
-      if(AudioCtx){
-        var ac = new AudioCtx();
-        if(ac.state === 'suspended') ac.resume();
-        /* Store it so AUDIO engine reuses the same context */
-        /* (AUDIO._ac is private, so we just call _getAC via a dummy beep) */
-        var o = ac.createOscillator(), g = ac.createGain();
-        g.gain.value = 0;  /* silent — just to warm up */
-        o.connect(g); g.connect(ac.destination);
-        o.start(); o.stop(ac.currentTime + 0.001);
+  /* ── PHASE 2: triggered by user click ── */
+  var phase2Started = false;
+  function startPhase2(){
+    if(phase2Started) return;
+    phase2Started = true;
+
+    /* ★ THIS IS THE GESTURE — unlock audio NOW ★ */
+    AUDIO.unlock();
+
+    if(statusEl) statusEl.textContent = 'Initializing\u2026';
+    if(hintEl)   hintEl.style.opacity = '0';
+
+    var MSGS = [
+      {at:0,   t:'Initializing\u2026'},
+      {at:0.22,t:'Building matrix\u2026'},
+      {at:0.55,t:'Encoding payload\u2026'},
+      {at:0.82,t:'Scanning\u2026'}
+    ];
+    var ASSEMBLE = 1800;
+    var tStart = null, prevN = 0, animDone = false;
+
+    function step(ts){
+      if(!tStart) tStart = ts;
+      var p = Math.min((ts - tStart) / ASSEMBLE, 1);
+
+      if(barEl) barEl.style.width = (p * 74) + '%';
+      for(var mi=0;mi<MSGS.length;mi++) if(p >= MSGS[mi].at && statusEl) statusEl.textContent = MSGS[mi].t;
+
+      var n = Math.floor(p * ordered.length);
+      for(var oi=prevN; oi<n; oi++){
+        revealed[ordered[oi].r][ordered[oi].c] = true;
+        AUDIO.pixelTick();   /* ← audio is unlocked, this WILL play */
       }
-    }catch(e){}
-    /* Drain queued sounds */
-    for(var qi = 0; qi < _soundQueue.length; qi++){
-      try{ _soundQueue[qi](); }catch(e){}
+      prevN = n;
+      drawQR();
+
+      if(p < 1){ requestAnimationFrame(step); }
+      else if(!animDone){ animDone = true; finalize(); }
     }
-    _soundQueue = [];
-    /* Play a short burst of pixel ticks for the missed pixels */
-    var burst = Math.min(_pixelsMissed, 18);
-    for(var bi = 0; bi < burst; bi++){
-      (function(delay){
-        setTimeout(function(){
-          try{ AUDIO.pixelTick(); }catch(e){}
-        }, delay);
-      })(bi * 28);
-    }
-    _pixelsMissed = 0;
-  }
 
-  /* Attach unlock to the intro overlay immediately on mousedown/touchstart
-     so audio is ready before the click fully fires */
-  if(intro){
-    intro.addEventListener('mousedown',  _tryUnlockAudio, {once:true, passive:true});
-    intro.addEventListener('touchstart', _tryUnlockAudio, {once:true, passive:true});
-    intro.addEventListener('keydown',    _tryUnlockAudio, {once:true, passive:true});
-  }
-
-  function safePixelTick(){
-    if(_audioUnlocked){
-      try{ AUDIO.pixelTick(); }catch(e){}
-    } else {
-      _pixelsMissed++;  /* count silenced ticks for burst replay */
-    }
-  }
-
-  function safeScanSweep(){
-    if(_audioUnlocked){
-      try{ AUDIO.scanSweep(); }catch(e){}
-    } else {
-      _soundQueue.push(function(){ try{ AUDIO.scanSweep(); }catch(e){}; });
-    }
-  }
-
-  function safeGranted(){
-    if(_audioUnlocked){
-      try{ AUDIO.grantedChord(); }catch(e){}
-    } else {
-      _soundQueue.push(function(){ try{ AUDIO.grantedChord(); }catch(e){}; });
-    }
-  }
-
-  /* ── animation ── */
-  var MSGS=[
-    {at:0,   t:'Initializing\u2026'},
-    {at:.22, t:'Building matrix\u2026'},
-    {at:.55, t:'Encoding payload\u2026'},
-    {at:.84, t:'Scanning\u2026'}
-  ];
-  var ASSEMBLE=1850, tStart=null, done=false, prevN=0;
-
-  function step(ts){
-    if(!tStart) tStart=ts;
-    var p = Math.min((ts-tStart)/ASSEMBLE, 1);
-
-    /* progress bar */
-    if(barEl) barEl.style.width=(p*74)+'%';
-    /* status text */
-    for(var mi=0;mi<MSGS.length;mi++){ if(p>=MSGS[mi].at && statusEl) statusEl.textContent=MSGS[mi].t; }
-
-    /* reveal pixels */
-    var n = Math.floor(p * ordered.length);
-    for(var oi=prevN;oi<n;oi++){
-      revealed[ordered[oi].r][ordered[oi].c]=true;
-      safePixelTick();
-    }
-    prevN=n;
-    drawAll();
-
-    if(p<1){ requestAnimationFrame(step); }
-    else if(!done){ done=true; finalize(); }
+    requestAnimationFrame(step);
   }
 
   function finalize(){
     for(var fr=0;fr<SIZE;fr++) for(var fc=0;fc<SIZE;fc++) revealed[fr][fc]=true;
-    drawAll();
-    if(wrap) wrap.classList.add('corners-show');
-    setTimeout(doScan, 100);
+    drawQR();
+    if(wrapEl) wrapEl.classList.add('corners-show');
+    setTimeout(doScan, 120);
   }
 
   function doScan(){
     if(barEl){ barEl.style.transition='width .75s cubic-bezier(.4,0,.2,1)'; barEl.style.width='100%'; }
-    if(statusEl) statusEl.textContent='Scanning\u2026';
-    safeScanSweep();
+    if(statusEl) statusEl.textContent = 'Scanning\u2026';
+    AUDIO.scanSweep();
     if(scanEl){
       scanEl.classList.add('scanning');
       scanEl.addEventListener('animationend', function(){
-        ctx2d.fillStyle='rgba(139,0,0,.18)'; ctx2d.fillRect(0,0,180,180);
+        ctx2d.fillStyle='rgba(139,0,0,0.18)'; ctx2d.fillRect(0,0,180,180);
         setTimeout(function(){
-          drawAll();
+          drawQR();
           if(statusEl){ statusEl.textContent='Access Granted'; statusEl.classList.add('status-granted'); }
-          safeGranted();
-          setTimeout(doExit, 480);
-        },150);
-      },{once:true});
-    } else {
-      /* fallback if no scan line element */
+          AUDIO.grantedChord();
+          setTimeout(doExit, 500);
+        }, 160);
+      }, {once:true});
+      /* failsafe */
       setTimeout(function(){
-        drawAll();
-        if(statusEl){ statusEl.textContent='Access Granted'; statusEl.classList.add('status-granted'); }
-        safeGranted();
-        setTimeout(doExit, 480);
-      }, 800);
+        if(!introEl.classList.contains('intro-exit')) doExit();
+      }, 3500);
+    } else {
+      setTimeout(function(){ AUDIO.grantedChord(); setTimeout(doExit, 500); }, 750);
     }
   }
 
   function doExit(){
-    if(intro) intro.classList.add('intro-exit');
+    introEl.classList.add('intro-exit');
     setTimeout(function(){
-      if(intro) intro.classList.add('intro-gone');
-      if(document.body) document.body.style.overflow='';
-      /* start background music — deferred so it works even without prior gesture */
-      try{ AUDIO.startBGMusic(); }catch(e){}
+      introEl.classList.add('intro-gone');
+      document.body.style.overflow = '';
+      AUDIO.startBG();
       var mb = document.getElementById('music-btn');
       if(mb) mb.classList.add('playing');
     }, 580);
   }
 
-  /* start animation immediately */
-  requestAnimationFrame(step);
-
-  /* skip handlers */
-  intro.addEventListener('click',   function(){ if(!done){ done=true; doExit(); } });
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape'&&!done){ done=true; doExit(); } });
+  /* attach the one genuine click */
+  introEl.addEventListener('click', startPhase2, {once:true});
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Enter' || e.key === ' ') startPhase2();
+  }, {once:true});
 })();
 
 /* ── CURSOR ── */
