@@ -130,50 +130,26 @@ img{display:block;max-width:100%;}
   opacity:.5;
 }
 
-/* CURSOR — crosshair */
-#cur-cross{
-  position:fixed;pointer-events:none;z-index:9999;
-  width:28px;height:28px;
-  transform:translate(-50%,-50%);
-  will-change:left,top;
-  transition:transform .22s cubic-bezier(.34,1.56,.64,1), opacity .2s;
-  opacity:.75;
+/* CURSOR — QR pixel */
+#cur-qr {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  /* We'll draw the QR via an SVG canvas element positioned at cursor */
+  width: 32px; height: 32px;
+  transform: translate(-4px, -4px);
+  will-change: left, top;
+  image-rendering: pixelated;
 }
-/* Horizontal arm */
-#cur-cross::before{
-  content:'';position:absolute;
-  top:50%;left:0;right:0;height:1px;
-  background:var(--red);
-  transform:translateY(-50%);
-  /* gap in centre */
-  -webkit-mask:linear-gradient(90deg,#fff 38%,transparent 38%,transparent 62%,#fff 62%);
-  mask:linear-gradient(90deg,#fff 38%,transparent 38%,transparent 62%,#fff 62%);
+#cur-qr canvas {
+  display: block;
+  width: 32px; height: 32px;
+  image-rendering: pixelated;
+  opacity: 0.88;
+  transition: transform .18s cubic-bezier(.34,1.56,.64,1), opacity .15s;
 }
-/* Vertical arm */
-#cur-cross::after{
-  content:'';position:absolute;
-  left:50%;top:0;bottom:0;width:1px;
-  background:var(--red);
-  transform:translateX(-50%);
-  -webkit-mask:linear-gradient(180deg,#fff 38%,transparent 38%,transparent 62%,#fff 62%);
-  mask:linear-gradient(180deg,#fff 38%,transparent 38%,transparent 62%,#fff 62%);
-}
-/* Centre dot */
-#cur-dot{
-  position:fixed;pointer-events:none;z-index:9999;
-  width:3px;height:3px;
-  background:var(--red);border-radius:50%;
-  transform:translate(-50%,-50%);
-  will-change:left,top;
-  transition:transform .08s, opacity .15s, width .12s, height .12s;
-  opacity:.9;
-}
-/* hover — crosshair grows slightly */
-body.c-hover #cur-cross{ transform:translate(-50%,-50%) scale(1.35); opacity:1; }
-body.c-hover #cur-dot  { width:2px;height:2px;opacity:.5; }
-/* click — snap small */
-body.c-down #cur-cross { transform:translate(-50%,-50%) scale(.72); opacity:1; }
-body.c-down #cur-dot   { transform:translate(-50%,-50%) scale(2); }
+body.c-hover #cur-qr canvas { transform: scale(1.25); opacity: 1; }
+body.c-down  #cur-qr canvas { transform: scale(0.82); opacity: 1; }
 
 /* TICKER */
 .ticker{
@@ -425,7 +401,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
   h2{font-size:1.6rem;}
   .qr-deco{display:none;}
   .cta-btns{flex-direction:column;align-items:stretch;}
-  #cur-cross,#cur-dot{display:none;}
+  #cur-qr{display:none;}
   body{cursor:auto;}a{cursor:pointer;}button{cursor:pointer;}
 }
 @media(max-width:460px){
@@ -454,8 +430,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
 <div class="bg-mesh" aria-hidden="true"></div>
 <div class="bg-grid" aria-hidden="true"></div>
 
-<div id="cur-cross"></div>
-<div id="cur-dot"></div>
+<div id="cur-qr"><canvas id="qr-cur-canvas" width="8" height="8"></canvas></div>
 
 <div class="ticker" aria-hidden="true">
   <div class="ticker-track" id="tkt"></div>
@@ -810,36 +785,61 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
 })();
 
 /* ── CURSOR ── */
-const cross=document.getElementById('cur-cross');
-const cdot=document.getElementById('cur-dot');
-let mx=0,my=0,cx=0,cy=0;
-document.addEventListener('mousemove',e=>{
-  mx=e.clientX;my=e.clientY;
-  /* dot snaps instantly */
-  cdot.style.left=mx+'px';cdot.style.top=my+'px';
-},{passive:true});
-/* crosshair follows with very slight lag for elegance */
-(function tr(){
-  cx+=(mx-cx)*.18;cy+=(my-cy)*.18;
-  cross.style.left=cx+'px';cross.style.top=cy+'px';
-  requestAnimationFrame(tr);
-})();
-document.querySelectorAll('a,button,.faq-q,.tab,.chip,.sec-item,.role-tile,.dl-btn,.stat,.card').forEach(el=>{
-  el.addEventListener('mouseenter',()=>document.body.classList.add('c-hover'),{passive:true});
-  el.addEventListener('mouseleave',()=>document.body.classList.remove('c-hover'),{passive:true});
-});
-document.addEventListener('mousedown',()=>document.body.classList.add('c-down'));
-document.addEventListener('mouseup',()=>document.body.classList.remove('c-down'));
+(function(){
+  const el  = document.getElementById('cur-qr');
+  const cvs = document.getElementById('qr-cur-canvas');
+  const ctx = cvs.getContext('2d');
 
-/* Card spotlight */
-document.querySelectorAll('.card').forEach(card=>{
-  card.addEventListener('mousemove',e=>{
-    const r=card.getBoundingClientRect();
-    card.style.setProperty('--mx',((e.clientX-r.left)/r.width*100).toFixed(1)+'%');
-    card.style.setProperty('--my',((e.clientY-r.top)/r.height*100).toFixed(1)+'%');
+  // 8x8 QR-like pixel pattern (hand-crafted to look like a mini QR)
+  const PIX = [
+    [1,1,1,0,1,1,1,0],
+    [1,0,1,0,1,0,1,0],
+    [1,1,1,0,0,1,0,0],
+    [0,0,0,0,1,0,1,1],
+    [1,1,0,1,0,1,1,0],
+    [0,1,0,0,1,0,1,0],
+    [1,1,1,0,1,1,1,0],
+    [0,0,0,0,0,0,0,0],
+  ];
+
+  function drawQR(color) {
+    ctx.clearRect(0,0,8,8);
+    ctx.fillStyle = color;
+    for (let r=0;r<8;r++) for (let c=0;c<8;c++) {
+      if (PIX[r][c]) ctx.fillRect(c, r, 1, 1);
+    }
+  }
+
+  // Draw initial
+  const isDark = () => document.documentElement.hasAttribute('data-dark');
+  function getColor(){ return getComputedStyle(document.documentElement).getPropertyValue('--red').trim() || '#8b0000'; }
+
+  drawQR(getColor());
+
+  // Redraw on theme change
+  const themeObs = new MutationObserver(()=> drawQR(getColor()));
+  themeObs.observe(document.documentElement, {attributes:true, attributeFilter:['data-dark']});
+
+  let mx=0, my=0, ex=0, ey=0;
+  document.addEventListener('mousemove', e=>{
+    mx=e.clientX; my=e.clientY;
   },{passive:true});
-});
 
+  (function track(){
+    ex += (mx-ex)*.16;
+    ey += (my-ey)*.16;
+    el.style.left = ex + 'px';
+    el.style.top  = ey + 'px';
+    requestAnimationFrame(track);
+  })();
+
+  document.querySelectorAll('a,button,.faq-q,.tab,.chip,.sec-item,.role-tile,.dl-btn,.stat,.card').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('c-hover'),{passive:true});
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('c-hover'),{passive:true});
+  });
+  document.addEventListener('mousedown',()=>document.body.classList.add('c-down'));
+  document.addEventListener('mouseup',()=>document.body.classList.remove('c-down'));
+})();
 /* ── TICKER ── */
 const msgs=['<b>Project QrSys</b> &middot; SaaS Attendance Platform for Any Organization','Schools &middot; Companies &middot; Corporate Teams &middot; Any Group','<b>RBAC Enforced</b> &middot; Zero Privilege Leakage','Windows Desktop + Android Mobile &middot; Deploy Today','<b>4 Roles</b> &middot; Normal User &middot; Admin &middot; Super Admin &middot; Owner','QR Scanning &middot; Webcam Interface &middot; .NET MAUI Framework','<b>Live Since</b> January 8 2026 &middot; Encrypted Connection Active'];
 document.getElementById('tkt').innerHTML=[...msgs,...msgs,...msgs,...msgs].map(m=>`<span>${m}</span>`).join('');
