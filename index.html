@@ -3,904 +3,783 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Project QrSys — SaaS Attendance Management Platform</title>
-<meta name="description" content="A secure, cloud-integrated QR attendance SaaS platform for schools, companies, corporate teams, and any organization. Windows Desktop and Android Mobile.">
-<meta name="theme-color" content="#800000">
+<title>Project QrSys — SaaS Attendance Platform</title>
+<meta name="description" content="A secure, cloud-integrated QR attendance SaaS platform for schools, companies, and organizations.">
+<meta name="theme-color" content="#7a0000">
 <link rel="icon" type="image/png" href="123.png">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <style>
-/* ════════════════════════════════════════
-   DESIGN TOKENS
-════════════════════════════════════════ */
+
+/* ══════════════════════════════════
+   TOKENS
+══════════════════════════════════ */
 :root {
-  /* Brand */
-  --red:    #800000;
-  --red-hi: #9a1515;
-  --red-lo: #5a0000;
+  --red:    #7a0000;
+  --red2:   #9b1111;
+  --red3:   #4d0000;
 
-  /* Surface */
-  --bg:     #fdfcfc;
-  --bg2:    #f8f4f4;
-  --card:   rgba(255,255,255,0.88);
+  --bg:     #f7f5f5;
+  --surf:   #ffffff;
+  --nav-bg: rgba(247,245,245,0.86);
 
-  /* Text — proper contrast ratios */
-  --text:   #111010;   /* headings, primary */
-  --body:   #2d2020;   /* body copy */
-  --muted:  #6b5454;   /* secondary labels */
-  --faint:  #9a8080;   /* captions, tiny labels */
+  --ink:    #100707;
+  --ink2:   #3c2222;
+  --ink3:   #7d5555;
+  --ink4:   #b09090;
 
-  /* Borders */
-  --line:   rgba(128,0,0,.12);
-  --line-hi:rgba(128,0,0,.28);
+  --line:   rgba(122,0,0,0.09);
+  --lineh:  rgba(122,0,0,0.20);
+  --t1:     rgba(122,0,0,0.04);
+  --t2:     rgba(122,0,0,0.08);
 
-  /* Tints */
-  --tint1:  rgba(128,0,0,.05);
-  --tint2:  rgba(128,0,0,.10);
+  --fserif: 'Instrument Serif', Georgia, serif;
+  --fsans:  'Inter', system-ui, sans-serif;
+  --fmono:  'JetBrains Mono', monospace;
 
-  /* Typography */
-  --f-head: 'Playfair Display', Georgia, serif;
-  --f-body: 'Inter', system-ui, sans-serif;
-  --f-code: 'JetBrains Mono', 'Courier New', monospace;
+  --ease:   cubic-bezier(0.4, 0, 0.2, 1);
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  /* Motion */
-  --ease:  cubic-bezier(.4,0,.2,1);
-  --pop:   cubic-bezier(.175,.885,.32,1.275);
+  --sh:  0 1px 3px rgba(0,0,0,0.04), 0 4px 18px rgba(0,0,0,0.06);
+  --sh2: 0 6px 24px rgba(0,0,0,0.08), 0 24px 64px rgba(0,0,0,0.08);
 
-  /* Shadows */
-  --sh:  0 1px 4px rgba(0,0,0,.06), 0 4px 16px rgba(128,0,0,.06);
-  --sh2: 0 8px 24px rgba(0,0,0,.08), 0 24px 64px rgba(128,0,0,.10);
-
-  /* Log tags */
-  --c-add: #15803d; --c-add-bg: rgba(21,128,61,.10);
-  --c-imp: #1d4ed8; --c-imp-bg: rgba(29,78,216,.10);
-  --c-fix: #b45309; --c-fix-bg: rgba(180,83,9,.10);
+  --cadd: #166534; --caddbg: rgba(22,101,52,0.09);
+  --cimp: #1e40af; --cimpbg: rgba(30,64,175,0.09);
+  --cfix: #92400e; --cfixbg: rgba(146,64,14,0.09);
 }
 
-[data-theme=dark] {
-  --bg:    #0a0303;
-  --bg2:   #0f0404;
-  --card:  rgba(18,5,5,.90);
-  --text:  #f5eded;
-  --body:  #e0d0d0;
-  --muted: #b09090;
-  --faint: #7a6060;
-  --line:  rgba(200,60,60,.13);
-  --line-hi:rgba(200,60,60,.30);
-  --tint1: rgba(160,30,30,.07);
-  --tint2: rgba(160,30,30,.13);
-  --sh:  0 1px 4px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.2);
-  --sh2: 0 8px 24px rgba(0,0,0,.4), 0 24px 64px rgba(0,0,0,.3);
-  --c-add: #4ade80; --c-imp: #60a5fa; --c-fix: #fbbf24;
-  --c-add-bg: rgba(74,222,128,.10);
-  --c-imp-bg: rgba(96,165,250,.10);
-  --c-fix-bg: rgba(251,191,36,.10);
+[data-dark] {
+  --bg:    #090303;
+  --surf:  #110505;
+  --nav-bg: rgba(9,3,3,0.90);
+  --ink:   #f0e8e8;
+  --ink2:  #d8c8c8;
+  --ink3:  #9a7878;
+  --ink4:  #685050;
+  --line:  rgba(170,45,45,0.11);
+  --lineh: rgba(200,65,65,0.22);
+  --t1:    rgba(140,20,20,0.07);
+  --t2:    rgba(140,20,20,0.13);
+  --sh:  0 1px 3px rgba(0,0,0,0.45), 0 4px 18px rgba(0,0,0,0.32);
+  --sh2: 0 6px 24px rgba(0,0,0,0.50), 0 24px 64px rgba(0,0,0,0.42);
+  --cadd: #4ade80; --cimp: #60a5fa; --cfix: #fbbf24;
+  --caddbg: rgba(74,222,128,0.09);
+  --cimpbg: rgba(96,165,250,0.09);
+  --cfixbg: rgba(251,191,36,0.09);
 }
 
-/* ════════════════════════════════════════
-   RESET & BASE
-════════════════════════════════════════ */
-*, ::before, ::after { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; font-size:16px; -webkit-text-size-adjust:100%; }
+/* ══════════════════════════════════
+   RESET
+══════════════════════════════════ */
+*, ::before, ::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
 body {
-  font-family: var(--f-body);
+  font-family: var(--fsans);
   background: var(--bg);
-  color: var(--body);
-  line-height: 1.65;
+  color: var(--ink2);
+  line-height: 1.72;
   overflow-x: hidden;
   cursor: none;
-  transition: background .3s var(--ease), color .3s var(--ease);
   -webkit-overflow-scrolling: touch;
+  transition: background .35s var(--ease), color .35s var(--ease);
 }
 a { text-decoration: none; cursor: none; }
 button { cursor: none; }
 img { display: block; max-width: 100%; }
-.card, .wrap { contain: layout style; }
 
-/* ════════════════════════════════════════
-   CURSOR
-════════════════════════════════════════ */
-#cd, #cr {
-  position: fixed; top: 0; left: 0;
-  border-radius: 50%; pointer-events: none; z-index: 9999;
-}
-#cd {
-  width: 8px; height: 8px; background: var(--red);
-  transform: translate(-50%,-50%);
-  transition: width .15s, height .15s, background .15s;
-  will-change: transform;
-}
-#cr {
-  width: 36px; height: 36px;
-  border: 1.5px solid var(--red); opacity: .35;
-  transform: translate(-50%,-50%);
-  transition: width .2s var(--pop), height .2s var(--pop), opacity .2s;
-  will-change: transform;
-}
-body.hl #cd { width: 12px; height: 12px; background: var(--red-hi); }
-body.hl #cr { width: 48px; height: 48px; opacity: .15; }
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--lineh); border-radius: 3px; }
 
-/* ════════════════════════════════════════
-   BACKGROUND (keep what you like)
-   CSS blobs + single lean canvas
-════════════════════════════════════════ */
-#bg {
-  position: fixed; inset: 0; z-index: 0;
-  overflow: hidden; pointer-events: none;
+/* ══════════════════════════════════
+   CURSOR — elegant bracket / corner
+══════════════════════════════════ */
+#cur-frame {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  width: 24px; height: 24px;
+  transform: translate(-50%, -50%);
+  will-change: left, top;
+  transition: width .2s var(--ease), height .2s var(--ease);
 }
-#bg::before {
-  content: ''; position: absolute; inset: 0;
+#cur-frame::before,
+#cur-frame::after,
+#cur-frame .c-bl,
+#cur-frame .c-br {
+  content: '';
+  position: absolute;
+  width: 6px; height: 6px;
+  border-color: var(--red);
+  border-style: solid;
+  opacity: 0.75;
+  transition: all .2s var(--ease), opacity .2s;
+}
+#cur-frame::before  { top: 0;    left: 0;  border-width: 1.5px 0 0 1.5px; }
+#cur-frame::after   { top: 0;    right: 0; border-width: 1.5px 1.5px 0 0; }
+#cur-frame .c-bl    { bottom: 0; left: 0;  border-width: 0 0 1.5px 1.5px; }
+#cur-frame .c-br    { bottom: 0; right: 0; border-width: 0 1.5px 1.5px 0; }
+
+#cur-dot {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  width: 3px; height: 3px;
+  background: var(--red);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  will-change: left, top;
+  transition: width .12s, height .12s, opacity .12s;
+  opacity: 0.8;
+}
+
+/* hover state — frame expands, dot hides */
+body.c-hover #cur-frame { width: 36px; height: 36px; }
+body.c-hover #cur-frame::before,
+body.c-hover #cur-frame::after,
+body.c-hover #cur-frame .c-bl,
+body.c-hover #cur-frame .c-br {
+  width: 9px; height: 9px; opacity: 1;
+}
+body.c-hover #cur-dot { opacity: 0; }
+
+/* click state */
+body.c-down #cur-frame { width: 18px; height: 18px; }
+body.c-down #cur-frame::before,
+body.c-down #cur-frame::after,
+body.c-down #cur-frame .c-bl,
+body.c-down #cur-frame .c-br { opacity: 1; }
+
+/* ══════════════════════════════════
+   BACKGROUND — just a very faint
+   warm vignette, nothing geometric
+══════════════════════════════════ */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: -1;
+  pointer-events: none;
   background:
-    radial-gradient(ellipse 110% 70% at 8% 6%,  rgba(128,0,0,.13) 0%, transparent 52%),
-    radial-gradient(ellipse 80%  90% at 94% 90%, rgba(128,0,0,.09) 0%, transparent 52%),
-    radial-gradient(ellipse 55%  55% at 50% 48%, rgba(128,0,0,.04) 0%, transparent 64%);
+    radial-gradient(ellipse 70% 55% at 0% 0%,   rgba(122,0,0,0.055) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 45% at 100% 100%, rgba(122,0,0,0.040) 0%, transparent 58%);
 }
-#bg::after {
-  content: ''; position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(128,0,0,.033) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(128,0,0,.033) 1px, transparent 1px);
-  background-size: 58px 58px;
-  mask-image: radial-gradient(ellipse 72% 72% at 50% 50%, #000 10%, transparent 74%);
-  -webkit-mask-image: radial-gradient(ellipse 72% 72% at 50% 50%, #000 10%, transparent 74%);
-}
-.blob { position: absolute; border-radius: 50%; will-change: transform; filter: blur(80px); }
-.b1 { width:720px; height:340px; background:rgba(128,0,0,.12); top:-90px; left:-130px; animation:b1 20s ease-in-out infinite alternate; }
-.b2 { width:520px; height:520px; background:rgba(128,0,0,.08); bottom:-110px; right:-110px; animation:b2 24s ease-in-out infinite alternate; }
-.b3 { width:400px; height:200px; background:rgba(80,0,0,.07); top:44%; left:28%; animation:b3 28s ease-in-out infinite alternate; }
-@keyframes b1 { to { transform: translate(70px,55px) scale(1.1); } }
-@keyframes b2 { to { transform: translate(-55px,-45px) scale(1.08); } }
-@keyframes b3 { to { transform: translate(36px,28px) rotate(14deg); } }
-#grain {
-  position: absolute; inset: 0; opacity: .38; mix-blend-mode: multiply;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E") repeat;
-  background-size: 160px;
-}
-[data-theme=dark] #grain { mix-blend-mode: screen; opacity: .28; }
-#cvs { position: absolute; inset: 0; will-change: contents; }
 
-/* ════════════════════════════════════════
+/* ══════════════════════════════════
    TICKER
-════════════════════════════════════════ */
-.tkw {
-  position: fixed; top: 64px; width: 100%; z-index: 999;
-  background: var(--red); height: 28px;
-  overflow: hidden; display: flex; align-items: center;
-  box-shadow: 0 3px 16px rgba(128,0,0,.25);
+══════════════════════════════════ */
+.ticker {
+  position: fixed; top: 60px; width: 100%; height: 24px;
+  background: var(--red); overflow: hidden;
+  display: flex; align-items: center; z-index: 999;
 }
-.tkt { display: flex; white-space: nowrap; animation: tick 38s linear infinite; will-change: transform; }
-.tkt span { font-family: var(--f-code); font-size: 11px; color: rgba(255,255,255,.65); letter-spacing: 1.8px; text-transform: uppercase; padding: 0 32px; flex-shrink: 0; }
-.tkt span b { color: #fff; font-weight: 500; }
-@keyframes tick { from { transform:translateX(0); } to { transform:translateX(-50%); } }
-.tkw:hover .tkt { animation-play-state: paused; }
+.ticker-track {
+  display: flex; white-space: nowrap;
+  animation: ticker-run 46s linear infinite;
+  will-change: transform;
+}
+.ticker-track span {
+  font-family: var(--fmono); font-size: 10px;
+  color: rgba(255,255,255,0.58); letter-spacing: 2px;
+  text-transform: uppercase; padding: 0 36px; flex-shrink: 0;
+}
+.ticker-track span b { color: rgba(255,255,255,0.88); font-weight: 500; }
+@keyframes ticker-run {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.ticker:hover .ticker-track { animation-play-state: paused; }
 
-/* ════════════════════════════════════════
+/* ══════════════════════════════════
    NAV
-════════════════════════════════════════ */
+══════════════════════════════════ */
 nav {
-  position: fixed; top: 0; width: 100%; height: 64px; z-index: 1000;
+  position: fixed; top: 0; width: 100%; height: 60px;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 48px;
-  background: rgba(255,255,255,.82);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  padding: 0 48px; z-index: 1000;
+  background: var(--nav-bg);
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
   border-bottom: 1px solid var(--line);
-  transition: background .3s;
+  transition: background .35s;
 }
-[data-theme=dark] nav { background: rgba(8,2,2,.88); }
-
-.nav-brand {
-  display: flex; align-items: center; gap: 10px;
+.nav-brand { display: flex; align-items: center; gap: 10px; }
+.nav-logo  { width: 26px; height: 26px; border-radius: 5px; object-fit: contain; }
+.nav-pulse {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--red); flex-shrink: 0;
+  animation: ring-pulse 2.4s ease-out infinite;
 }
-.nav-logo {
-  width: 30px; height: 30px; object-fit: contain; border-radius: 7px;
+@keyframes ring-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(122,0,0,0.55); }
+  70%  { box-shadow: 0 0 0 7px rgba(122,0,0,0); }
+  100% { box-shadow: 0 0 0 0 rgba(122,0,0,0); }
 }
-.nav-wordmark {
-  font-family: var(--f-head);
-  font-size: 1.25rem; font-weight: 800;
-  color: var(--red); letter-spacing: -.01em;
-  line-height: 1;
+.nav-name {
+  font-family: var(--fserif); font-size: 1.12rem;
+  color: var(--red); letter-spacing: 0.01em; line-height: 1;
 }
-.nav-dot {
-  width: 7px; height: 7px; border-radius: 50%; background: var(--red);
-  animation: pulse-ring 2.2s ease-out infinite; flex-shrink: 0;
-}
-@keyframes pulse-ring {
-  0%   { box-shadow: 0 0 0 0 rgba(128,0,0,.5); }
-  70%  { box-shadow: 0 0 0 8px rgba(128,0,0,0); }
-  100% { box-shadow: 0 0 0 0 rgba(128,0,0,0); }
-}
-
 .nav-status {
-  font-family: var(--f-code); font-size: 11px;
-  color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase;
+  font-family: var(--fmono); font-size: 10px; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--ink4);
   display: flex; align-items: center; gap: 7px;
 }
 .nav-status::before {
-  content: ''; width: 6px; height: 6px; border-radius: 50%;
-  background: #22c55e; animation: pulse-ring 1.7s ease-out infinite;
+  content: ''; width: 5px; height: 5px; border-radius: 50%;
+  background: #22c55e; animation: ring-pulse 2s ease-out infinite;
 }
-
-.nav-right { display: flex; align-items: center; gap: 10px; }
+.nav-right { display: flex; align-items: center; gap: 8px; }
 .nav-link {
-  font-family: var(--f-code); font-size: 12px; font-weight: 500;
-  color: var(--muted); border: 1px solid var(--line);
-  padding: 6px 14px; border-radius: 40px;
-  display: flex; align-items: center; gap: 6px;
+  font-family: var(--fmono); font-size: 10px; font-weight: 500;
+  color: var(--ink3); border: 1px solid var(--line);
+  padding: 6px 14px; border-radius: 2px;
+  display: flex; align-items: center; gap: 5px;
   transition: color .2s, border-color .2s;
 }
-.nav-link:hover { color: var(--red); border-color: var(--line-hi); }
+.nav-link:hover { color: var(--red); border-color: var(--lineh); }
 .nav-theme {
-  background: none; border: 1px solid var(--line-hi);
-  padding: 6px 14px; border-radius: 40px;
-  color: var(--body); font-family: var(--f-body);
-  font-size: 13px; font-weight: 600;
-  display: flex; align-items: center; gap: 6px;
-  transition: background .2s, color .2s, border-color .2s;
+  font-family: var(--fsans); font-size: 12px; font-weight: 500;
+  color: var(--ink2); background: none;
+  border: 1px solid var(--lineh); padding: 6px 14px; border-radius: 2px;
+  display: flex; align-items: center; gap: 6px; transition: all .2s;
 }
 .nav-theme:hover { background: var(--red); color: #fff; border-color: var(--red); }
 
-/* ════════════════════════════════════════
+/* ══════════════════════════════════
    HERO
-════════════════════════════════════════ */
-header {
-  padding: 164px 24px 100px;
-  text-align: center;
-  max-width: 900px; margin: 0 auto;
-  position: relative; z-index: 1;
-}
+══════════════════════════════════ */
+.hero { padding: 154px 24px 96px; text-align: center; position: relative; z-index: 1; }
+.hero-in { max-width: 800px; margin: 0 auto; }
 
-.hero-eyebrow {
+.eyebrow {
   display: inline-flex; align-items: center; gap: 8px;
-  background: var(--card); border: 1px solid var(--line-hi);
-  border-radius: 40px; padding: 8px 18px;
-  color: var(--red); font-family: var(--f-code);
-  font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
-  margin-bottom: 28px;
-  backdrop-filter: blur(10px);
-  box-shadow: var(--sh);
-  animation: fade-up .7s var(--ease) both;
+  background: var(--surf); border: 1px solid var(--line);
+  border-radius: 2px; padding: 7px 16px;
+  font-family: var(--fmono); font-size: 10px;
+  color: var(--red); letter-spacing: 2.5px; text-transform: uppercase;
+  margin-bottom: 32px; box-shadow: var(--sh);
+  animation: anim-up .75s var(--ease) both;
 }
 .eyebrow-dot {
-  width: 5px; height: 5px; border-radius: 50%; background: var(--red);
-  animation: pulse-ring 1.6s ease-out infinite;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--red); animation: ring-pulse 1.9s ease-out infinite;
 }
 
 h1 {
-  font-family: var(--f-head);
-  font-size: clamp(2.6rem, 7.5vw, 5.5rem);
-  font-weight: 800; line-height: 1.06;
-  letter-spacing: -.03em;
-  color: var(--text);
-  margin-bottom: 4px;
-  animation: fade-up .78s .08s var(--ease) both;
+  font-family: var(--fserif);
+  font-size: clamp(2.8rem, 7.5vw, 5.4rem);
+  font-weight: 400; line-height: 1.07;
+  letter-spacing: -0.02em; color: var(--ink);
+  margin-bottom: 6px;
+  animation: anim-up .78s .09s var(--ease) both;
 }
 h1 em { color: var(--red); font-style: italic; }
 
-.hero-divider {
-  width: 56px; height: 3px; border-radius: 2px;
-  background: linear-gradient(90deg, var(--red), var(--red-hi));
-  margin: 24px auto;
-  animation: fade-up .75s .14s var(--ease) both;
+.h-rule {
+  width: 36px; height: 1px; background: var(--red); opacity: .45;
+  margin: 28px auto;
+  animation: anim-up .72s .15s var(--ease) both;
 }
 
 .hero-sub {
-  font-size: 1.1rem; /* readable! */
-  color: var(--muted);
-  line-height: 1.75;
-  max-width: 520px; margin: 0 auto 44px;
-  font-weight: 400;
-  animation: fade-up .78s .2s var(--ease) both;
+  font-size: 1.05rem; font-weight: 400;
+  color: var(--ink3); line-height: 1.82;
+  max-width: 470px; margin: 0 auto 52px;
+  animation: anim-up .78s .22s var(--ease) both;
 }
 
 .stats-row {
-  display: flex; overflow: hidden;
-  border-radius: 16px; border: 1px solid var(--line);
-  background: var(--card); backdrop-filter: blur(12px);
-  max-width: 600px; margin: 0 auto;
-  box-shadow: var(--sh);
-  animation: fade-up .85s .28s var(--ease) both;
+  display: grid; grid-template-columns: repeat(4,1fr);
+  max-width: 580px; margin: 0 auto;
+  background: var(--surf); border: 1px solid var(--line);
+  border-radius: 3px; overflow: hidden; box-shadow: var(--sh);
+  animation: anim-up .86s .30s var(--ease) both;
 }
-.stat { flex: 1; padding: 22px 16px; text-align: center; border-right: 1px solid var(--line); transition: background .2s; }
+.stat {
+  padding: 22px 14px; text-align: center;
+  border-right: 1px solid var(--line);
+  position: relative; overflow: hidden;
+  transition: background .22s;
+}
 .stat:last-child { border-right: none; }
-.stat:hover { background: var(--tint1); }
-.stat-n {
-  font-family: var(--f-head);
-  font-size: 2.4rem; font-weight: 800;
-  color: var(--red); line-height: 1; display: block;
+.stat::after {
+  content: ''; position: absolute; inset: 0;
+  background: var(--red); transform: scaleY(0);
+  transform-origin: bottom; transition: transform .3s var(--ease); z-index: 0;
 }
-.stat-n2 {
-  font-family: var(--f-head);
-  font-size: 1.05rem; font-weight: 700;
-  color: var(--red); line-height: 1.3; display: block;
-}
-.stat-label {
-  font-family: var(--f-code);
-  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
-  color: var(--faint); margin-top: 5px; display: block;
-}
+.stat:hover::after { transform: scaleY(1); }
+.stat > * { position: relative; z-index: 1; transition: color .28s; }
+.stat:hover .sn, .stat:hover .sn2, .stat:hover .sl { color: #fff; }
+.sn  { font-family: var(--fserif); font-size: 2.1rem; color: var(--red); display: block; line-height: 1; }
+.sn2 { font-family: var(--fserif); font-size: .9rem;  color: var(--red); display: block; line-height: 1.3; }
+.sl  { font-family: var(--fmono); font-size: 9px; letter-spacing: 2px;
+       text-transform: uppercase; color: var(--ink4); margin-top: 5px; display: block; }
 
-@keyframes fade-up { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:none; } }
+@keyframes anim-up { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:none; } }
 
-/* ════════════════════════════════════════
+/* ══════════════════════════════════
    LAYOUT
-════════════════════════════════════════ */
-.wrap {
-  max-width: 1120px; margin: 0 auto;
-  padding: 0 24px 100px;
-  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
-  position: relative; z-index: 1;
-}
-.s2 { grid-column: 1 / -1; }
+══════════════════════════════════ */
+main { max-width: 1080px; margin: 0 auto; padding: 0 24px 100px; position: relative; z-index: 1; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.full { grid-column: 1 / -1; }
 
-/* Section header */
 .sec-head {
-  grid-column: 1 / -1;
-  padding: 40px 0 4px;
+  grid-column: 1 / -1; padding: 48px 0 12px;
   display: flex; align-items: center; gap: 14px;
 }
-.sec-head::before { content:''; width:16px; height:2px; background:var(--red); border-radius:1px; flex-shrink:0; }
-.sec-head::after  { content:''; flex:1; height:1px; background:linear-gradient(90deg,var(--line),transparent); }
-.sec-head span {
-  font-family: var(--f-code);
-  font-size: 11px; font-weight: 500;
-  letter-spacing: 2.5px; text-transform: uppercase;
-  color: var(--faint); white-space: nowrap;
-}
+.sec-num   { font-family: var(--fmono); font-size: 10px; color: var(--red); letter-spacing: 1px; opacity: .55; }
+.sec-label { font-family: var(--fmono); font-size: 10px; color: var(--ink4); letter-spacing: 2.5px; text-transform: uppercase; white-space: nowrap; }
+.sec-line  { flex: 1; height: 1px; background: linear-gradient(90deg, var(--line), transparent); }
 
-/* ════════════════════════════════════════
+/* ══════════════════════════════════
    CARDS
-════════════════════════════════════════ */
+══════════════════════════════════ */
 .card {
-  background: var(--card);
+  background: var(--surf);
   border: 1px solid var(--line);
-  border-radius: 20px; padding: 36px;
+  border-radius: 3px; padding: 36px;
   position: relative; overflow: hidden;
-  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
   box-shadow: var(--sh);
-  transition: transform .3s var(--pop), box-shadow .28s var(--ease), border-color .22s;
+  transition: transform .30s var(--ease), box-shadow .28s var(--ease), border-color .20s;
   will-change: transform;
 }
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--sh2);
-  border-color: var(--line-hi);
-}
-/* Top edge highlight */
-.card::before {
-  content: ''; position: absolute; top: 0; left: 16%; right: 16%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,.85), transparent);
-  pointer-events: none;
-}
-/* Corner accent */
-.card::after {
-  content: ''; position: absolute; top: -32px; right: -32px;
-  width: 100px; height: 100px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(128,0,0,.06), transparent 70%);
-  pointer-events: none;
-}
-.card > * { position: relative; z-index: 1; }
+.card:hover { transform: translateY(-4px); box-shadow: var(--sh2); border-color: var(--lineh); }
 .card-bar {
-  position: absolute; left: 0; top: 24px; bottom: 24px; width: 3px;
-  border-radius: 0 3px 3px 0;
-  background: linear-gradient(180deg, var(--red), var(--red-hi));
-  box-shadow: 1px 0 8px rgba(128,0,0,.18);
+  position: absolute; left: 0; top: 20px; bottom: 20px; width: 2px;
+  background: var(--red); border-radius: 0 2px 2px 0; opacity: .65;
 }
-
-/* Card label */
 .card-label {
-  font-family: var(--f-code);
-  font-size: 11px; font-weight: 500;
+  font-family: var(--fmono); font-size: 10px; font-weight: 500;
   color: var(--red); letter-spacing: 2.5px; text-transform: uppercase;
-  display: flex; align-items: center; gap: 9px;
-  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
 }
-.card-label::before { content:''; width:14px; height:1px; background:var(--red); }
-
-/* Card heading */
+.card-label::before { content: ''; width: 10px; height: 1px; background: var(--red); opacity: .55; }
 h2 {
-  font-family: var(--f-head);
-  font-size: 1.9rem; font-weight: 800;
-  color: var(--text); margin-bottom: 6px;
-  line-height: 1.15; letter-spacing: -.02em;
+  font-family: var(--fserif); font-size: 1.85rem; font-weight: 400;
+  color: var(--ink); margin-bottom: 10px; line-height: 1.15;
 }
 h2 em { color: var(--red); font-style: italic; }
+.card-desc { font-size: 15px; font-weight: 400; color: var(--ink3); line-height: 1.76; margin-bottom: 4px; }
 
-/* Card description */
-.card-desc {
-  font-size: 15px; /* comfortable reading size */
-  color: var(--muted);
-  line-height: 1.7;
-  margin-bottom: 4px;
-}
-
-/* ════════════════════════════════════════
+/* ══════════════════════════════════
    BADGE
-════════════════════════════════════════ */
+══════════════════════════════════ */
 .badge {
   display: inline-flex; align-items: center; gap: 6px;
   background: var(--red); color: #fff;
-  padding: 4px 12px; border-radius: 5px;
-  font-family: var(--f-code); font-size: 11px;
-  letter-spacing: 1.5px; text-transform: uppercase;
-  margin-bottom: 14px;
-  box-shadow: 0 2px 10px rgba(128,0,0,.22);
+  padding: 3px 10px; border-radius: 2px;
+  font-family: var(--fmono); font-size: 10px;
+  letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 14px;
 }
-.badge::before { content:''; width:4px; height:4px; border-radius:50%; background:rgba(255,255,255,.7); animation:pulse-ring 1.8s ease-out infinite; }
-.badge-navy { background:#1e3a5f; box-shadow:0 2px 10px rgba(30,58,95,.22); }
-.badge-navy::before { display:none; }
+.badge::before {
+  content: ''; width: 4px; height: 4px; border-radius: 50%;
+  background: rgba(255,255,255,0.7); animation: ring-pulse 1.9s ease-out infinite;
+}
+.badge-navy { background: #1a2f50; }
+.badge-navy::before { display: none; }
 
-/* ════════════════════════════════════════
+/* ══════════════════════════════════
    SPEC TABLE
-════════════════════════════════════════ */
-.spec-table { width: 100%; border-collapse: collapse; margin: 18px 0; }
-.spec-table tr { transition: background .15s; }
-.spec-table tr:hover td { background: var(--tint1); }
-.spec-table td {
-  padding: 12px 6px;
-  border-bottom: 1px solid var(--line);
-  font-size: 14px; /* clear size */
-}
-.td-label { color: var(--muted); font-weight: 500; }
-.td-value {
-  text-align: right; font-family: var(--f-code);
-  font-size: 13px; font-weight: 500; color: var(--text);
-}
+══════════════════════════════════ */
+.spec { width: 100%; border-collapse: collapse; margin: 18px 0; }
+.spec tr { transition: background .13s; }
+.spec tr:hover td { background: var(--t1); }
+.spec td { padding: 11px 6px; border-bottom: 1px solid var(--line); font-size: 14px; }
+.tdl { color: var(--ink3); font-weight: 500; }
+.tdv { text-align: right; font-family: var(--fmono); font-size: 12px; font-weight: 500; color: var(--ink); }
 
-/* ════════════════════════════════════════
+/* ══════════════════════════════════
    CHIPS
-════════════════════════════════════════ */
+══════════════════════════════════ */
 .chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 18px; }
 .chip {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 6px 14px; border-radius: 40px;
-  background: var(--tint2); border: 1px solid var(--line);
-  font-size: 13px; font-weight: 600; color: var(--body);
-  transition: background .16s, color .16s, border-color .16s, transform .16s;
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 13px; border-radius: 2px;
+  background: var(--t1); border: 1px solid var(--line);
+  font-size: 13px; font-weight: 500; color: var(--ink2);
+  transition: all .2s var(--ease);
 }
 .chip:hover { background: var(--red); color: #fff; border-color: var(--red); transform: translateY(-2px); }
 
-/* ════════════════════════════════════════
-   BUTTON
-════════════════════════════════════════ */
-.btn {
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  width: 100%; padding: 15px 24px;
-  background: var(--red); color: #fff;
-  font-family: var(--f-body); font-weight: 700; font-size: 15px;
-  border-radius: 12px; border: none; margin-top: 20px;
-  position: relative; overflow: hidden;
-  box-shadow: 0 4px 18px rgba(128,0,0,.22);
-  transition: background .2s, box-shadow .2s, transform .16s;
-  will-change: transform;
-  letter-spacing: .01em;
-}
-.btn::after {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.14) 50%, transparent 70%);
-  transform: translateX(-100%);
-  animation: btn-shine 4s linear infinite 2.5s;
-}
-@keyframes btn-shine {
-  0%,100% { transform: translateX(-100%); }
-  45%     { transform: translateX(210%); }
-  46%     { transform: translateX(-100%); }
-}
-.btn:hover { background: var(--red-lo); box-shadow: 0 8px 28px rgba(128,0,0,.28); transform: translateY(-2px); }
-.btn:active { transform: translateY(0); }
-.btn-dark { background: #160808; box-shadow: 0 4px 18px rgba(0,0,0,.18); }
-.btn-dark:hover { background: #220a0a; }
-.btn-navy { background: linear-gradient(135deg,#1a2a4a,#1e3a5f); box-shadow: 0 4px 18px rgba(30,58,95,.22); }
-.btn-navy:hover { background: linear-gradient(135deg,#0f1a2e,#1a2a4a); }
-
-/* ── FUN DOWNLOAD BUTTONS ── */
-.dl-wrap { margin-top: 20px; position: relative; }
-
-/* The main button — bigger, bolder */
+/* ══════════════════════════════════
+   DOWNLOAD BUTTONS
+══════════════════════════════════ */
+.dl-wrap { margin-top: 20px; }
 .dl-btn {
   display: flex; align-items: center; justify-content: space-between;
-  width: 100%; padding: 16px 22px;
-  border-radius: 14px; border: none;
-  font-family: var(--f-body); font-weight: 700; font-size: 15px;
+  width: 100%; padding: 15px 20px; border-radius: 3px; border: none;
+  font-family: var(--fsans); font-weight: 600; font-size: 14px;
   position: relative; overflow: hidden;
-  transition: transform .2s var(--pop), box-shadow .2s var(--ease), filter .2s;
-  will-change: transform; cursor: none;
-  text-decoration: none;
+  transition: transform .22s var(--ease), filter .18s, box-shadow .2s;
+  will-change: transform; cursor: none; text-decoration: none;
 }
-.dl-btn-pc {
-  background: linear-gradient(135deg, #800000 0%, #a33 60%, #700 100%);
-  color: #fff;
-  box-shadow: 0 6px 24px rgba(128,0,0,.30), 0 1px 0 rgba(255,255,255,.15) inset;
-}
-.dl-btn-apk {
-  background: linear-gradient(135deg, #1a2a4a 0%, #1e3a5f 60%, #0f1a30 100%);
-  color: #fff;
-  box-shadow: 0 6px 24px rgba(30,58,95,.30), 0 1px 0 rgba(255,255,255,.10) inset;
-}
-.dl-btn:hover { transform: translateY(-3px) scale(1.01); filter: brightness(1.08); }
-.dl-btn:active { transform: translateY(0) scale(.99); }
-
-/* Shine sweep */
+.dl-pc  { background: var(--red); color: #fff; box-shadow: 0 4px 18px rgba(122,0,0,0.26); }
+.dl-apk { background: #1a2f50; color: #fff; box-shadow: 0 4px 18px rgba(26,47,80,0.24); }
+.dl-btn:hover { transform: translateY(-2px); filter: brightness(1.08); }
+.dl-btn:active { transform: translateY(0); }
 .dl-btn::before {
-  content: '';
-  position: absolute; top: 0; left: -80%;
-  width: 60%; height: 100%;
-  background: linear-gradient(120deg, transparent, rgba(255,255,255,.18), transparent);
-  animation: dl-shine 3.5s ease-in-out infinite 1s;
+  content: ''; position: absolute; top: 0; left: -70%; width: 48%; height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.13), transparent);
+  animation: dl-shine 4s ease-in-out infinite 1s;
 }
-@keyframes dl-shine { 0%,100%{left:-80%;} 42%{left:130%;} 43%{left:-80%;} }
-
-/* Left side: icon + text */
-.dl-left { display: flex; align-items: center; gap: 13px; position: relative; z-index: 1; }
+@keyframes dl-shine { 0%,100%{left:-70%} 40%{left:120%} 41%{left:-70%} }
+.dl-left { display: flex; align-items: center; gap: 12px; position: relative; z-index: 1; }
 .dl-icon {
-  width: 42px; height: 42px; border-radius: 10px;
-  background: rgba(255,255,255,.14);
+  width: 38px; height: 38px; border-radius: 3px;
+  background: rgba(255,255,255,0.13);
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.4rem; flex-shrink: 0;
-  transition: transform .25s var(--pop);
+  font-size: 1.25rem; flex-shrink: 0;
+  transition: transform .22s var(--spring);
 }
-.dl-btn:hover .dl-icon { transform: scale(1.15) rotate(-6deg); }
-.dl-title { font-size: 15px; font-weight: 700; line-height: 1.2; }
-.dl-sub { font-size: 11px; font-weight: 400; opacity: .72; margin-top: 2px; letter-spacing: .3px; }
-
-/* Right side: arrow bouncing */
+.dl-btn:hover .dl-icon { transform: scale(1.14) rotate(-5deg); }
+.dl-title { font-size: 14px; font-weight: 600; line-height: 1.2; }
+.dl-sub   { font-size: 11px; font-weight: 400; opacity: .67; margin-top: 2px; }
 .dl-arrow {
-  font-size: 1.2rem; position: relative; z-index: 1;
-  animation: dl-bounce 1.8s ease-in-out infinite;
-  transition: transform .2s;
+  font-size: 1rem; position: relative; z-index: 1;
+  animation: dl-bounce 2s ease-in-out infinite;
 }
-.dl-btn:hover .dl-arrow { animation: none; transform: translateY(3px) scale(1.2); }
-@keyframes dl-bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(4px);} }
-
-/* Ripple on click */
-.dl-btn .ripple {
+.dl-btn:hover .dl-arrow { animation: none; transform: translateY(4px); }
+@keyframes dl-bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(4px)} }
+.dl-meta { display: flex; align-items: center; justify-content: space-between; margin-top: 9px; padding: 0 2px; }
+.dl-ver {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--fmono); font-size: 10px; color: var(--ink4);
+}
+.dl-ver::before {
+  content: ''; width: 4px; height: 4px; border-radius: 50%;
+  background: #22c55e; box-shadow: 0 0 5px #22c55e;
+  animation: ring-pulse 2s ease-out infinite;
+}
+.dl-size { font-family: var(--fmono); font-size: 10px; color: var(--ink4); }
+.ripple {
   position: absolute; border-radius: 50%;
-  background: rgba(255,255,255,.28);
-  transform: scale(0); animation: ripple-go .55s ease-out forwards;
+  background: rgba(255,255,255,0.24);
+  transform: scale(0); animation: rip .55s ease-out forwards;
   pointer-events: none;
 }
-@keyframes ripple-go { to { transform: scale(4); opacity: 0; } }
-
-/* Fun version pill below button */
-.dl-meta {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-top: 10px; padding: 0 4px;
-}
-.dl-version {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-family: var(--f-code); font-size: 11px; color: var(--faint);
-  letter-spacing: .8px;
-}
-.dl-version::before {
-  content: ''; width: 5px; height: 5px; border-radius: 50%;
-  background: #22c55e; box-shadow: 0 0 5px #22c55e;
-  animation: pulse-ring 2s ease-out infinite;
-}
-.dl-size {
-  font-family: var(--f-code); font-size: 11px; color: var(--faint);
-}
-
+@keyframes rip { to { transform: scale(4); opacity: 0; } }
 .api-status {
   display: inline-flex; align-items: center; gap: 6px;
-  margin-top: 13px; font-family: var(--f-code);
-  font-size: 11px; color: var(--faint);
-  letter-spacing: 1px; text-transform: uppercase;
-  background: var(--tint1); border: 1px solid var(--line);
-  padding: 5px 12px; border-radius: 40px;
+  margin-top: 12px; font-family: var(--fmono); font-size: 10px;
+  color: var(--ink4); letter-spacing: 1px; text-transform: uppercase;
+  background: var(--t1); border: 1px solid var(--line); padding: 5px 12px; border-radius: 2px;
 }
 .api-status::before {
-  content: ''; width: 5px; height: 5px; border-radius: 50%;
-  background: #22c55e; animation: pulse-ring 2s ease-out infinite;
+  content: ''; width: 4px; height: 4px; border-radius: 50%;
+  background: #22c55e; animation: ring-pulse 2s ease-out infinite;
 }
 
-/* ════════════════════════════════════════
-   PERMISSIONS TABLE
-════════════════════════════════════════ */
-.perm-table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 20px; }
-.perm-table th {
-  text-align: left; color: var(--red);
-  font-family: var(--f-code); font-size: 11px;
-  letter-spacing: 2px; text-transform: uppercase;
-  padding: 11px 12px; border-bottom: 2px solid var(--red);
-  font-weight: 600;
+/* ══════════════════════════════════
+   ROLE TILES
+══════════════════════════════════ */
+.role-grid {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 10px; margin: 24px 0 30px;
 }
-.perm-table td { padding: 13px 12px; border-bottom: 1px solid var(--line); transition: background .15s; font-size: 14px; }
-.perm-table tr:hover td { background: var(--tint1); }
-.ck { color: #16a34a; font-weight: 700; text-align: center; font-size: 16px; }
-.cx { color: #dc2626; font-weight: 700; text-align: center; font-size: 16px; }
-.sh { color: var(--red); font-weight: 700; text-align: center; font-family: var(--f-code); font-size: 12px; letter-spacing: 1px; }
+.role-tile {
+  background: var(--t1); border: 1px solid var(--line);
+  border-radius: 3px; padding: 20px 16px; text-align: center;
+  position: relative; overflow: hidden;
+  transition: border-color .22s, transform .22s var(--ease);
+}
+.role-tile::before {
+  content: ''; position: absolute; inset: 0; background: var(--red);
+  transform: scaleY(0); transform-origin: bottom; transition: transform .26s var(--ease);
+}
+.role-tile:hover { transform: translateY(-3px); border-color: var(--lineh); }
+.role-tile:hover::before { transform: scaleY(1); }
+.role-tile:hover .rt-n, .role-tile:hover .rt-name, .role-tile:hover .rt-desc { color: #fff; }
+.rt-n    { font-family: var(--fmono); font-size: 9px; color: var(--ink4); margin-bottom: 8px; letter-spacing: 1px; position: relative; z-index: 1; transition: color .26s; }
+.rt-name { font-family: var(--fserif); font-size: 1.05rem; color: var(--ink); margin-bottom: 6px; position: relative; z-index: 1; transition: color .26s; }
+.rt-desc { font-size: 12px; color: var(--ink3); line-height: 1.55; position: relative; z-index: 1; transition: color .26s; }
 
-/* ════════════════════════════════════════
+/* ══════════════════════════════════
+   RBAC TABLE
+══════════════════════════════════ */
+.rbac { width: 100%; border-collapse: collapse; font-size: 14px; }
+.rbac th {
+  text-align: left; color: var(--red); font-family: var(--fmono);
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  padding: 10px 12px; border-bottom: 1px solid var(--lineh); font-weight: 600;
+}
+.rbac td { padding: 12px 12px; border-bottom: 1px solid var(--line); font-size: 13.5px; transition: background .13s; }
+.rbac tr:hover td { background: var(--t1); }
+.ck { color: #166534; font-weight: 700; text-align: center; }
+.cx { color: #b91c1c; font-weight: 700; text-align: center; }
+.sh-cell { color: var(--red); font-weight: 600; text-align: center; font-family: var(--fmono); font-size: 11px; }
+
+/* ══════════════════════════════════
+   SECURITY
+══════════════════════════════════ */
+.sec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }
+.sec-item {
+  background: var(--t1); border: 1px solid var(--line); border-radius: 3px; padding: 20px;
+  transition: background .18s, border-color .18s, transform .2s var(--ease);
+}
+.sec-item:hover { background: var(--t2); border-color: var(--lineh); transform: translateY(-2px); }
+.sec-ico   { font-size: 1.25rem; margin-bottom: 10px; }
+.sec-title { font-family: var(--fserif); font-size: 1rem; color: var(--ink); margin-bottom: 5px; }
+.sec-desc  { font-size: 13px; color: var(--ink3); line-height: 1.68; }
+
+.bar-row { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+.bar-lbl { font-family: var(--fmono); font-size: 10px; color: var(--ink3); min-width: 90px; text-transform: uppercase; letter-spacing: .4px; }
+.bar-track { flex: 1; height: 2px; background: var(--t2); border-radius: 2px; overflow: hidden; }
+.bar-fill { height: 100%; background: var(--red); transform: scaleX(0); transform-origin: left; transition: transform 1.1s var(--ease); }
+.bar-pct { font-family: var(--fmono); font-size: 10px; color: var(--red); min-width: 28px; text-align: right; }
+
+/* ══════════════════════════════════
    VIDEO
-════════════════════════════════════════ */
+══════════════════════════════════ */
 .vid {
-  border-radius: 14px; overflow: hidden;
+  border-radius: 3px; overflow: hidden;
   position: relative; padding-bottom: 56.25%; height: 0;
-  background: #030000; border: 1px solid var(--line);
-  margin-top: 16px; box-shadow: 0 8px 32px rgba(0,0,0,.14);
+  background: #060000; border: 1px solid var(--line); margin-top: 16px;
 }
 .vid iframe { position: absolute; inset: 0; width: 100%; height: 100%; }
 
-/* ════════════════════════════════════════
-   SECURITY GRID
-════════════════════════════════════════ */
-.sec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }
-.sec-item {
-  background: var(--tint1); border: 1px solid var(--line);
-  border-radius: 14px; padding: 20px;
-  transition: background .18s, border-color .18s, transform .2s;
-}
-.sec-item:hover { background: var(--tint2); border-color: var(--line-hi); transform: translateY(-3px); }
-.sec-ico { font-size: 1.5rem; margin-bottom: 10px; }
-.sec-title { font-weight: 700; font-size: 15px; color: var(--text); margin-bottom: 5px; }
-.sec-desc { font-size: 13px; color: var(--muted); line-height: 1.65; }
-
-/* Progress bars */
-.bar-row { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
-.bar-lbl { font-family: var(--f-code); font-size: 11px; color: var(--muted); min-width: 96px; text-transform: uppercase; letter-spacing: .5px; }
-.bar-track { flex: 1; height: 4px; background: var(--tint2); border-radius: 4px; overflow: hidden; }
-.bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg,var(--red),var(--red-hi)); transform: scaleX(0); transform-origin: left; transition: transform 1s var(--ease); }
-.bar-pct { font-family: var(--f-code); font-size: 11px; color: var(--red); min-width: 30px; text-align: right; }
-
-/* ════════════════════════════════════════
+/* ══════════════════════════════════
    FAQ
-════════════════════════════════════════ */
+══════════════════════════════════ */
 .faq-item { border-bottom: 1px solid var(--line); }
 .faq-q {
   display: flex; justify-content: space-between; align-items: center;
-  padding: 18px 0; font-size: 15px; font-weight: 600; color: var(--text);
-  gap: 16px; transition: color .18s; user-select: none;
+  padding: 17px 0; font-size: 15px; font-weight: 500; color: var(--ink);
+  gap: 16px; user-select: none; transition: color .18s;
 }
 .faq-q:hover { color: var(--red); }
 .faq-icon {
-  width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
-  border: 1.5px solid var(--line-hi);
+  width: 22px; height: 22px; flex-shrink: 0;
+  border: 1px solid var(--lineh); border-radius: 2px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 10px; color: var(--red);
-  transition: background .22s, color .22s, transform .3s;
+  font-size: 9px; color: var(--red);
+  transition: all .28s var(--ease);
 }
 .faq-item.open .faq-icon { background: var(--red); color: #fff; border-color: var(--red); transform: rotate(180deg); }
-.faq-ans {
-  max-height: 0; overflow: hidden;
-  transition: max-height .35s ease-out;
-  font-size: 15px; /* readable! */ color: var(--muted); line-height: 1.72;
-}
-.faq-item.open .faq-ans { max-height: 280px; padding-bottom: 18px; }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height .36s var(--ease); font-size: 14.5px; color: var(--ink3); line-height: 1.8; }
+.faq-item.open .faq-a { max-height: 300px; padding-bottom: 18px; }
 
-/* ════════════════════════════════════════
-   DOCS
-════════════════════════════════════════ */
-.tabs { display: flex; gap: 3px; overflow-x: auto; scrollbar-width: none; }
+/* ══════════════════════════════════
+   TABS + DOCS
+══════════════════════════════════ */
+.tabs { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; }
 .tabs::-webkit-scrollbar { display: none; }
 .tab {
-  background: transparent; border: 1px solid var(--line);
-  padding: 9px 18px; border-radius: 9px 9px 0 0;
-  font-family: var(--f-code); font-size: 12px; font-weight: 500;
-  color: var(--faint); text-transform: uppercase; letter-spacing: 1px;
-  white-space: nowrap;
-  transition: background .16s, color .16s;
+  background: none; border: 1px solid var(--line); padding: 8px 16px;
+  border-radius: 2px 2px 0 0; font-family: var(--fmono); font-size: 10px;
+  font-weight: 500; color: var(--ink4); text-transform: uppercase;
+  letter-spacing: 1.2px; white-space: nowrap; transition: all .16s;
 }
-.tab.on { background: var(--card); color: var(--red); border-top: 2px solid var(--red); border-bottom-color: transparent; }
-.tab:not(.on):hover { background: var(--tint1); color: var(--body); }
+.tab.on { background: var(--surf); color: var(--red); border-top: 1.5px solid var(--red); border-bottom-color: transparent; }
+.tab:not(.on):hover { background: var(--t1); color: var(--ink2); }
 .doc-view {
-  background: var(--card); backdrop-filter: blur(12px);
-  border: 1px solid var(--line); border-top: none;
-  border-radius: 0 12px 18px 18px;
-  padding: 32px; max-height: 500px; overflow-y: auto;
-  font-size: 15px; line-height: 1.8;
-  scrollbar-width: thin; scrollbar-color: var(--line-hi) transparent;
+  background: var(--surf); border: 1px solid var(--line); border-top: none;
+  border-radius: 0 3px 3px 3px; padding: 28px;
+  max-height: 480px; overflow-y: auto;
+  font-size: 14.5px; line-height: 1.8;
 }
 .doc-view::-webkit-scrollbar { width: 3px; }
-.doc-view::-webkit-scrollbar-thumb { background: var(--line-hi); border-radius: 3px; }
-.doc-view h1,.doc-view h2,.doc-view h3 { font-family: var(--f-head); color: var(--red); margin: 20px 0 8px; }
-.doc-view p { margin-bottom: 10px; color: var(--muted); font-size: 15px; }
-.doc-view code { background: var(--tint2); padding: 2px 6px; border-radius: 4px; font-family: var(--f-code); font-size: 13px; }
-.doc-view pre { background: var(--tint1); padding: 14px; border-radius: 9px; overflow-x: auto; margin: 10px 0; }
+.doc-view::-webkit-scrollbar-thumb { background: var(--lineh); border-radius: 3px; }
+.doc-view h1,.doc-view h2,.doc-view h3 { font-family: var(--fserif); color: var(--red); margin: 20px 0 8px; font-weight: 400; }
+.doc-view p { margin-bottom: 10px; color: var(--ink3); font-size: 14px; }
+.doc-view code { background: var(--t2); padding: 2px 6px; border-radius: 2px; font-family: var(--fmono); font-size: 12px; }
+.doc-view pre { background: var(--t1); padding: 14px; border-radius: 3px; overflow-x: auto; margin: 10px 0; }
 .doc-view a { color: var(--red); }
 
-/* ════════════════════════════════════════
+/* ══════════════════════════════════
    CHANGELOG
-════════════════════════════════════════ */
-.log-row { display: flex; align-items: flex-start; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); border-radius: 6px; transition: padding .16s, background .16s; }
-.log-row:hover { padding-left: 8px; background: var(--tint1); }
-.log-tag { min-width: 80px; padding: 3px 10px; border-radius: 5px; font-family: var(--f-code); font-size: 11px; text-transform: uppercase; text-align: center; letter-spacing: .8px; flex-shrink: 0; }
-.tg-add { background: var(--c-add-bg); color: var(--c-add); }
-.tg-imp { background: var(--c-imp-bg); color: var(--c-imp); }
-.tg-fix { background: var(--c-fix-bg); color: var(--c-fix); }
-.tg-def { background: var(--tint2); color: var(--muted); }
-.log-text { font-size: 14px; color: var(--body); line-height: 1.6; }
+══════════════════════════════════ */
+.log-row {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 0; border-bottom: 1px solid var(--line);
+  transition: padding .15s, background .15s; border-radius: 2px;
+}
+.log-row:hover { padding-left: 8px; background: var(--t1); }
+.log-tag {
+  min-width: 70px; padding: 3px 9px; border-radius: 2px;
+  font-family: var(--fmono); font-size: 10px;
+  text-transform: uppercase; text-align: center; letter-spacing: .8px; flex-shrink: 0;
+}
+.tg-add { background: var(--caddbg); color: var(--cadd); }
+.tg-imp { background: var(--cimpbg); color: var(--cimp); }
+.tg-fix { background: var(--cfixbg); color: var(--cfix); }
+.tg-def { background: var(--t2); color: var(--ink3); }
+.log-text { font-size: 14px; color: var(--ink2); line-height: 1.6; }
 
-/* ════════════════════════════════════════
+/* ══════════════════════════════════
    UPTIME
-════════════════════════════════════════ */
+══════════════════════════════════ */
 .uptime-box {
-  position: relative; border-radius: 16px; overflow: hidden;
-  background: var(--tint1); border: 1px solid var(--line-hi); margin-top: 20px;
+  border-radius: 3px; overflow: hidden; background: var(--t1);
+  border: 1px solid var(--line); margin-top: 20px; position: relative;
 }
 .uptime-val {
-  font-family: var(--f-code); font-size: clamp(1.6rem, 5vw, 3rem);
-  font-weight: 500; letter-spacing: .06em; color: var(--red);
-  text-align: center; padding: 48px 20px;
-  position: relative; z-index: 1;
-}
-.uptime-box::before {
-  content: ''; position: absolute; inset: 0; pointer-events: none;
-  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(128,0,0,.014) 3px, rgba(128,0,0,.014) 4px);
+  font-family: var(--fmono);
+  font-size: clamp(1.6rem,5vw,2.6rem); font-weight: 400;
+  letter-spacing: .08em; color: var(--red);
+  text-align: center; padding: 44px 20px; position: relative; z-index: 1;
 }
 .uptime-box::after {
-  content: '● LIVE'; position: absolute; top: 14px; right: 16px;
-  font-family: var(--f-code); font-size: 10px; letter-spacing: 3px;
-  color: #22c55e; text-shadow: 0 0 8px #22c55e; z-index: 2;
+  content: '● LIVE'; position: absolute; top: 13px; right: 14px;
+  font-family: var(--fmono); font-size: 9px; letter-spacing: 3px;
+  color: #22c55e; text-shadow: 0 0 6px #22c55e; z-index: 2;
 }
-.uptime-label {
-  text-align: center; margin-top: 14px;
-  font-family: var(--f-code); font-size: 11px;
-  letter-spacing: 3px; text-transform: uppercase; color: var(--faint);
+.uptime-lbl {
+  text-align: center; margin-top: 12px;
+  font-family: var(--fmono); font-size: 10px;
+  letter-spacing: 2.5px; text-transform: uppercase; color: var(--ink4);
 }
 
-/* ════════════════════════════════════════
-   QR BADGE (decorative, CSS only)
-════════════════════════════════════════ */
-.qr-badge {
-  position: absolute; top: 20px; right: 20px;
-  width: 44px; height: 44px;
-  border: 1.5px solid var(--line-hi); border-radius: 9px;
-  display: grid; grid-template-columns: repeat(5,1fr); gap: 2px;
-  padding: 5px; background: var(--card); backdrop-filter: blur(6px);
-  opacity: .6; transition: opacity .2s, transform .2s;
+/* ══════════════════════════════════
+   BUTTONS
+══════════════════════════════════ */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 13px 24px; font-family: var(--fsans); font-weight: 600; font-size: 14px;
+  border-radius: 2px; border: none; position: relative; overflow: hidden;
+  transition: transform .2s, filter .2s, box-shadow .2s; will-change: transform;
 }
-.card:hover .qr-badge { opacity: 1; transform: rotate(-4deg) scale(1.08); }
-.qc { border-radius: 1px; }
-.qb { background: var(--red); }
-.qw { background: transparent; }
+.btn:hover { transform: translateY(-2px); filter: brightness(1.07); }
+.btn:active { transform: translateY(0); }
+.btn-dark { background: #100505; color: #fff; box-shadow: 0 4px 16px rgba(0,0,0,0.22); }
+.btn-red  { background: var(--red); color: #fff; box-shadow: 0 4px 16px rgba(122,0,0,0.24); }
 
-/* ════════════════════════════════════════
+/* ══════════════════════════════════
    CTA
-════════════════════════════════════════ */
-.cta-card {
-  text-align: center;
-  border: 2px solid var(--line-hi);
-  background: linear-gradient(135deg, rgba(128,0,0,.05), rgba(128,0,0,.015));
-}
+══════════════════════════════════ */
+.cta-card { text-align: center; }
 .cta-wm {
-  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  font-family: var(--f-head); font-size: clamp(4rem,13vw,9rem);
-  font-weight: 800; color: rgba(128,0,0,.028); letter-spacing: -.04em;
-  pointer-events: none; user-select: none; font-style: italic;
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--fserif); font-size: clamp(4rem,12vw,9rem);
+  font-style: italic; color: rgba(122,0,0,0.022); pointer-events: none; user-select: none;
 }
 .cta-inner { position: relative; }
-.cta-title { font-family: var(--f-head); font-size: 2.4rem; font-weight: 800; color: var(--text); margin-bottom: 10px; line-height: 1.1; }
-.cta-title em { color: var(--red); }
-.cta-sub { color: var(--muted); font-size: 16px; margin: 0 auto 32px; max-width: 460px; line-height: 1.7; }
+.cta-title { font-family: var(--fserif); font-size: clamp(1.8rem,4vw,2.5rem); font-weight: 400; color: var(--ink); margin-bottom: 10px; line-height: 1.1; }
+.cta-title em { color: var(--red); font-style: italic; }
+.cta-sub { color: var(--ink3); font-size: 15px; margin: 0 auto 32px; max-width: 430px; line-height: 1.78; }
 .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-.cta-btns .btn { max-width: 220px; margin: 0; }
-.cta-links { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--line); display: flex; justify-content: center; gap: 44px; flex-wrap: wrap; }
-.link-group .link-label { font-family: var(--f-code); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--faint); margin-bottom: 8px; }
-.link-group a { display: inline-block; font-size: 14px; font-weight: 700; color: var(--red); margin: 0 7px; opacity: .85; transition: opacity .16s; }
-.link-group a:hover { opacity: .5; }
+.cta-links {
+  margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--line);
+  display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;
+}
+.link-group .link-label { font-family: var(--fmono); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--ink4); margin-bottom: 8px; }
+.link-group a { display: inline-block; font-size: 13px; font-weight: 500; color: var(--red); margin: 0 7px; opacity: .82; transition: opacity .16s; }
+.link-group a:hover { opacity: .45; }
 
-/* ════════════════════════════════════════
+/* QR DECO */
+.qr-deco {
+  position: absolute; top: 18px; right: 18px; width: 36px; height: 36px;
+  border: 1px solid var(--lineh); border-radius: 2px;
+  display: grid; grid-template-columns: repeat(5,1fr); gap: 2px;
+  padding: 4px; background: var(--surf);
+  opacity: .4; transition: opacity .2s, transform .22s var(--spring);
+}
+.card:hover .qr-deco { opacity: .85; transform: rotate(-5deg) scale(1.1); }
+.qc { border-radius: 1px; } .qb { background: var(--red); } .qw { background: transparent; }
+
+/* ══════════════════════════════════
    SCROLL REVEAL
-════════════════════════════════════════ */
-.rv  { opacity:0; transform:translateY(24px); transition:opacity .55s var(--ease),transform .55s var(--ease); }
-.rvl { opacity:0; transform:translateX(-18px); transition:opacity .55s var(--ease),transform .55s var(--ease); }
-.rvr { opacity:0; transform:translateX(18px);  transition:opacity .55s var(--ease),transform .55s var(--ease); }
+══════════════════════════════════ */
+.rv  { opacity:0; transform:translateY(18px); transition:opacity .55s var(--ease),transform .55s var(--ease); }
+.rvl { opacity:0; transform:translateX(-14px); transition:opacity .55s var(--ease),transform .55s var(--ease); }
+.rvr { opacity:0; transform:translateX(14px);  transition:opacity .55s var(--ease),transform .55s var(--ease); }
 .rv.in,.rvl.in,.rvr.in { opacity:1; transform:none; }
 
-/* ════════════════════════════════════════
+/* ══════════════════════════════════
    FOOTER
-════════════════════════════════════════ */
-footer { position:relative; z-index:1; border-top:1px solid var(--line); padding:52px 24px 36px; text-align:center; }
-.foot-brand { font-family:var(--f-head); font-size:2.6rem; font-weight:800; color:var(--red); opacity:.08; display:block; margin-bottom:12px; }
-.foot-copy { font-family:var(--f-code); font-size:12px; letter-spacing:2.5px; text-transform:uppercase; color:var(--faint); }
+══════════════════════════════════ */
+footer { position:relative; z-index:1; border-top:1px solid var(--line); padding:48px 24px 32px; text-align:center; }
+.foot-brand { font-family:var(--fserif); font-size:2.2rem; font-style:italic; color:var(--red); opacity:.055; display:block; margin-bottom:10px; }
+.foot-copy  { font-family:var(--fmono); font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--ink4); }
 
-/* ════════════════════════════════════════
+/* ══════════════════════════════════
    RESPONSIVE
-════════════════════════════════════════ */
-@media (max-width: 840px) {
-  .wrap { grid-template-columns: 1fr; }
-  nav { padding: 0 16px; }
-  .nav-status { display: none; }
-  header { padding: 144px 16px 80px; }
-  .stats-row { flex-wrap: wrap; }
-  .stat { min-width: 120px; }
-  .sec-grid { grid-template-columns: 1fr; }
-  .cta-title { font-size: 2rem; }
-  .log-row { flex-direction: column; gap: 6px; }
-  h2 { font-size: 1.7rem; }
-  .qr-badge { display: none; }
+══════════════════════════════════ */
+@media (max-width:820px) {
+  .grid { grid-template-columns:1fr; }
+  nav { padding:0 16px; }
+  .nav-status { display:none; }
+  .hero { padding:138px 16px 72px; }
+  .stats-row { grid-template-columns:repeat(2,1fr); }
+  .stat:nth-child(2) { border-right:none; }
+  .stat:nth-child(3),.stat:nth-child(4) { border-top:1px solid var(--line); }
+  .sec-grid { grid-template-columns:1fr; }
+  .role-grid { grid-template-columns:repeat(2,1fr); }
+  h2 { font-size:1.65rem; }
+  .qr-deco { display:none; }
+  .cta-btns { flex-direction:column; align-items:stretch; }
+}
+@media (max-width:460px) {
+  h1 { letter-spacing:-0.015em; }
+  .stats-row { grid-template-columns:1fr 1fr; }
 }
 </style>
 </head>
 <body>
 
-<div id="cd"></div><div id="cr"></div>
+<!-- Cursor: 4-corner bracket -->
+<div id="cur-frame"><span class="c-bl"></span><span class="c-br"></span></div>
+<div id="cur-dot"></div>
 
-<!-- Background: CSS aurora + grain + lean canvas -->
-<div id="bg" aria-hidden="true">
-  <div class="blob b1"></div>
-  <div class="blob b2"></div>
-  <div class="blob b3"></div>
-  <div id="grain"></div>
-  <canvas id="cvs"></canvas>
+<!-- Ticker -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track" id="tkt"></div>
 </div>
 
-<!-- Maroon ticker -->
-<div class="tkw" aria-hidden="true"><div class="tkt" id="tkt"></div></div>
-
-<!-- ═══ NAV ═══ -->
+<!-- Nav -->
 <nav>
   <div class="nav-brand">
-    <img src="123.png" alt="Project QrSys" class="nav-logo" onerror="this.style.display='none'">
-    <span class="nav-dot"></span>
-    <span class="nav-wordmark">Project QrSys</span>
+    <img src="123.png" alt="QrSys" class="nav-logo" onerror="this.style.display='none'">
+    <div class="nav-pulse"></div>
+    <span class="nav-name">Project QrSys</span>
   </div>
-  <div class="nav-status">System Online &middot; Encrypted Cloud Active</div>
+  <div class="nav-status">System Online · Encrypted</div>
   <div class="nav-right">
     <a href="https://github.com/AstroNutws/Attendance-QRSYS" target="_blank" class="nav-link">GitHub ↗</a>
-    <button class="nav-theme" id="ts">🌙 Dark Mode</button>
+    <button class="nav-theme" id="themeBtn">🌙 Dark</button>
   </div>
 </nav>
 
-<!-- ═══ HERO ═══ -->
-<header>
-  <div class="hero-eyebrow">
-    <span class="eyebrow-dot"></span>
-    Secured PostgreSQL &middot; Cloud-Integrated &middot; Built for Any Organization
-  </div>
-  <h1>
-    Attendance Infrastructure<br>
-    <em>Built for Every Organization.</em>
-  </h1>
-  <div class="hero-divider"></div>
-  <p class="hero-sub">
-    A SaaS-ready QR attendance platform with real-time cloud sync, role-based access control, and zero-compromise data security — built for schools, companies, corporate teams, and any organization that needs to track attendance.
-  </p>
-  <div class="stats-row">
-    <div class="stat">
-      <span class="stat-n" data-t="2">0</span>
-      <span class="stat-label">Platforms</span>
-    </div>
-    <div class="stat">
-      <span class="stat-n" data-t="4">0</span>
-      <span class="stat-label">Access Tiers</span>
-    </div>
-    <div class="stat">
-      <span class="stat-n" data-t="100" data-s="%">0</span>
-      <span class="stat-label">Cloud Sync</span>
-    </div>
-    <div class="stat">
-      <span class="stat-n2">Secure &amp;<br>Encrypted</span>
-      <span class="stat-label">Data Protection</span>
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-in">
+    <div class="eyebrow"><span class="eyebrow-dot"></span>PostgreSQL · Cloud-Integrated · Any Organization</div>
+    <h1>Attendance Infrastructure<br><em>Built for Everyone.</em></h1>
+    <div class="h-rule"></div>
+    <p class="hero-sub">A SaaS-ready QR attendance platform with real-time cloud sync, role-based access control, and zero-compromise data security.</p>
+    <div class="stats-row">
+      <div class="stat"><span class="sn" data-t="2">0</span><span class="sl">Platforms</span></div>
+      <div class="stat"><span class="sn" data-t="4">0</span><span class="sl">Access Tiers</span></div>
+      <div class="stat"><span class="sn" data-t="100" data-s="%">0</span><span class="sl">Cloud Sync</span></div>
+      <div class="stat"><span class="sn2">Secure &amp;<br>Encrypted</span><span class="sl">Protection</span></div>
     </div>
   </div>
-</header>
+</div>
 
-<!-- ═══ CONTENT ═══ -->
-<div class="wrap">
+<!-- Main content -->
+<main>
+<div class="grid">
 
-  <!-- ── Download ── -->
-  <div class="sec-head rv"><span>Download Clients</span></div>
+  <!-- 01 Download -->
+  <div class="sec-head rv"><span class="sec-num">01</span><span class="sec-label">Download Clients</span><span class="sec-line"></span></div>
 
   <div class="card rvl">
     <div class="card-bar"></div>
-    <div class="qr-badge" aria-hidden="true">
+    <div class="qr-deco" aria-hidden="true">
       <div class="qc qb"></div><div class="qc qb"></div><div class="qc qw"></div><div class="qc qb"></div><div class="qc qb"></div>
       <div class="qc qb"></div><div class="qc qw"></div><div class="qc qw"></div><div class="qc qw"></div><div class="qc qb"></div>
       <div class="qc qw"></div><div class="qc qw"></div><div class="qc qb"></div><div class="qc qw"></div><div class="qc qw"></div>
       <div class="qc qb"></div><div class="qc qw"></div><div class="qc qw"></div><div class="qc qw"></div><div class="qc qb"></div>
       <div class="qc qb"></div><div class="qc qb"></div><div class="qc qw"></div><div class="qc qb"></div><div class="qc qb"></div>
     </div>
-    <div id="db"><span class="badge">● Syncing&hellip;</span></div>
+    <div id="db"><span class="badge">● Syncing…</span></div>
     <div class="card-label">Windows Client</div>
     <h2>Desktop <em>Edition</em></h2>
-    <p class="card-desc">Full-featured attendance management with live webcam QR scanning, admin dashboard, and automatic cloud sync — for any organization size.</p>
-    <table class="spec-table">
-      <tr><td class="td-label">Platform</td>    <td class="td-value">Windows 7 – 11</td></tr>
-      <tr><td class="td-label">Input</td>        <td class="td-value">Webcam Interface</td></tr>
-      <tr><td class="td-label">Architecture</td> <td class="td-value">VB.NET / Npgsql</td></tr>
-      <tr><td class="td-label">Security</td>     <td class="td-value">Visual Masking</td></tr>
+    <p class="card-desc">Full-featured attendance management with live webcam QR scanning, admin dashboard, and automatic cloud sync for any organization size.</p>
+    <table class="spec">
+      <tr><td class="tdl">Platform</td>    <td class="tdv">Windows 7 – 11</td></tr>
+      <tr><td class="tdl">Input</td>       <td class="tdv">Webcam Interface</td></tr>
+      <tr><td class="tdl">Architecture</td><td class="tdv">VB.NET / Npgsql</td></tr>
+      <tr><td class="tdl">Security</td>    <td class="tdv">Visual Masking</td></tr>
     </table>
     <div class="chips">
       <span class="chip">📷 QR Scanner</span>
@@ -909,42 +788,33 @@ footer { position:relative; z-index:1; border-top:1px solid var(--line); padding
       <span class="chip">📊 Audit Logs</span>
     </div>
     <div class="dl-wrap">
-      <a href="#" id="win-btn" class="dl-btn dl-btn-pc">
-        <div class="dl-left">
-          <div class="dl-icon">🖥️</div>
-          <div>
-            <div class="dl-title" id="win-btn-title">Fetching Latest Release…</div>
-            <div class="dl-sub">Windows 7 – 11 &middot; VB.NET</div>
-          </div>
-        </div>
+      <a href="#" id="win-btn" class="dl-btn dl-pc">
+        <div class="dl-left"><div class="dl-icon">🖥️</div><div><div class="dl-title" id="win-title">Fetching Latest Release…</div><div class="dl-sub">Windows 7–11 · VB.NET</div></div></div>
         <span class="dl-arrow">⬇</span>
       </a>
-      <div class="dl-meta">
-        <span class="dl-version" id="win-version">Syncing registry…</span>
-        <span class="dl-size">Setup .exe</span>
-      </div>
+      <div class="dl-meta"><span class="dl-ver" id="win-ver">Syncing…</span><span class="dl-size">Setup .exe</span></div>
     </div>
     <div class="api-status" id="api-info">Registry: Syncing…</div>
   </div>
 
   <div class="card rvr">
-    <div class="card-bar" style="background:linear-gradient(180deg,#1e3a5f,#2563eb);box-shadow:1px 0 8px rgba(30,58,95,.18);"></div>
-    <div class="qr-badge" aria-hidden="true">
+    <div class="card-bar" style="background:#1a2f50;opacity:.75"></div>
+    <div class="qr-deco" aria-hidden="true">
       <div class="qc qb"></div><div class="qc qw"></div><div class="qc qb"></div><div class="qc qb"></div><div class="qc qw"></div>
       <div class="qc qw"></div><div class="qc qb"></div><div class="qc qw"></div><div class="qc qb"></div><div class="qc qb"></div>
       <div class="qc qb"></div><div class="qc qb"></div><div class="qc qw"></div><div class="qc qw"></div><div class="qc qb"></div>
       <div class="qc qw"></div><div class="qc qb"></div><div class="qc qw"></div><div class="qc qb"></div><div class="qc qw"></div>
       <div class="qc qb"></div><div class="qc qw"></div><div class="qc qb"></div><div class="qc qw"></div><div class="qc qb"></div>
     </div>
-    <div id="mb"><span class="badge badge-navy">● Syncing&hellip;</span></div>
+    <div id="mb"><span class="badge badge-navy">● Syncing…</span></div>
     <div class="card-label">Android Client</div>
     <h2>Mobile <em>Client</em></h2>
-    <p class="card-desc">Lightweight Android companion app with instant push notifications and real-time database synchronization.</p>
-    <table class="spec-table">
-      <tr><td class="td-label">OS</td>         <td class="td-value">Android 8.0+</td></tr>
-      <tr><td class="td-label">Framework</td>  <td class="td-value">.NET MAUI</td></tr>
-      <tr><td class="td-label">Sync</td>        <td class="td-value">Real-time</td></tr>
-      <tr><td class="td-label">Storage</td>     <td class="td-value">~60 MB</td></tr>
+    <p class="card-desc">Lightweight Android companion app with instant push notifications and real-time database synchronization for on-the-go attendance.</p>
+    <table class="spec">
+      <tr><td class="tdl">OS</td>        <td class="tdv">Android 8.0+</td></tr>
+      <tr><td class="tdl">Framework</td> <td class="tdv">.NET MAUI</td></tr>
+      <tr><td class="tdl">Sync</td>      <td class="tdv">Real-time</td></tr>
+      <tr><td class="tdl">Storage</td>   <td class="tdv">~60 MB</td></tr>
     </table>
     <div class="chips">
       <span class="chip">📱 Native MAUI</span>
@@ -953,129 +823,94 @@ footer { position:relative; z-index:1; border-top:1px solid var(--line); padding
       <span class="chip">🌐 Online Sync</span>
     </div>
     <div class="dl-wrap">
-      <a href="#" id="mob-btn" class="dl-btn dl-btn-apk">
-        <div class="dl-left">
-          <div class="dl-icon">📱</div>
-          <div>
-            <div class="dl-title" id="mob-btn-title">Fetching Latest Release…</div>
-            <div class="dl-sub">Android 8.0+ &middot; .NET MAUI</div>
-          </div>
-        </div>
+      <a href="#" id="mob-btn" class="dl-btn dl-apk">
+        <div class="dl-left"><div class="dl-icon">📱</div><div><div class="dl-title" id="mob-title">Fetching Latest Release…</div><div class="dl-sub">Android 8.0+ · .NET MAUI</div></div></div>
         <span class="dl-arrow">⬇</span>
       </a>
-      <div class="dl-meta">
-        <span class="dl-version" id="mob-version">Syncing registry…</span>
-        <span class="dl-size">~60 MB .apk</span>
-      </div>
+      <div class="dl-meta"><span class="dl-ver" id="mob-ver">Syncing…</span><span class="dl-size">~60 MB .apk</span></div>
     </div>
   </div>
 
-  <!-- ── RBAC ── -->
-  <div class="sec-head rv"><span>Administrative Hierarchy &middot; Access Control</span></div>
+  <!-- 02 RBAC -->
+  <div class="sec-head rv"><span class="sec-num">02</span><span class="sec-label">Access Control · Role Hierarchy</span><span class="sec-line"></span></div>
 
-  <div class="card s2 rv">
+  <div class="card full rv">
     <div class="card-label">Role-Based Access Control</div>
     <h2>Who Can Do <em>What</em></h2>
-    <p class="card-desc" style="margin-bottom:22px;">
-      Four distinct roles ensure every user has exactly the access they need — nothing more, nothing less. Every action is scoped and approval-gated by design.
-    </p>
-    <table class="perm-table">
-      <thead><tr>
-        <th>Privilege</th>
-        <th style="text-align:center">Normal User</th>
-        <th style="text-align:center">Admin</th>
-        <th style="text-align:center">Super Admin</th>
-        <th style="text-align:center">Owner</th>
-      </tr></thead>
-      <tbody>
-        <tr><td>Scan QR Code to Mark Attendance</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td></tr>
-        <tr><td>View Own Attendance Records</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td></tr>
-        <tr><td>Request Own Info Change (pending approval)</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td></tr>
-        <tr><td>Scan QR Code on Behalf of User</td><td class="cx">✕</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td></tr>
-        <tr><td>Manage Sections &amp; Members</td><td class="cx">✕</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td></tr>
-        <tr><td>Approve User Info Change Requests</td><td class="cx">✕</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td></tr>
-        <tr><td>Access Admin Panel</td><td class="cx">✕</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td></tr>
-        <tr><td>Create New Admin Accounts</td><td class="cx">✕</td><td class="cx">✕</td><td class="ck">✓</td><td class="ck">✓</td></tr>
-        <tr><td>Update Peer Credentials (Username / Email / Password)</td><td class="cx">✕</td><td class="cx">✕</td><td class="ck">✓</td><td class="ck">✓</td></tr>
-        <tr><td>Access Super Admin Panel</td><td class="cx">✕</td><td class="cx">✕</td><td class="ck">✓</td><td class="ck">✓</td></tr>
-        <tr><td>Direct Database (PostgreSQL) Access</td><td class="cx">✕</td><td class="cx">✕</td><td class="cx">✕</td><td class="sh">⚔ SHIELDED</td></tr>
-      </tbody>
-    </table>
+    <p class="card-desc" style="margin-bottom:0">Four distinct roles ensure every user has exactly the access they need — nothing more, nothing less.</p>
+    <div class="role-grid">
+      <div class="role-tile"><div class="rt-n">ROLE 01</div><div class="rt-name">Normal User</div><div class="rt-desc">Scan QR, view own records, request info changes</div></div>
+      <div class="role-tile"><div class="rt-n">ROLE 02</div><div class="rt-name">Admin</div><div class="rt-desc">Manage sections, scan for users, approve requests</div></div>
+      <div class="role-tile"><div class="rt-n">ROLE 03</div><div class="rt-name">Super Admin</div><div class="rt-desc">Create admin accounts, manage peer credentials</div></div>
+      <div class="role-tile"><div class="rt-n">ROLE 04</div><div class="rt-name">Owner</div><div class="rt-desc">Full system authority — exclusive database access</div></div>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="rbac">
+        <thead><tr><th>Privilege</th><th style="text-align:center">Normal User</th><th style="text-align:center">Admin</th><th style="text-align:center">Super Admin</th><th style="text-align:center">Owner</th></tr></thead>
+        <tbody>
+          <tr><td>Scan QR Code to Mark Attendance</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td></tr>
+          <tr><td>View Own Attendance Records</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td></tr>
+          <tr><td>Request Own Info Change (pending approval)</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td></tr>
+          <tr><td>Scan QR on Behalf of User</td><td class="cx">✕</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td></tr>
+          <tr><td>Manage Sections &amp; Members</td><td class="cx">✕</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td></tr>
+          <tr><td>Approve User Info Change Requests</td><td class="cx">✕</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td></tr>
+          <tr><td>Access Admin Panel</td><td class="cx">✕</td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td></tr>
+          <tr><td>Create New Admin Accounts</td><td class="cx">✕</td><td class="cx">✕</td><td class="ck">✓</td><td class="ck">✓</td></tr>
+          <tr><td>Update Peer Credentials</td><td class="cx">✕</td><td class="cx">✕</td><td class="ck">✓</td><td class="ck">✓</td></tr>
+          <tr><td>Access Super Admin Panel</td><td class="cx">✕</td><td class="cx">✕</td><td class="ck">✓</td><td class="ck">✓</td></tr>
+          <tr><td>Direct Database (PostgreSQL) Access</td><td class="cx">✕</td><td class="cx">✕</td><td class="cx">✕</td><td class="sh-cell">⚔ SHIELDED</td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
-  <!-- ── Security ── -->
-  <div class="sec-head rv"><span>Security Architecture</span></div>
+  <!-- 03 Security -->
+  <div class="sec-head rv"><span class="sec-num">03</span><span class="sec-label">Security Architecture</span><span class="sec-line"></span></div>
 
-  <div class="card s2 rv">
+  <div class="card full rv">
     <div class="card-label">Zero-Trust Design</div>
     <h2>Your Data Stays <em>Yours.</em></h2>
-    <p class="card-desc">
-      Project QrSys operates as pure middleware. The development team holds zero ownership of your database — ever. Whether you're a school, a corporation, or a startup, your data stays exclusively yours.
-    </p>
-    <div style="margin:22px 0 26px;">
+    <p class="card-desc">Project QrSys operates as pure middleware. The development team holds zero ownership of your database — ever.</p>
+    <div style="margin:22px 0 26px">
       <div class="bar-row"><span class="bar-lbl">Data Isolation</span><div class="bar-track"><div class="bar-fill" data-w="1"></div></div><span class="bar-pct">100%</span></div>
-      <div class="bar-row" style="margin-top:10px;"><span class="bar-lbl">RBAC Coverage</span><div class="bar-track"><div class="bar-fill" data-w="1"></div></div><span class="bar-pct">100%</span></div>
-      <div class="bar-row" style="margin-top:10px;"><span class="bar-lbl">Credential Mask</span><div class="bar-track"><div class="bar-fill" data-w=".9"></div></div><span class="bar-pct">90%</span></div>
-      <div class="bar-row" style="margin-top:10px;"><span class="bar-lbl">Client Control</span><div class="bar-track"><div class="bar-fill" data-w="1"></div></div><span class="bar-pct">100%</span></div>
+      <div class="bar-row"><span class="bar-lbl">RBAC Coverage</span><div class="bar-track"><div class="bar-fill" data-w="1"></div></div><span class="bar-pct">100%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Credential Mask</span><div class="bar-track"><div class="bar-fill" data-w=".9"></div></div><span class="bar-pct">90%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Client Control</span><div class="bar-track"><div class="bar-fill" data-w="1"></div></div><span class="bar-pct">100%</span></div>
     </div>
     <div class="sec-grid">
       <div class="sec-item"><div class="sec-ico">🛡️</div><div class="sec-title">Data Isolation</div><div class="sec-desc">Project QrSys is middleware only. The dev team holds zero direct ownership of your database at any point.</div></div>
-      <div class="sec-item"><div class="sec-ico">🔑</div><div class="sec-title">Client Control</div><div class="sec-desc">Your organization — school, company, or team — retains full Supabase ownership. SQL and master keys stay exclusively with you.</div></div>
-      <div class="sec-item"><div class="sec-ico">👁️</div><div class="sec-title">Credential Integrity</div><div class="sec-desc">Admin credentials are masked at the UI level. Upcoming iterations will add one-way cryptographic hashing.</div></div>
-      <div class="sec-item"><div class="sec-ico">⚙️</div><div class="sec-title">RBAC Enforcement</div><div class="sec-desc">Normal User → Admin → Super Admin → Owner. Users can only request their own info changes — Admins approve them. No role exceeds its scope.</div></div>
+      <div class="sec-item"><div class="sec-ico">🔑</div><div class="sec-title">Client Control</div><div class="sec-desc">Your organization retains full Supabase ownership. SQL and master keys stay exclusively with you.</div></div>
+      <div class="sec-item"><div class="sec-ico">👁️</div><div class="sec-title">Credential Integrity</div><div class="sec-desc">Admin credentials are masked at the UI level. Upcoming versions will add one-way cryptographic hashing.</div></div>
+      <div class="sec-item"><div class="sec-ico">⚙️</div><div class="sec-title">RBAC Enforcement</div><div class="sec-desc">Normal User → Admin → Super Admin → Owner. No role ever exceeds its defined scope.</div></div>
     </div>
   </div>
 
-  <!-- ── Previews ── -->
-  <div class="sec-head rv"><span>Live Demonstrations</span></div>
+  <!-- 04 Demos -->
+  <div class="sec-head rv"><span class="sec-num">04</span><span class="sec-label">Live Demonstrations</span><span class="sec-line"></span></div>
 
-  <div class="card rvl">
-    <div class="card-label">Demo</div>
-    <h2>Desktop <em>Preview</em></h2>
-    <div class="vid"><iframe src="https://www.youtube.com/embed/ZcIJaQYzTzw" title="Desktop Preview" frameborder="0" allowfullscreen loading="lazy"></iframe></div>
-  </div>
+  <div class="card rvl"><div class="card-label">Demo</div><h2>Desktop <em>Preview</em></h2><div class="vid"><iframe src="https://www.youtube.com/embed/ZcIJaQYzTzw" title="Desktop Preview" frameborder="0" allowfullscreen loading="lazy"></iframe></div></div>
+  <div class="card rvr"><div class="card-label">Demo</div><h2>Mobile <em>Preview</em></h2><div class="vid"><iframe src="https://www.youtube.com/embed/hnoCBZ3_GgQ" title="Mobile Preview" frameborder="0" allowfullscreen loading="lazy"></iframe></div></div>
 
-  <div class="card rvr">
-    <div class="card-label">Demo</div>
-    <h2>Mobile <em>Preview</em></h2>
-    <div class="vid"><iframe src="https://www.youtube.com/embed/hnoCBZ3_GgQ" title="Mobile Preview" frameborder="0" allowfullscreen loading="lazy"></iframe></div>
-  </div>
+  <!-- 05 FAQ -->
+  <div class="sec-head rv"><span class="sec-num">05</span><span class="sec-label">Frequently Asked Questions</span><span class="sec-line"></span></div>
 
-  <!-- ── FAQ ── -->
-  <div class="sec-head rv"><span>Frequently Asked Questions</span></div>
-
-  <div class="card s2 rv">
+  <div class="card full rv">
     <div class="card-label">FAQ</div>
     <h2>Questions &amp; <em>Answers</em></h2>
-    <div style="margin-top:24px;">
-      <div class="faq-item">
-        <div class="faq-q">What are the four roles in Project QrSys? <span class="faq-icon">▼</span></div>
-        <div class="faq-ans"><strong>Normal User</strong> — scans QR codes, views their own attendance, and can request changes to their own info pending admin approval. <strong>Admin</strong> — handles daily operations: scanning QR codes for users, managing sections and members, and approving user info change requests. <strong>Super Admin</strong> — system overseer who creates admin accounts and manages credentials. <strong>Owner</strong> — holds the database with full system authority.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q">What exactly can a Normal User do? <span class="faq-icon">▼</span></div>
-        <div class="faq-ans">Normal Users can scan a QR code to mark their own attendance and view their own attendance records. They can also submit a request to update their own personal information — but this change is not applied immediately. It goes through an approval process handled by an Admin before it takes effect.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q">Can Admins scan QR codes for users? <span class="faq-icon">▼</span></div>
-        <div class="faq-ans">Yes. Admins can scan QR codes on behalf of users — useful in situations where a user cannot scan themselves. Admins also manage sections and members, approve user info change requests, and have full access to the Admin Panel.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q">What is the difference between Admin and Super Admin? <span class="faq-icon">▼</span></div>
-        <div class="faq-ans">Admins handle day-to-day operations — scanning QR codes, managing members, and approving requests. Super Admins go a level higher: they can create new admin accounts, modify peer credentials (email, username, password), reset passwords, and delegate Super Admin status to others via the dedicated Super Admin Panel.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q">Who has direct access to the database? <span class="faq-icon">▼</span></div>
-        <div class="faq-ans">Only the Owner has database-level authority, exclusively through their private Supabase Dashboard. Normal Users, Admins, and Super Admins have zero direct database access. System management and raw data are fully separated at every tier.</div>
-      </div>
+    <div style="margin-top:24px">
+      <div class="faq-item"><div class="faq-q">What are the four roles in Project QrSys?<span class="faq-icon">▼</span></div><div class="faq-a"><strong>Normal User</strong> — scans QR codes and views their own attendance. <strong>Admin</strong> — handles daily operations, scans for users, manages sections. <strong>Super Admin</strong> — creates admin accounts and manages credentials. <strong>Owner</strong> — holds the database with full system authority.</div></div>
+      <div class="faq-item"><div class="faq-q">What exactly can a Normal User do?<span class="faq-icon">▼</span></div><div class="faq-a">Normal Users can scan a QR code to mark their attendance and view their own records. They can submit a request to update personal information — but this change requires Admin approval before taking effect.</div></div>
+      <div class="faq-item"><div class="faq-q">Can Admins scan QR codes for users?<span class="faq-icon">▼</span></div><div class="faq-a">Yes. Admins can scan QR codes on behalf of users — useful when a user cannot scan themselves. Admins also manage sections, approve info change requests, and have full Admin Panel access.</div></div>
+      <div class="faq-item"><div class="faq-q">What is the difference between Admin and Super Admin?<span class="faq-icon">▼</span></div><div class="faq-a">Admins handle day-to-day operations. Super Admins go higher: they create new admin accounts, modify peer credentials, reset passwords, and delegate Super Admin status via the dedicated Super Admin Panel.</div></div>
+      <div class="faq-item"><div class="faq-q">Who has direct access to the database?<span class="faq-icon">▼</span></div><div class="faq-a">Only the Owner has database-level authority — exclusively through their private Supabase Dashboard. Normal Users, Admins, and Super Admins have zero direct database access.</div></div>
     </div>
   </div>
 
-  <!-- ── Docs ── -->
-  <div class="sec-head rv"><span>Technical Documentation</span></div>
+  <!-- 06 Docs -->
+  <div class="sec-head rv"><span class="sec-num">06</span><span class="sec-label">Technical Documentation</span><span class="sec-line"></span></div>
 
-  <div class="card s2 rv" style="background:transparent;border:none;padding:0;box-shadow:none;backdrop-filter:none;">
-    <div class="card-label" style="padding-left:2px;">Repository Files</div>
+  <div class="card full rv" style="background:transparent;border:none;padding:0;box-shadow:none">
+    <div class="card-label" style="padding-left:2px">Repository Files</div>
     <div class="tabs">
       <button class="tab on" onclick="loadFile('README.md',this)">README</button>
       <button class="tab" onclick="loadFile('LICENSE.md',this)">LICENSE</button>
@@ -1083,312 +918,202 @@ footer { position:relative; z-index:1; border-top:1px solid var(--line); padding
       <button class="tab" onclick="loadSec(this)">Security Policy</button>
     </div>
     <div class="doc-view" id="doc-content">
-      <div style="text-align:center;padding:44px;color:var(--faint);font-family:var(--f-code);font-size:12px;letter-spacing:2px;">⟳ Fetching repository data&hellip;</div>
+      <div style="text-align:center;padding:44px;color:var(--ink4);font-family:var(--fmono);font-size:11px;letter-spacing:2px">⟳ Fetching repository data…</div>
     </div>
   </div>
 
-  <!-- ── Uptime ── -->
-  <div class="sec-head rv"><span>System Status</span></div>
+  <!-- 07 Uptime -->
+  <div class="sec-head rv"><span class="sec-num">07</span><span class="sec-label">System Status</span><span class="sec-line"></span></div>
 
-  <div class="card s2 rv">
+  <div class="card full rv">
     <div class="card-label">Live Metrics</div>
     <h2>System <em>Uptime</em></h2>
-    <div class="uptime-box">
-      <div class="uptime-val" id="uptime">00d 00h 00m 00s</div>
-    </div>
-    <p class="uptime-label">Encrypted Cloud Connection &middot; Active</p>
+    <div class="uptime-box"><div class="uptime-val" id="uptime">00d 00h 00m 00s</div></div>
+    <p class="uptime-lbl" style="margin-top:14px">Encrypted Cloud Connection · Active</p>
   </div>
 
-  <!-- ── Registry ── -->
-  <div class="sec-head rv"><span>Update Registry</span></div>
+  <!-- 08 Changelog -->
+  <div class="sec-head rv"><span class="sec-num">08</span><span class="sec-label">Update Registry</span><span class="sec-line"></span></div>
 
-  <div class="card s2 rv">
+  <div class="card full rv">
     <div class="card-label">Deployment Logs</div>
-    <h2 id="regt">Update <em>Registry</em></h2>
-    <div id="regl" style="margin-top:22px;">
-      <div class="log-row"><span class="log-tag tg-def">Syncing</span><span class="log-text">Pulling latest deployment logs&hellip;</span></div>
+    <h2 id="reg-title">Update <em>Registry</em></h2>
+    <div id="reg-logs" style="margin-top:22px">
+      <div class="log-row"><span class="log-tag tg-def">Syncing</span><span class="log-text">Pulling latest deployment logs…</span></div>
     </div>
   </div>
 
-  <!-- ── CTA ── -->
-  <div class="sec-head rv"><span>Get Started</span></div>
+  <!-- 09 CTA -->
+  <div class="sec-head rv"><span class="sec-num">09</span><span class="sec-label">Get Started</span><span class="sec-line"></span></div>
 
-  <div class="card s2 cta-card rv">
+  <div class="card full cta-card rv">
     <div class="cta-wm">Project QrSys</div>
-    <div class="ctai">
-      <div class="card-label" style="justify-content:center;">Official Implementation</div>
+    <div class="cta-inner">
+      <div class="card-label" style="justify-content:center">Official Implementation</div>
       <div class="cta-title">Ready to Deploy <em>Project QrSys?</em></div>
-      <p class="cta-sub">Whether you're a school, a company, a corporate team, or any group that tracks attendance — request a test account or schedule a live demo. We'll walk you through everything.</p>
+      <p class="cta-sub">Whether you're a school, company, corporate team, or any organization that tracks attendance — request a test account or schedule a live demo.</p>
       <div class="cta-btns">
-        <a href="/cdn-cgi/l/email-protection#d5a6b4b8babbb2a0b195b2b8b4bcb9fbb6bab8eaa6a0b7bfb0b6a1e885a7babfb0b6a1f0e7e584a786aca6f0e7e5f090e7f0ede5f0ece1f0e7e594b1b8bcbbf0e7e594b6b6baa0bba1f0e7e587b0a4a0b0a6a1f3b7bab1ace89dbcf0e7e5a1bdb0a7b0f0e796f0e594f0e5949cf0e7e5a2baa0b9b1f0e7e5b9bcbeb0f0e7e5a1baf0e7e5a7b0a4a0b0a6a1f0e7e5b4f0e7e5a1b0a6a1f0e7e5b4b1b8bcbbf0e7e5b4b6b6baa0bba1f0e7e5b3baa7f0e7e585a7babfb0b6a1f0e7e584a786aca6fbf0e594f0e5949aa7b2b4bbbcafb4a1bcbabbf0e7e59bb4b8b0f0e694f0e7e5f0e0978cbaa0a7f0e7e59aa7b2b4bbbcafb4a1bcbabbf0e091f0e5949aa7b2b4bbbcafb4a1bcbabbf0e7e581aca5b0f0e694f0e7e5f0e09786b6bdbabab9f0e7e5f0e793f0e7e596bab8a5b4bbacf0e7e5f0e793f0e7e596baa7a5baa7b4a1b0f0e7e581b0b4b8f0e7e5f0e793f0e7e59aa1bdb0a7f0e091f0e5949ba0b8b7b0a7f0e7e5bab3f0e7e580a6b0a7a6f0e694f0e7e5f0e09794a5a5a7baadbcb8b4a1b0f0e7e5b6baa0bba1f0e091f0e59496babba1b4b6a1f0e7e585b0a7a6babbf0e694f0e7e5f0e0978cbaa0a7f0e7e59bb4b8b0f0e091f0e59496babba1b4b6a1f0e7e590b8b4bcb9f0e694f0e7e5f0e0978cbaa0a7f0e7e590b8b4bcb9f0e091f0e594f0e59494b1b1bca1bcbabbb4b9f0e7e59bbaa1b0a6f0e694f0e594f0e09794bbacf0e7e5a6a5b0b6bcb3bcb6f0e7e5a7b0a4a0bca7b0b8b0bba1a6f0e7e5baa7f0e7e5a4a0b0a6a1bcbabba6f0e091f0e594f0e59499bababebcbbb2f0e7e5b3baa7a2b4a7b1f0e7e5a1baf0e7e5bdb0b4a7bcbbb2f0e7e5b3a7bab8f0e7e5acbaa0fbf0e594f0e59481bdb4bbbef0e7e5acbaa0f4" class="btn btn-dark">Request Admin Account</a>
-        <a href="/cdn-cgi/l/email-protection#f98a989496979e8c9db99e94989095d79a9694c68a8c9b939c9a8dc4a98b96939c9a8ddccbc9a88baa808adccbc9dcbccbdcc1c9dcc0cddccbc9bd9c9496dccbc9ab9c888c9c8a8ddf9b969d80c4b190dccbc98d919c8b9cdccbbadcc9b8dcc9b8b0dccbc98e968c959ddccbc99590929cdccbc98d96dccbc98a9a919c9d8c959cdccbc998dccbc995908f9cdccbc99d9c9496978a8d8b988d909697dccbc9969fdccbc9a98b96939c9a8ddccbc9a88baa808ad7dcc9b8dcc9b8b68b9e98979083988d909697dccbc9b798949cdccab8dccbc9dcccbba0968c8bdccbc9b68b9e98979083988d909697dcccbddcc9b8b68b9e98979083988d909697dccbc9ad80899cdccab8dccbc9dcccbbaa9a91969695dccbc9dccbbfdccbc9ba969489989780dccbc9dccbbfdccbc9ba968b89968b988d9cdccbc9ad9c9894dccbc9dccbbfdccbc9b68d919c8bdcccbddcc9b8a98b9c9f9c8b8b9c9ddccbc9bd988d9cdccbc9dccbcfdccbc9ad90949cdccab8dccbc9dcccbba0968c8bdccbc9898b9c9f9c8b8b9c9ddccbc98a9a919c9d8c959cdcccbddcc9b8ba96978d989a8ddccbc9a99c8b8a9697dccab8dccbc9dcccbba0968c8bdccbc9b798949cdcccbddcc9b8ba96978d989a8ddccbc9bc94989095dccab8dccbc9dcccbba0968c8bdccbc9bc94989095dcccbddcc9b8dcc9b8ae91988ddccbc9988b9cdccbc980968cdccbc994968a8ddccbc990978d9c8b9c8a8d9c9ddccbc99097dccab8dcc9b8dcccbbdccbc9dcccbddccbc9bd9c8a928d9689dccbc9ba95909c978ddccbc9bd9c9496dcc9b8dcccbbdccbc9dcccbddccbc9b4969b90959cdccbc9ba95909c978ddccbc9bd9c9496dcc9b8dcccbbdccbc9dcccbddccbc9bb968d91dcc9b8dcc9b8b89d9d908d9096979895dccbc9a88c9c8a8d9096978adccab8dcc9b8dcccbbb89780dccbc98a899c9a909f909adccbc99f9c988d8c8b9c8adccbc980968cdccbc98e98978ddccbc98d96dccbc98a9c9cdcccbddcc9b8dcc9b8ad91989792dccbc980968cd8" class="btn">Schedule a Demo</a>
+        <a href="mailto:dev@qrsys.app" class="btn btn-dark">Request Admin Account</a>
+        <a href="mailto:dev@qrsys.app" class="btn btn-red">Schedule a Demo</a>
       </div>
       <div class="cta-links">
-        <div class="link-group">
-          <p class="link-label">Support Channels</p>
-          <a href="https://discord.gg/BRTWwm2k" target="_blank">Discord →</a>
-          <a href="/cdn-cgi/l/email-protection#7a091b1715141d0f1e3a1d171b13165419151745090f18101f190e472a0815101f190e5f484a2b082903095f484a5f3f485f424a5f434e5f484a290f0a0a15080e5f484a281f0b0f1f090e5c18151e034732135f484a0e121f081f5f48395f4a3b5f4a3b335f484a141f1f1e5f484a090f0a0a15080e5f484a0d130e125f484a2a0815101f190e5f484a2b08290309545f4a3b5f4a3b3309090f1f5f484a2e030a1f5f493b5f484a5f4f38380f1d5f484a5f483c5f484a2b0f1f090e1315145f484a5f483c5f484a3c1f1b0e0f081f5f484a281f0b0f1f090e5f484a5f483c5f484a350e121f085f4f3e5f4a3b35081d1b1413001b0e1315145f493b5f484a5f4f3823150f085f484a35081d1b1413001b0e1315145f4f3e5f4a3b2c1f08091315145f484a5f48422a395f484a5f483c5f484a3b2a315f48435f493b5f484a5f4f382c1f08091315145f484a140f17181f085f4f3e5f4a3b5f4a3b3e1f091908130a0e1315145f484a151c5f484a3309090f1f5f493b5f4a3b5f4f382a161f1b091f5f484a1e1f09190813181f5f484a03150f085f484a1309090f1f5f484a15085f484a0b0f1f090e1315145f484a13145f484a1e1f0e1b13165f4f3e5f4a3b5f4a3b290e1f0a095f484a0e155f484a281f0a08151e0f191f5f484a5f4842131c5f484a180f1d5f48435f493b5f4a3b4b545f484a5f4a3b48545f484a5f4a3b49545f484a5f4a3b5f4a3b2e121b14115f484a03150f5b">Email Support →</a>
-        </div>
-        <div class="link-group">
-          <p class="link-label">Source Code</p>
-          <a href="https://github.com/AstroNutws/Attendance-QRSYS" target="_blank">GitHub Repository →</a>
-        </div>
+        <div class="link-group"><p class="link-label">Support Channels</p><a href="https://discord.gg/BRTWwm2k" target="_blank">Discord →</a><a href="mailto:dev@qrsys.app">Email Support →</a></div>
+        <div class="link-group"><p class="link-label">Source Code</p><a href="https://github.com/AstroNutws/Attendance-QRSYS" target="_blank">GitHub Repository →</a></div>
       </div>
     </div>
   </div>
 
-</div><!-- /wrap -->
+</div>
+</main>
 
 <footer>
   <span class="foot-brand">Project QrSys</span>
-  <span class="foot-copy">&copy; 2026 Project QrSys Development Lab &middot; All rights reserved</span>
+  <span class="foot-copy">© 2026 Project QrSys Development Lab · All rights reserved</span>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 'use strict';
 
-/* ── LOW-END DETECTION ── */
-const LOW = navigator.hardwareConcurrency <= 2;
-
 /* ── CURSOR ── */
-const cd = document.getElementById('cd'), cr = document.getElementById('cr');
-let mx=0, my=0, rx=0, ry=0;
+const frame = document.getElementById('cur-frame');
+const cdot  = document.getElementById('cur-dot');
+let mx=0, my=0, fx=0, fy=0;
+
 document.addEventListener('mousemove', e => {
   mx = e.clientX; my = e.clientY;
-  cd.style.left = mx+'px'; cd.style.top = my+'px';
-}, {passive:true});
-(function loop(){ rx+=(mx-rx)*.1; ry+=(my-ry)*.1; cr.style.left=rx+'px'; cr.style.top=ry+'px'; requestAnimationFrame(loop); })();
-document.querySelectorAll('a,button,.faq-q,.tab,.chip,.sec-item').forEach(el => {
-  el.addEventListener('mouseenter', () => document.body.classList.add('hl'), {passive:true});
-  el.addEventListener('mouseleave', () => document.body.classList.remove('hl'), {passive:true});
-});
+  cdot.style.left = mx + 'px'; cdot.style.top = my + 'px';
+}, { passive: true });
 
-/* ── CANVAS: particles + QR grid in one lean loop ── */
-(function(){
-  const c = document.getElementById('cvs');
-  const x = c.getContext('2d', {alpha:true});
-  let W, H, nd=[], mox=null, moy=null, frame=0;
-  const MAX  = LOW ? 24 : 50;
-  const CONN = LOW ? 100 : 145;
-  const QR   = !LOW;
-
-  function resize(){
-    W = c.width = window.innerWidth;
-    H = c.height = window.innerHeight;
-    nd = [];
-    const n = Math.min(MAX, Math.floor(W*H/14000));
-    for(let i=0;i<n;i++) nd.push({
-      bx: Math.random()*W, by: Math.random()*H,
-      x:0, y:0,
-      vx:(Math.random()-.5)*.32, vy:(Math.random()-.5)*.32,
-      r: Math.random()*1.4+.5, p: Math.random()*Math.PI*2
-    });
-  }
-  resize();
-  window.addEventListener('resize', resize, {passive:true});
-  window.addEventListener('mousemove', e => { mox=e.clientX; moy=e.clientY; }, {passive:true});
-
-  function draw(){
-    frame++;
-    if(LOW && frame%2===0){ requestAnimationFrame(draw); return; }
-    x.clearRect(0,0,W,H);
-    const dk = document.documentElement.hasAttribute('data-theme');
-    const col = dk ? '195,55,55' : '128,0,0';
-
-    if(QR){
-      const cell=54, t=frame*.38;
-      const cols=Math.ceil(W/cell)+1, rows=Math.ceil(H/cell)+1;
-      const ox=t%cell, oy=(t*.46)%cell;
-      for(let r=0;r<rows;r++) for(let cl=0;cl<cols;cl++){
-        const n=Math.sin(cl*.7+frame*.013)*Math.cos(r*.55+frame*.011);
-        const a=Math.max(0,n)*(dk?.20:.16);
-        if(a<.008) continue;
-        const sz=cell*.38, wx=cl*cell-ox, wy=r*cell-oy;
-        x.fillStyle=`rgba(${col},${a})`;
-        x.beginPath(); x.roundRect(wx+(cell-sz)/2, wy+(cell-sz)/2, sz, sz, 2); x.fill();
-      }
-    }
-
-    const px = mox!=null ? (mox/W-.5)*11 : 0;
-    const py = moy!=null ? (moy/H-.5)*11 : 0;
-    nd.forEach(n => {
-      n.bx+=n.vx; n.by+=n.vy;
-      if(n.bx<0)n.bx=W; if(n.bx>W)n.bx=0;
-      if(n.by<0)n.by=H; if(n.by>H)n.by=0;
-      n.p+=.007; n.x=n.bx+px; n.y=n.by+py;
-      x.beginPath(); x.arc(n.x, n.y, n.r+Math.sin(n.p)*.4, 0, Math.PI*2);
-      x.fillStyle=`rgba(${col},.26)`; x.fill();
-    });
-
-    for(let i=0;i<nd.length;i++){
-      for(let j=i+1;j<nd.length;j++){
-        const dx=nd[i].x-nd[j].x, dy=nd[i].y-nd[j].y, d=dx*dx+dy*dy;
-        if(d<CONN*CONN){
-          x.strokeStyle=`rgba(${col},${(1-Math.sqrt(d)/CONN)*(dk?.09:.15)})`;
-          x.lineWidth=.65;
-          x.beginPath(); x.moveTo(nd[i].x,nd[i].y); x.lineTo(nd[j].x,nd[j].y); x.stroke();
-        }
-      }
-      if(!LOW && mox!==null){
-        const dx=nd[i].x-mox, dy=nd[i].y-moy, d=dx*dx+dy*dy;
-        if(d<100*100){
-          x.strokeStyle=`rgba(${col},${(1-Math.sqrt(d)/100)*.22})`;
-          x.lineWidth=.5;
-          x.beginPath(); x.moveTo(nd[i].x,nd[i].y); x.lineTo(mox,moy); x.stroke();
-        }
-      }
-    }
-    requestAnimationFrame(draw);
-  }
-  draw();
+(function trackFrame() {
+  fx += (mx - fx) * 0.10;
+  fy += (my - fy) * 0.10;
+  frame.style.left = fx + 'px';
+  frame.style.top  = fy + 'px';
+  requestAnimationFrame(trackFrame);
 })();
+
+const interactives = 'a,button,.faq-q,.tab,.chip,.sec-item,.role-tile,.dl-btn,.stat,.card';
+document.querySelectorAll(interactives).forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('c-hover'),    { passive: true });
+  el.addEventListener('mouseleave', () => document.body.classList.remove('c-hover'), { passive: true });
+});
+document.addEventListener('mousedown', () => document.body.classList.add('c-down'));
+document.addEventListener('mouseup',   () => document.body.classList.remove('c-down'));
 
 /* ── TICKER ── */
 const msgs = [
-  '<b>Project QrSys</b> &middot; SaaS Attendance Platform for Any Organization',
-  'Schools &middot; Companies &middot; Corporate Teams &middot; Any Group',
-  '<b>RBAC Enforced</b> &middot; Zero Privilege Leakage',
-  'Windows Desktop + Android Mobile &middot; SaaS &middot; Deploy Today',
-  '<b>4 Roles</b> &middot; Normal User &middot; Admin &middot; Super Admin &middot; Owner',
-  'QR Scanning &middot; Webcam Interface &middot; .NET MAUI Framework',
-  '<b>Live Since</b> January 8, 2026 &middot; Encrypted Connection Active'
+  '<b>Project QrSys</b> · SaaS Attendance Platform for Any Organization',
+  'Schools · Companies · Corporate Teams · Any Group',
+  '<b>RBAC Enforced</b> · Zero Privilege Leakage',
+  'Windows Desktop + Android Mobile · Deploy Today',
+  '<b>4 Roles</b> · Normal User · Admin · Super Admin · Owner',
+  'QR Scanning · Webcam Interface · .NET MAUI Framework',
+  '<b>Live Since</b> January 8 2026 · Encrypted Connection Active'
 ];
 const tkt = document.getElementById('tkt');
-tkt.innerHTML = [...msgs,...msgs,...msgs,...msgs].map(m=>`<span>${m}</span>`).join('');
+tkt.innerHTML = [...msgs,...msgs,...msgs,...msgs].map(m => `<span>${m}</span>`).join('');
 
 /* ── THEME ── */
-const ts = document.getElementById('ts');
-function applyTheme(t){
-  document.documentElement[t==='dark'?'setAttribute':'removeAttribute']('data-theme','dark');
-  ts.innerHTML = t==='dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+const tBtn = document.getElementById('themeBtn');
+function applyTheme(t) {
+  document.documentElement[t === 'dark' ? 'setAttribute' : 'removeAttribute']('data-dark', '');
+  tBtn.innerHTML = t === 'dark' ? '☀️ Light' : '🌙 Dark';
 }
 applyTheme(localStorage.getItem('theme') || 'light');
-ts.addEventListener('click', () => {
-  const d = document.documentElement.hasAttribute('data-theme');
-  applyTheme(d?'light':'dark'); localStorage.setItem('theme', d?'light':'dark');
+tBtn.addEventListener('click', () => {
+  const d = document.documentElement.hasAttribute('data-dark');
+  applyTheme(d ? 'light' : 'dark'); localStorage.setItem('theme', d ? 'light' : 'dark');
 });
 
-/* ── STAT COUNTERS ── */
+/* ── COUNTERS ── */
 setTimeout(() => {
-  document.querySelectorAll('.stat-n[data-t]').forEach(el => {
-    const t=+el.dataset.t, s=el.dataset.s||''; let v=0;
-    const step = Math.ceil(t/36);
-    const iv = setInterval(() => { v=Math.min(v+step,t); el.textContent=v+s; if(v>=t)clearInterval(iv); }, 26);
+  document.querySelectorAll('.sn[data-t]').forEach(el => {
+    const t = +el.dataset.t, s = el.dataset.s || ''; let v = 0;
+    const iv = setInterval(() => { v = Math.min(v + Math.ceil(t/32), t); el.textContent = v + s; if (v >= t) clearInterval(iv); }, 28);
   });
-}, 600);
+}, 500);
 
-/* ── RIPPLE ON DOWNLOAD BUTTONS ── */
+/* ── RIPPLE ── */
 document.querySelectorAll('.dl-btn').forEach(btn => {
   btn.addEventListener('click', function(e) {
-    const r = document.createElement('span');
-    r.className = 'ripple';
-    const rect = btn.getBoundingClientRect();
-    const size = Math.max(rect.width, rect.height);
-    r.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px`;
-    btn.appendChild(r);
-    setTimeout(() => r.remove(), 600);
-  }, {passive:true});
+    const r = document.createElement('span'); r.className = 'ripple';
+    const rect = btn.getBoundingClientRect(), sz = Math.max(rect.width, rect.height);
+    r.style.cssText = `width:${sz}px;height:${sz}px;left:${e.clientX-rect.left-sz/2}px;top:${e.clientY-rect.top-sz/2}px`;
+    btn.appendChild(r); setTimeout(() => r.remove(), 580);
+  }, { passive: true });
 });
 
 /* ── FAQ ── */
 document.querySelectorAll('.faq-q').forEach(q => {
   q.addEventListener('click', () => {
-    const item=q.parentElement, was=item.classList.contains('open');
-    document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
-    if(!was) item.classList.add('open');
+    const item = q.parentElement, was = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!was) item.classList.add('open');
   });
 });
 
-/* ── SCROLL REVEAL + PROGRESS BARS ── */
+/* ── SCROLL REVEAL ── */
 const ro = new IntersectionObserver(entries => {
-  entries.forEach((e,i) => {
-    if(e.isIntersecting){
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
       setTimeout(() => {
         e.target.classList.add('in');
-        e.target.querySelectorAll('.bar-fill').forEach(b => {
-          b.style.transform = `scaleX(${b.dataset.w})`;
-        });
-      }, i*55);
+        e.target.querySelectorAll('.bar-fill').forEach(b => { b.style.transform = `scaleX(${b.dataset.w})`; });
+      }, i * 50);
       ro.unobserve(e.target);
     }
   });
-}, {threshold:.07, rootMargin:'0px 0px -40px 0px'});
+}, { threshold: .07, rootMargin: '0px 0px -40px 0px' });
 document.querySelectorAll('.rv,.rvl,.rvr').forEach(el => ro.observe(el));
 
-/* ── GITHUB RELEASE SYNC ── */
+/* ── GITHUB SYNC ── */
 (async () => {
-  const winBtn   = document.getElementById('win-btn');
-  const mobBtn   = document.getElementById('mob-btn');
-  const apiInfo  = document.getElementById('api-info');
-  const dbEl     = document.getElementById('db');
-  const mbEl     = document.getElementById('mb');
-  const winTitle = document.getElementById('win-btn-title');
-  const mobTitle = document.getElementById('mob-btn-title');
-  const winVer   = document.getElementById('win-version');
-  const mobVer   = document.getElementById('mob-version');
-  const logs     = document.getElementById('regl');
-  const titleEl  = document.getElementById('regt');
-  const cb       = Date.now();
-
+  const winBtn  = document.getElementById('win-btn'),  mobBtn = document.getElementById('mob-btn');
+  const apiInfo = document.getElementById('api-info'), dbEl   = document.getElementById('db'),  mbEl = document.getElementById('mb');
+  const winT    = document.getElementById('win-title'), mobT  = document.getElementById('mob-title');
+  const winV    = document.getElementById('win-ver'),   mobV  = document.getElementById('mob-ver');
+  const logs    = document.getElementById('reg-logs'),  titleEl = document.getElementById('reg-title');
+  const cb = Date.now();
   try {
     const resp = await fetch(`https://api.github.com/repos/AstroNutws/Attendance-QRSYS/releases?t=${cb}`);
-    if(resp.ok){
-      const all = await resp.json(); let exe=null, apk=null;
-      for(const r of all){
-        if(!exe){ const a=r.assets.find(a=>a.name.endsWith('.exe')); if(a) exe={url:a.browser_download_url,tag:r.tag_name}; }
-        if(!apk){ const a=r.assets.find(a=>a.name.endsWith('.apk')); if(a) apk={url:a.browser_download_url,tag:r.tag_name}; }
-        if(exe&&apk) break;
+    if (resp.ok) {
+      const all = await resp.json(); let exe = null, apk = null;
+      for (const r of all) {
+        if (!exe) { const a = r.assets.find(a => a.name.endsWith('.exe')); if (a) exe = { url: a.browser_download_url, tag: r.tag_name }; }
+        if (!apk) { const a = r.assets.find(a => a.name.endsWith('.apk')); if (a) apk = { url: a.browser_download_url, tag: r.tag_name }; }
+        if (exe && apk) break;
       }
-      if(exe){
-        winBtn.href=exe.url;
-        winTitle.textContent=`Download for Windows (${exe.tag})`;
-        winVer.textContent=`${exe.tag} · Stable Release`;
-        dbEl.innerHTML=`<span class="badge">● ${exe.tag} Stable</span>`;
-      } else {
-        winTitle.textContent='PC Release Pending';
-        winVer.textContent='V2.1.1 Legacy';
-        dbEl.innerHTML=`<span class="badge">V2.1.1 Legacy</span>`;
-      }
-      if(apk){
-        mobBtn.href=apk.url;
-        mobTitle.textContent=`Download APK (${apk.tag})`;
-        mobVer.textContent=`${apk.tag} · Available`;
-        mbEl.innerHTML=`<span class="badge badge-navy">● ${apk.tag} Available</span>`;
-      } else {
-        mobTitle.textContent='APK Release Pending';
-        mobVer.textContent='Build Pending';
-        mbEl.innerHTML=`<span class="badge badge-navy">Build Pending</span>`;
-      }
+      if (exe) { winBtn.href=exe.url; winT.textContent=`Download for Windows (${exe.tag})`; winV.textContent=`${exe.tag} · Stable`; dbEl.innerHTML=`<span class="badge">● ${exe.tag} Stable</span>`; }
+      else { winT.textContent='PC Release Pending'; winV.textContent='V2.1.1 Legacy'; dbEl.innerHTML='<span class="badge">V2.1.1 Legacy</span>'; }
+      if (apk) { mobBtn.href=apk.url; mobT.textContent=`Download APK (${apk.tag})`; mobV.textContent=`${apk.tag} · Available`; mbEl.innerHTML=`<span class="badge badge-navy">● ${apk.tag} Available</span>`; }
+      else { mobT.textContent='APK Release Pending'; mobV.textContent='Build Pending'; mbEl.innerHTML='<span class="badge badge-navy">Build Pending</span>'; }
       apiInfo.innerHTML = 'Registry: Online (Encrypted)';
     }
-
     const cl = await fetch(`https://raw.githubusercontent.com/AstroNutws/Attendance-QRSYS/main/CHANGELOG.md?t=${cb}`);
-    if(!cl.ok) throw 0;
-    const txt = await cl.text();
-    const vm = txt.match(/## \[(\d+\.\d+\.\d+)\][\s\S]*?(?=## \[|$)/);
-    if(vm){
-      titleEl.innerHTML = `Update <em>Registry</em> <span style="font-family:var(--f-code);font-size:13px;font-weight:400;color:var(--faint);">(v${vm[1]})</span>`;
-      const items=[]; let cat='Update';
+    if (!cl.ok) throw 0;
+    const txt = await cl.text(), vm = txt.match(/## \[(\d+\.\d+\.\d+)\][\s\S]*?(?=## \[|$)/);
+    if (vm) {
+      titleEl.innerHTML = `Update <em>Registry</em> <span style="font-family:var(--fmono);font-size:12px;font-weight:400;color:var(--ink4)">(v${vm[1]})</span>`;
+      const items = []; let cat = 'Update';
       vm[0].split('\n').forEach(ln => {
-        if(ln.trim().startsWith('###')) cat=ln.replace('###','').trim();
-        else if(ln.trim().startsWith('-')) items.push({tag:cat, text:ln.trim().slice(1).trim().replace(/\*\*/g,'').replace(/__/g,'')});
+        if (ln.trim().startsWith('###')) cat = ln.replace('###','').trim();
+        else if (ln.trim().startsWith('-')) items.push({ tag:cat, text:ln.trim().slice(1).trim().replace(/\*\*/g,'').replace(/__/g,'') });
       });
-      if(items.length) logs.innerHTML = items.slice(0,8).map(it => {
-        const c=it.tag.toLowerCase();
-        const tc=c.includes('added')?'tg-add':c.includes('improved')?'tg-imp':c.includes('fixed')?'tg-fix':'tg-def';
+      if (items.length) logs.innerHTML = items.slice(0,8).map(it => {
+        const c = it.tag.toLowerCase();
+        const tc = c.includes('added')?'tg-add':c.includes('improved')?'tg-imp':c.includes('fixed')?'tg-fix':'tg-def';
         return `<div class="log-row"><span class="log-tag ${tc}">${it.tag}</span><span class="log-text">${it.text}</span></div>`;
       }).join('');
     }
   } catch {
-    apiInfo.innerHTML = 'Registry: Connection Error';
-    logs.innerHTML = '<div class="log-row"><span class="log-tag tg-fix">Error</span><span class="log-text">Failed to sync live registry. Check connection.</span></div>';
+    apiInfo.innerHTML='Registry: Connection Error';
+    logs.innerHTML='<div class="log-row"><span class="log-tag tg-fix">Error</span><span class="log-text">Failed to sync live registry.</span></div>';
   }
 })();
 
 /* ── UPTIME ── */
 (() => {
-  const start = new Date('2026-01-08T00:00:00');
-  const el = document.getElementById('uptime');
+  const start = new Date('2026-01-08T00:00:00'), el = document.getElementById('uptime');
   setInterval(() => {
     const d = Date.now() - start;
     el.textContent = `${Math.floor(d/86400000)}d ${String(Math.floor((d/3600000)%24)).padStart(2,'0')}h ${String(Math.floor((d/60000)%60)).padStart(2,'0')}m ${String(Math.floor((d/1000)%60)).padStart(2,'0')}s`;
@@ -1396,30 +1121,24 @@ document.querySelectorAll('.rv,.rvl,.rvr').forEach(el => ro.observe(el));
 })();
 
 /* ── DOCS ── */
-async function loadFile(name, btn){
+async function loadFile(name, btn) {
   const div = document.getElementById('doc-content');
   document.querySelectorAll('.tab').forEach(b => b.classList.remove('on'));
-  if(btn) btn.classList.add('on');
-  div.innerHTML = `<div style="text-align:center;padding:40px;color:var(--faint);font-family:var(--f-code);font-size:12px;letter-spacing:2px;">⟳ Syncing ${name}…</div>`;
+  if (btn) btn.classList.add('on');
+  div.innerHTML = `<div style="text-align:center;padding:44px;color:var(--ink4);font-family:var(--fmono);font-size:11px;letter-spacing:2px">⟳ Syncing ${name}…</div>`;
   try {
     const r = await fetch(`https://raw.githubusercontent.com/AstroNutws/Attendance-QRSYS/main/${name}?t=${Date.now()}`);
-    if(!r.ok) throw 0;
+    if (!r.ok) throw 0;
     div.innerHTML = marked.parse(await r.text());
   } catch {
-    div.innerHTML = `<p style="color:var(--red);text-align:center;padding:40px;font-family:var(--f-code);font-size:13px;">${name} could not be loaded. Please check the repository.</p>`;
+    div.innerHTML = `<p style="color:var(--red);text-align:center;padding:40px;font-family:var(--fmono);font-size:12px">${name} could not be loaded.</p>`;
   }
 }
-function loadSec(btn){
+function loadSec(btn) {
   const div = document.getElementById('doc-content');
   document.querySelectorAll('.tab').forEach(b => b.classList.remove('on'));
-  if(btn) btn.classList.add('on');
-  div.innerHTML = `
-    <h2>Security &amp; Data Ownership Policy</h2><br>
-    <p><strong>1. Data Isolation:</strong> Project QrSys acts as middleware. The development team holds zero database ownership at any point in the system lifecycle.</p><br>
-    <p><strong>2. Client Control:</strong> The Client (your organization — school, company, or corporate team) is the sole Supabase project owner. SQL execution and master key control remain exclusively with you.</p><br>
-    <p><strong>3. Credential Integrity:</strong> All credentials are masked at the UI level across all roles. Upcoming versions will introduce one-way cryptographic hashing for database storage.</p><br>
-    <p><strong>4. Access Scoping (RBAC):</strong> Four distinct roles are enforced throughout the system. Normal Users can view their own attendance and submit info change requests — which require Admin approval before taking effect. Admins handle operations and can scan QR codes on behalf of users. Super Admins manage accounts and credentials. Only the Owner has database-level authority via their private Supabase Dashboard.</p>
-  `;
+  if (btn) btn.classList.add('on');
+  div.innerHTML = `<h2>Security &amp; Data Ownership Policy</h2><br><p><strong>1. Data Isolation:</strong> Project QrSys acts as middleware. The development team holds zero database ownership at any point.</p><br><p><strong>2. Client Control:</strong> The Client is the sole Supabase project owner. SQL execution and master keys remain exclusively with you.</p><br><p><strong>3. Credential Integrity:</strong> All credentials are masked at the UI level. Upcoming versions will introduce one-way cryptographic hashing.</p><br><p><strong>4. RBAC Scoping:</strong> Four distinct roles enforced throughout. Normal Users submit info change requests requiring Admin approval. Only the Owner has database-level authority via their private Supabase Dashboard.</p>`;
 }
 loadFile('README.md', document.querySelector('.tab.on'));
 </script>
