@@ -8,26 +8,10 @@
 <meta name="theme-color" content="#8b0000">
 <link rel="icon" type="image/png" href="123.png">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js">/* ── MUSIC BUTTON + VOLUME SLIDER ── */
-const musicBtn  = document.getElementById('music-btn');
-const volSlider = document.getElementById('vol-slider');
-if(musicBtn){
-  musicBtn.addEventListener('click', function(){
-    const on = AUDIO.toggleMusic();
-    musicBtn.innerHTML = on ? '&#127925; Music' : '&#128263; Muted';
-    musicBtn.classList.toggle('playing', on);
-    if(volSlider){ volSlider.disabled = !on; volSlider.style.opacity = on ? '.8' : '.3'; }
-  });
-}
-if(volSlider){
-  volSlider.addEventListener('input', function(){
-    AUDIO.setVolume(volSlider.value / 100);
-  });
-}
-
-</script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <style>
-#intro{position:fixed;inset:0;z-index:99999;background:#050101;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .55s cubic-bezier(.4,0,.2,1),transform .55s cubic-bezier(.4,0,.2,1);will-change:opacity,transform;}
+#intro{position:fixed;inset:0;z-index:99999;background:#050101;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .55s cubic-bezier(.4,0,.2,1),transform .55s cubic-bezier(.4,0,.2,1);will-change:opacity,transform;cursor:auto;}
+#intro a, #intro button{cursor:pointer;}
 #intro.intro-exit{opacity:0;transform:scale(1.025);pointer-events:none;}
 #intro.intro-gone{display:none;}
 #qr-wrap{position:relative;width:180px;height:180px;margin-bottom:32px;}
@@ -889,6 +873,23 @@ const AUDIO = (function(){
 /* ── TICKER ── */
 const msgs=['<b>Project QrSys</b> &middot; SaaS Attendance Platform for Any Organization','Schools &middot; Companies &middot; Corporate Teams &middot; Any Group','<b>RBAC Enforced</b> &middot; Zero Privilege Leakage','Windows Desktop + Android Mobile &middot; Deploy Today','<b>4 Roles</b> &middot; Normal User &middot; Admin &middot; Super Admin &middot; Owner','QR Scanning &middot; Webcam Interface &middot; .NET MAUI Framework','<b>Live Since</b> January 8 2026 &middot; Encrypted Connection Active'];
 document.getElementById('tkt').innerHTML=[...msgs,...msgs,...msgs,...msgs].map(m=>`<span>${m}</span>`).join('');
+
+/* ── MUSIC BUTTON + VOLUME SLIDER ── */
+const musicBtn  = document.getElementById('music-btn');
+const volSlider = document.getElementById('vol-slider');
+if(musicBtn){
+  musicBtn.addEventListener('click', function(){
+    const on = AUDIO.toggleMusic();
+    musicBtn.innerHTML = on ? '&#127925; Music' : '&#128263; Muted';
+    musicBtn.classList.toggle('playing', on);
+    if(volSlider){ volSlider.disabled = !on; volSlider.style.opacity = on ? '.8' : '.3'; }
+  });
+}
+if(volSlider){
+  volSlider.addEventListener('input', function(){
+    AUDIO.setVolume(volSlider.value / 100);
+  });
+}
 
 /* ── THEME ── */
 const tBtn=document.getElementById('themeBtn');
