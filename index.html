@@ -73,8 +73,6 @@ nav{position:fixed;top:0;width:100%;height:60px;display:flex;align-items:center;
 .nav-link:hover{color:var(--red);border-color:var(--red);background:var(--t1);}
 .nav-theme{font-family:var(--fmono);font-size:10px;color:var(--ink3);background:none;border:1px solid var(--line);padding:6px 14px;border-radius:100px;display:flex;align-items:center;gap:6px;transition:all .2s;}
 .nav-theme:hover{background:var(--red);color:#fff;border-color:var(--red);}
-
-/* ── MUSIC CONTROL BUTTON ── */
 #music-btn{
   font-family:var(--fmono);font-size:10px;color:var(--ink3);
   background:none;border:1px solid var(--line);
@@ -88,7 +86,6 @@ nav{position:fixed;top:0;width:100%;height:60px;display:flex;align-items:center;
   width:4px;height:4px;border-radius:50%;background:#22c55e;
   animation:pdot 1.4s ease-out infinite;
 }
-
 .hero{padding:158px 24px 100px;text-align:center;position:relative;z-index:1;}
 .hero-in{max-width:780px;margin:0 auto;}
 .eyebrow{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:100px;padding:6px 18px;font-family:var(--fmono);font-size:10px;color:var(--ink4);letter-spacing:2px;text-transform:uppercase;margin-bottom:36px;background:var(--surf);animation:aup .8s var(--ease) both;}
@@ -223,9 +220,7 @@ h2 em{color:var(--red);font-style:italic;}
 .uptime-box{border-radius:16px;overflow:hidden;background:var(--t1);border:1px solid var(--line);margin-top:20px;position:relative;}
 .uptime-val{font-family:var(--fmono);font-size:clamp(1.6rem,5vw,2.4rem);font-weight:400;letter-spacing:.1em;color:var(--red);text-align:center;padding:48px 20px;position:relative;z-index:1;}
 .uptime-box::after{content:'● LIVE';position:absolute;top:14px;right:16px;font-family:var(--fmono);font-size:9px;letter-spacing:2.5px;color:#22c55e;text-shadow:0 0 8px rgba(34,197,94,.5);z-index:2;}
-/* first-commit label top-left */
 .uptime-box::before{content:'↳ FIRST COMMIT';position:absolute;top:14px;left:16px;font-family:var(--fmono);font-size:9px;letter-spacing:2px;color:var(--red);opacity:.45;z-index:2;}
-.uptime-lbl{text-align:center;margin-top:12px;font-family:var(--fmono);font-size:9.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink4);}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 24px;font-family:var(--fsans);font-weight:500;font-size:14px;border-radius:100px;border:none;position:relative;overflow:hidden;transition:transform .2s,filter .2s,box-shadow .2s;will-change:transform;}
 .btn:hover{transform:translateY(-2px);filter:brightness(1.07);}
 .btn:active{transform:translateY(0);}
@@ -520,34 +515,17 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 'use strict';
 
-/* ══════════════════════════════════════════════════════
-   AUDIO ENGINE — Web Audio API
-   All sound is synthesised in-browser, no external files.
-   
-   1. QR BUILD SOUND  : soft random beeps as each pixel appears
-   2. SCAN SOUND      : rising sweep when the laser scans the QR
-   3. GRANTED SOUND   : satisfying confirmation chord
-   4. BG MUSIC        : ambient lo-fi loop that plays after entry
-══════════════════════════════════════════════════════ */
-/* ══════════════════════════════════════════════════════════════
-   AUDIO ENGINE
-   ─ One shared AudioContext, created on first genuine click.
-   ─ All sounds route through a master gain (volume slider).
-   ─ BG music is an HTMLAudioElement (main.mp3 from GitHub).
-   ─ Synth sounds (QR beeps, sweep, chord) use the Web Audio API.
-══════════════════════════════════════════════════════════════ */
 const AUDIO = (function(){
   var _ac      = null;
   var _master  = null;
   var _vol     = 0.75;
   var _on      = true;
-  var _bgEl    = null;   /* HTMLAudioElement */
+  var _bgEl    = null;
   var _bgReady = false;
   var _unlocked = false;
 
   var MP3 = 'https://raw.githubusercontent.com/AstroNutws/Attendance-QRSYS/main/main.mp3';
 
-  /* ── called once on the first real click ── */
   function unlock(){
     if(_unlocked) return;
     _unlocked = true;
@@ -560,7 +538,6 @@ const AUDIO = (function(){
     }catch(e){ _ac = null; }
   }
 
-  /* ── low-level synth ── */
   function _beep(freq, dur, vol, type){
     if(!_ac) return;
     try{
@@ -576,7 +553,6 @@ const AUDIO = (function(){
     }catch(e){}
   }
 
-  /* ── public sound functions ── */
   function pixelTick(){
     if(!_ac || Math.random() > 0.4) return;
     _beep(700 + Math.random()*1500, 0.06, 0.6, 'square');
@@ -616,7 +592,6 @@ const AUDIO = (function(){
     });
   }
 
-  /* ── background music (HTMLAudio loops main.mp3) ── */
   function _initBG(){
     if(_bgEl) return;
     _bgEl = new Audio(MP3);
@@ -662,15 +637,6 @@ const AUDIO = (function(){
   };
 })();
 
-/* ══════════════════════════════════════════════════════════════
-   INTRO — Two-phase:
-   PHASE 1 · "CLICK TO SCAN" splash  (forces user gesture)
-   PHASE 2 · QR build + scan animation WITH SOUND
-   
-   Why two phases? Browser autoplay policy requires a genuine
-   click/tap before AudioContext can start. Phase 1 gives us
-   that click, then Phase 2 runs with audio fully unlocked.
-══════════════════════════════════════════════════════════════ */
 (function(){
   var introEl  = document.getElementById('intro');
   var canvas   = document.getElementById('qr-canvas');
@@ -708,7 +674,6 @@ const AUDIO = (function(){
     [1,1,1,1,1,1,1,0,1,0,1,1,1,0,1,1,1,0,1,0,1]
   ];
 
-  /* shuffle reveal order — corners first */
   var corners=[], rest=[];
   for(var r=0;r<SIZE;r++) for(var cc=0;cc<SIZE;cc++){
     var isC=(r<8&&cc<8)||(r<8&&cc>=SIZE-8)||(r>=SIZE-8&&cc<8);
@@ -738,16 +703,13 @@ const AUDIO = (function(){
     }
   }
 
-  /* ── PHASE 1: show "TAP TO SCAN" and wait for click ── */
   document.body.style.overflow = 'hidden';
   ctx2d.fillStyle = C_BG; ctx2d.fillRect(0,0,180,180);
   if(statusEl) statusEl.textContent = 'TAP TO SCAN';
   if(hintEl)   hintEl.textContent   = 'Click anywhere to scan';
   if(barEl)    barEl.style.width    = '0%';
 
-  /* draw a ghost (dim) QR so they know what to expect */
   for(var gr=0;gr<SIZE;gr++) for(var gc=0;gc<SIZE;gc++) revealed[gr][gc]=false;
-  /* draw just the finder patterns dimly */
   ctx2d.fillStyle = C_BG; ctx2d.fillRect(0,0,180,180);
   for(var pr=0;pr<SIZE;pr++) for(var pc=0;pc<SIZE;pc++){
     if(PAT[pr][pc]===1){
@@ -756,13 +718,11 @@ const AUDIO = (function(){
     }
   }
 
-  /* ── PHASE 2: triggered by user click ── */
   var phase2Started = false;
   function startPhase2(){
     if(phase2Started) return;
     phase2Started = true;
 
-    /* ★ THIS IS THE GESTURE — unlock audio NOW ★ */
     AUDIO.unlock();
 
     if(statusEl) statusEl.textContent = 'Initializing\u2026';
@@ -787,7 +747,7 @@ const AUDIO = (function(){
       var n = Math.floor(p * ordered.length);
       for(var oi=prevN; oi<n; oi++){
         revealed[ordered[oi].r][ordered[oi].c] = true;
-        AUDIO.pixelTick();   /* ← audio is unlocked, this WILL play */
+        AUDIO.pixelTick();
       }
       prevN = n;
       drawQR();
@@ -821,7 +781,6 @@ const AUDIO = (function(){
           setTimeout(doExit, 500);
         }, 160);
       }, {once:true});
-      /* failsafe */
       setTimeout(function(){
         if(!introEl.classList.contains('intro-exit')) doExit();
       }, 3500);
@@ -841,14 +800,12 @@ const AUDIO = (function(){
     }, 580);
   }
 
-  /* attach the one genuine click */
   introEl.addEventListener('click', startPhase2, {once:true});
   document.addEventListener('keydown', function(e){
     if(e.key === 'Enter' || e.key === ' ') startPhase2();
   }, {once:true});
 })();
 
-/* ── CURSOR ── */
 (function(){
   const el=document.getElementById('cur-qr');
   const cvs=document.getElementById('qr-cur-canvas');
@@ -870,11 +827,9 @@ const AUDIO = (function(){
   document.addEventListener('mouseup',()=>document.body.classList.remove('c-down'));
 })();
 
-/* ── TICKER ── */
 const msgs=['<b>Project QrSys</b> &middot; SaaS Attendance Platform for Any Organization','Schools &middot; Companies &middot; Corporate Teams &middot; Any Group','<b>RBAC Enforced</b> &middot; Zero Privilege Leakage','Windows Desktop + Android Mobile &middot; Deploy Today','<b>4 Roles</b> &middot; Normal User &middot; Admin &middot; Super Admin &middot; Owner','QR Scanning &middot; Webcam Interface &middot; .NET MAUI Framework','<b>Live Since</b> January 8 2026 &middot; Encrypted Connection Active'];
 document.getElementById('tkt').innerHTML=[...msgs,...msgs,...msgs,...msgs].map(m=>`<span>${m}</span>`).join('');
 
-/* ── MUSIC BUTTON + VOLUME SLIDER ── */
 const musicBtn  = document.getElementById('music-btn');
 const volSlider = document.getElementById('vol-slider');
 if(musicBtn){
@@ -891,13 +846,11 @@ if(volSlider){
   });
 }
 
-/* ── THEME ── */
 const tBtn=document.getElementById('themeBtn');
 function applyTheme(t){document.documentElement[t==='dark'?'setAttribute':'removeAttribute']('data-dark','');tBtn.innerHTML=t==='dark'?'&#9728;&#65039; Light':'&#127769; Dark';}
 applyTheme(localStorage.getItem('theme')||'light');
 tBtn.addEventListener('click',()=>{const d=document.documentElement.hasAttribute('data-dark');applyTheme(d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');});
 
-/* ── COUNTERS ── */
 setTimeout(()=>{
   document.querySelectorAll('.sn[data-t]').forEach(el=>{
     const t=+el.dataset.t,s=el.dataset.s||'';let v=0;
@@ -905,7 +858,6 @@ setTimeout(()=>{
   });
 },500);
 
-/* ── RIPPLE ── */
 document.querySelectorAll('.dl-btn').forEach(btn=>{
   btn.addEventListener('click',function(e){
     const r=document.createElement('span');r.className='ripple';
@@ -915,7 +867,6 @@ document.querySelectorAll('.dl-btn').forEach(btn=>{
   },{passive:true});
 });
 
-/* ── FAQ ── */
 document.querySelectorAll('.faq-q').forEach(q=>{
   q.addEventListener('click',()=>{
     const item=q.parentElement,was=item.classList.contains('open');
@@ -924,7 +875,6 @@ document.querySelectorAll('.faq-q').forEach(q=>{
   });
 });
 
-/* ── SCROLL REVEAL ── */
 const ro=new IntersectionObserver(entries=>{
   entries.forEach((e,i)=>{
     if(e.isIntersecting){
@@ -938,7 +888,6 @@ const ro=new IntersectionObserver(entries=>{
 },{threshold:.07,rootMargin:'0px 0px -40px 0px'});
 document.querySelectorAll('.rv,.rvl,.rvr').forEach(el=>ro.observe(el));
 
-/* ── GITHUB SYNC (releases + changelog) ── */
 (async()=>{
   const winBtn=document.getElementById('win-btn'),mobBtn=document.getElementById('mob-btn');
   const apiInfo=document.getElementById('api-info'),dbEl=document.getElementById('db'),mbEl=document.getElementById('mb');
@@ -983,7 +932,6 @@ document.querySelectorAll('.rv,.rvl,.rvr').forEach(el=>ro.observe(el));
   }
 })();
 
-/* ── UPTIME: days since first commit (GitHub API) ── */
 (async()=>{
   const el  = document.getElementById('uptime');
   const lbl = document.getElementById('uptime-lbl');
@@ -998,7 +946,6 @@ document.querySelectorAll('.rv,.rvl,.rvr').forEach(el=>ro.observe(el));
   }
 
   try{
-    /* Fetch page 1 → read Link header for last page number */
     const resp = await fetch(
       `https://api.github.com/repos/AstroNutws/Attendance-QRSYS/commits?per_page=1&t=${Date.now()}`
     );
@@ -1009,7 +956,6 @@ document.querySelectorAll('.rv,.rvl,.rvr').forEach(el=>ro.observe(el));
     let firstDate;
 
     if(lastMatch){
-      /* Multiple pages — last page has the oldest commit */
       const oldResp = await fetch(
         `https://api.github.com/repos/AstroNutws/Attendance-QRSYS/commits?per_page=1&page=${lastMatch[1]}&t=${Date.now()}`
       );
@@ -1017,12 +963,10 @@ document.querySelectorAll('.rv,.rvl,.rvr').forEach(el=>ro.observe(el));
       const oldData = await oldResp.json();
       firstDate = new Date(oldData[0].commit.author.date);
     } else {
-      /* Only one page — this IS the first commit */
       const data = await resp.json();
       firstDate  = new Date(data[0].commit.author.date);
     }
 
-    /* Update subtitle with human-readable date */
     const opts = {year:'numeric',month:'long',day:'numeric'};
     if(lbl){
       lbl.textContent = `First Commit: ${firstDate.toLocaleDateString('en-US',opts)} \u00b7 Encrypted Cloud Connection \u00b7 Active`;
@@ -1033,7 +977,6 @@ document.querySelectorAll('.rv,.rvl,.rvr').forEach(el=>ro.observe(el));
     setInterval(()=>tick(startMs), 1000);
 
   } catch(e){
-    /* Fallback to known project start date */
     const fallback = new Date('2026-01-08T00:00:00').getTime();
     if(lbl) lbl.textContent = 'Encrypted Cloud Connection \u00b7 Active';
     tick(fallback);
@@ -1041,7 +984,6 @@ document.querySelectorAll('.rv,.rvl,.rvr').forEach(el=>ro.observe(el));
   }
 })();
 
-/* ── DOCS ── */
 async function loadFile(name,btn){
   const div=document.getElementById('doc-content');
   document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
