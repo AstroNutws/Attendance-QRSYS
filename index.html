@@ -5,1825 +5,732 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Project QrSys | Infrastructure Portal</title>
 <meta name="theme-color" content="#800000">
-<link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/100/800000/university.png">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="123.png">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=Syne:wght@400;500;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
 <style>
-/* =============================================
-   DESIGN SYSTEM
-============================================= */
-:root {
-  --m:       #800000;
-  --m2:      #a00000;
-  --m3:      #5a0000;
-  --m4:      #c0392b;
-  --w:       #ffffff;
-  --off:     #fdf8f8;
-  --bg:      #fcf5f5;
-  --text:    #180606;
-  --muted:   #8a5a5a;
-  --border:  rgba(128,0,0,0.13);
-  --bstrong: rgba(128,0,0,0.28);
-  --glass:   rgba(255,255,255,0.72);
-  --glass2:  rgba(255,255,255,0.55);
-  --glow:    rgba(128,0,0,0.10);
-  --glow2:   rgba(128,0,0,0.06);
-  --shadow:  0 8px 40px rgba(128,0,0,0.12);
-  --shadow2: 0 32px 80px rgba(128,0,0,0.16);
-  --serif: 'Cormorant Garamond', serif;
-  --sans:  'Outfit', sans-serif;
-  --mono:  'JetBrains Mono', monospace;
-  --ease:  cubic-bezier(.4,0,.2,1);
-  --spring:cubic-bezier(.175,.885,.32,1.275);
-  --tag-added:   #15803d;
-  --tag-improv:  #1d4ed8;
-  --tag-fixed:   #b45309;
+:root{
+  --m:#800000;--m2:#a00000;--m3:#5a0000;
+  --off:#fdf8f7;--ink:#1c0a0a;--mute:#9a7070;
+  --border:rgba(128,0,0,.13);--bhi:rgba(128,0,0,.28);
+  --glass:rgba(255,255,255,.76);--glow:rgba(128,0,0,.07);--glow2:rgba(128,0,0,.13);
+  --serif:'Cormorant Garamond',serif;--sans:'Syne',sans-serif;--mono:'JetBrains Mono',monospace;
+  --ease:cubic-bezier(.4,0,.2,1);--spring:cubic-bezier(.175,.885,.32,1.275);
+  --tadd:#14532d;--timp:#1e3a5f;--tfix:#7c2d12;
 }
-
-[data-theme="dark"] {
-  --w:      #090202;
-  --off:    #0e0404;
-  --bg:     #0a0303;
-  --text:   #f5e8e8;
-  --muted:  #9a6a6a;
-  --border: rgba(220,60,60,0.14);
-  --bstrong:rgba(220,60,60,0.30);
-  --glass:  rgba(14,4,4,0.80);
-  --glass2: rgba(14,4,4,0.60);
-  --glow:   rgba(200,40,40,0.09);
-  --glow2:  rgba(200,40,40,0.05);
-  --shadow: 0 8px 40px rgba(180,0,0,0.18);
-  --shadow2:0 32px 80px rgba(180,0,0,0.22);
-  --tag-added: #4ade80;
-  --tag-improv:#60a5fa;
-  --tag-fixed: #fbbf24;
+[data-theme="dark"]{
+  --off:#080101;--ink:#f5e8e8;--mute:#a08080;
+  --border:rgba(200,60,60,.13);--bhi:rgba(200,60,60,.27);
+  --glass:rgba(18,4,4,.82);--glow:rgba(180,30,30,.07);--glow2:rgba(180,30,30,.12);
+  --tadd:#4ade80;--timp:#60a5fa;--tfix:#fb923c;
 }
-
-/* =============================================
-   BASE
-============================================= */
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;font-size:16px;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:var(--off);color:var(--ink);overflow-x:hidden;line-height:1.65;cursor:none;transition:background .4s,color .4s;}
+a,button{cursor:none;}
 
-body {
-  font-family: var(--sans);
-  background: var(--bg);
-  color: var(--text);
-  overflow-x: hidden;
-  line-height: 1.65;
-  cursor: none;
-  padding-bottom: 100px;
-  transition: background .5s var(--ease), color .5s var(--ease);
-}
+/* CURSOR */
+#cd,#cr{position:fixed;border-radius:50%;pointer-events:none;z-index:99999;top:0;left:0;}
+#cd{width:7px;height:7px;background:var(--m);transform:translate(-50%,-50%);transition:width .15s,height .15s;}
+#cr{width:40px;height:40px;border:1.5px solid var(--m);transform:translate(-50%,-50%);opacity:.45;transition:width .25s var(--spring),height .25s var(--spring);}
+.cg #cd{width:13px;height:13px;}
+.cg #cr{width:60px;height:60px;opacity:.18;}
 
-/* =============================================
-   CURSOR
-============================================= */
-#c-dot,#c-ring,#c-trail {
-  position: fixed;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 99999;
-  will-change: transform;
-}
-#c-dot {
-  width: 7px; height: 7px;
-  background: var(--m);
-  transform: translate(-50%,-50%);
-  transition: width .15s, height .15s, background .2s;
-}
-#c-ring {
-  width: 40px; height: 40px;
-  border: 1.5px solid var(--m);
-  transform: translate(-50%,-50%);
-  opacity: .4;
-  transition: width .3s, height .3s, opacity .3s;
-}
-#c-trail {
-  width: 120px; height: 120px;
-  background: radial-gradient(circle, rgba(128,0,0,.07) 0%, transparent 70%);
-  transform: translate(-50%,-50%);
-  pointer-events: none;
-}
-body.cursor-active #c-dot { width:12px; height:12px; background:var(--m4); }
-body.cursor-active #c-ring { width:56px; height:56px; opacity:.25; }
+/* BACKGROUND */
+#bgw{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
+#ca,#cq,#cp{position:absolute;inset:0;}
+#ca{opacity:1;}#cq{opacity:.22;}#cp{opacity:.78;}
+#bgw::after{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23g)' opacity='0.04'/%3E%3C/svg%3E");background-size:180px;mix-blend-mode:multiply;}
+[data-theme="dark"] #bgw::after{mix-blend-mode:screen;opacity:.6;}
 
-/* =============================================
-   CANVAS BACKGROUND — DRAMATIC
-============================================= */
-#bg-canvas {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-}
+/* TICKER */
+.tkw{position:fixed;top:68px;width:100%;z-index:999;background:var(--m);overflow:hidden;height:28px;display:flex;align-items:center;box-shadow:0 3px 20px rgba(128,0,0,.3);}
+.tkt{display:flex;white-space:nowrap;animation:tk 34s linear infinite;}
+.tkt span{font-family:var(--mono);font-size:.57rem;color:rgba(255,255,255,.7);letter-spacing:2px;text-transform:uppercase;padding:0 28px;}
+.tkt span strong{color:#fff;}
+@keyframes tk{from{transform:translateX(0);}to{transform:translateX(-50%);}}
 
-/* Layered maroon mesh background */
-.bg-mesh {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse 120% 80% at 15% 10%,  rgba(128,0,0,0.13) 0%, transparent 55%),
-    radial-gradient(ellipse 80%  100% at 90% 80%,  rgba(160,0,0,0.10) 0%, transparent 55%),
-    radial-gradient(ellipse 60%  60%  at 50% 50%,  rgba(128,0,0,0.04) 0%, transparent 70%),
-    radial-gradient(ellipse 100% 60%  at 80% 10%,  rgba(90,0,0,0.06)  0%, transparent 60%);
-}
+/* NAV */
+nav{position:fixed;top:0;width:100%;height:68px;display:flex;justify-content:space-between;align-items:center;padding:0 56px;z-index:1000;backdrop-filter:blur(28px) saturate(200%);-webkit-backdrop-filter:blur(28px) saturate(200%);background:rgba(255,255,255,.82);border-bottom:1px solid var(--border);transition:background .4s;}
+[data-theme="dark"] nav{background:rgba(8,1,1,.88);}
+.nl{font-family:var(--serif);font-size:1.45rem;font-weight:700;color:var(--m);display:flex;align-items:center;gap:11px;}
+.nl-img{width:32px;height:32px;object-fit:contain;border-radius:8px;}
+.np{width:9px;height:9px;background:var(--m);border-radius:50%;box-shadow:0 0 12px var(--m);animation:pip 2s ease-in-out infinite;}
+@keyframes pip{0%,100%{transform:scale(1);box-shadow:0 0 8px var(--m);}50%{transform:scale(1.7);box-shadow:0 0 22px var(--m2);}}
+.nm{font-family:var(--mono);font-size:.6rem;color:var(--mute);letter-spacing:1.5px;text-transform:uppercase;display:flex;align-items:center;gap:8px;}
+.nm::before{content:'';width:6px;height:6px;background:#22c55e;border-radius:50%;box-shadow:0 0 10px #22c55e;animation:pip 1.4s ease-in-out infinite;}
+.nr{display:flex;align-items:center;gap:12px;}
+.ngh{font-family:var(--mono);font-size:.64rem;color:var(--mute);text-decoration:none;border:1px solid var(--border);padding:7px 14px;border-radius:40px;display:flex;align-items:center;gap:6px;transition:all .25s;}
+.ngh:hover{color:var(--m);border-color:var(--bhi);}
+.tt{background:none;border:1px solid var(--bhi);padding:7px 16px;border-radius:40px;color:var(--ink);font-family:var(--sans);font-size:.68rem;font-weight:700;cursor:none;display:flex;align-items:center;gap:7px;transition:all .25s;text-transform:uppercase;letter-spacing:.5px;}
+.tt:hover{background:var(--m);color:#fff;border-color:var(--m);}
 
-/* Moving aurora stripes */
-.bg-aurora {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-.aurora-stripe {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(70px);
-  animation: aurora-float linear infinite;
-  opacity: 0;
-}
-.aurora-stripe:nth-child(1) {
-  width: 700px; height: 300px;
-  background: rgba(128,0,0,0.12);
-  top: -80px; left: -100px;
-  animation-duration: 18s;
-  animation-delay: 0s;
-}
-.aurora-stripe:nth-child(2) {
-  width: 500px; height: 250px;
-  background: rgba(160,40,40,0.08);
-  top: 60%; right: -80px;
-  animation-duration: 22s;
-  animation-delay: -6s;
-}
-.aurora-stripe:nth-child(3) {
-  width: 600px; height: 200px;
-  background: rgba(90,0,0,0.07);
-  bottom: 10%; left: 30%;
-  animation-duration: 26s;
-  animation-delay: -12s;
-}
-.aurora-stripe:nth-child(4) {
-  width: 400px; height: 400px;
-  background: rgba(180,30,30,0.06);
-  top: 30%; left: 60%;
-  animation-duration: 20s;
-  animation-delay: -4s;
-}
+/* HERO */
+header{padding:172px 24px 108px;text-align:center;max-width:1000px;margin:0 auto;position:relative;z-index:1;}
+.hk{display:inline-flex;align-items:center;gap:10px;background:var(--glass);border:1px solid var(--bhi);border-radius:40px;padding:9px 22px;font-family:var(--mono);font-size:.6rem;color:var(--m);letter-spacing:2px;text-transform:uppercase;margin-bottom:34px;backdrop-filter:blur(14px);animation:fu .8s var(--ease) both;box-shadow:0 4px 24px rgba(128,0,0,.1);}
+.hkd{width:5px;height:5px;background:var(--m);border-radius:50%;animation:pip 1.5s infinite;}
+h1{font-family:var(--serif);font-size:clamp(3rem,8.8vw,6.8rem);font-weight:700;line-height:1.02;color:var(--ink);letter-spacing:-.02em;margin-bottom:8px;animation:fu .9s .1s var(--ease) both;}
+h1 em{color:var(--m);font-style:italic;}
+.hrr{display:flex;align-items:center;justify-content:center;gap:16px;margin:28px 0;animation:fu .9s .18s var(--ease) both;}
+.hrl{flex:1;max-width:110px;height:1px;background:var(--bhi);}
+.hrt{font-family:var(--mono);font-size:.68rem;color:var(--mute);letter-spacing:2px;text-transform:uppercase;}
+.sub{font-size:1.07rem;color:var(--mute);max-width:580px;margin:0 auto 46px;line-height:1.8;animation:fu .9s .22s var(--ease) both;}
+.hstats{display:flex;justify-content:center;border:1px solid var(--border);border-radius:20px;overflow:hidden;background:var(--glass);backdrop-filter:blur(18px);max-width:680px;margin:0 auto;box-shadow:0 8px 48px rgba(128,0,0,.09),0 2px 0 rgba(255,255,255,.9) inset;animation:fu 1s .3s var(--ease) both;}
+[data-theme="dark"] .hstats{box-shadow:0 8px 48px rgba(0,0,0,.4);}
+.st{flex:1;padding:26px 16px;border-right:1px solid var(--border);text-align:center;transition:background .25s;}
+.st:last-child{border-right:none;}
+.st:hover{background:var(--glow);}
+.sn{font-family:var(--serif);font-size:2.8rem;font-weight:700;color:var(--m);line-height:1;display:block;}
+.sn-sm{font-family:var(--serif);font-size:1.35rem;font-weight:700;color:var(--m);line-height:1.25;display:block;}
+.sl{font-family:var(--mono);font-size:.54rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--mute);margin-top:6px;display:block;}
+@keyframes fu{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
 
-@keyframes aurora-float {
-  0%   { transform: translateX(0) translateY(0) rotate(0deg);   opacity: 0; }
-  10%  { opacity: 1; }
-  50%  { transform: translateX(80px) translateY(40px) rotate(15deg); opacity: 1; }
-  90%  { opacity: 1; }
-  100% { transform: translateX(0) translateY(0) rotate(0deg);   opacity: 0; }
-}
+/* LAYOUT */
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px 80px;display:grid;grid-template-columns:1fr 1fr;gap:22px;position:relative;z-index:1;}
+.s2{grid-column:1/-1;}
+.dv{grid-column:1/-1;display:flex;align-items:center;gap:18px;padding:14px 0 4px;}
+.dv::before,.dv::after{content:'';flex:1;height:1px;background:var(--border);}
+.dv span{font-family:var(--mono);font-size:.54rem;letter-spacing:3px;text-transform:uppercase;color:var(--mute);white-space:nowrap;}
 
-/* Geometric grid overlay */
-.bg-grid {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(128,0,0,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(128,0,0,0.04) 1px, transparent 1px);
-  background-size: 60px 60px;
-  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
-}
+/* CARDS */
+.card{background:var(--glass);border:1px solid var(--border);border-radius:28px;padding:40px;position:relative;overflow:hidden;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 2px 0 rgba(255,255,255,.85) inset,0 8px 36px rgba(128,0,0,.06);transition:transform .45s var(--spring),box-shadow .4s var(--ease),border-color .3s;}
+[data-theme="dark"] .card{box-shadow:0 2px 0 rgba(255,255,255,.04) inset,0 8px 36px rgba(0,0,0,.35);}
+.card:hover{transform:translateY(-8px) scale(1.006);box-shadow:0 2px 0 rgba(255,255,255,.85) inset,0 32px 80px rgba(128,0,0,.14),0 0 0 1px var(--bhi);border-color:var(--bhi);}
+[data-theme="dark"] .card:hover{box-shadow:0 2px 0 rgba(255,255,255,.04) inset,0 32px 80px rgba(0,0,0,.55),0 0 0 1px var(--bhi);}
+.card::before{content:'';position:absolute;top:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.95),transparent);pointer-events:none;}
+.card::after{content:'';position:absolute;top:-50px;right:-50px;width:140px;height:140px;background:radial-gradient(circle,rgba(128,0,0,.08) 0%,transparent 70%);pointer-events:none;border-radius:50%;}
+.ey{font-family:var(--mono);font-size:.57rem;color:var(--m);letter-spacing:2.5px;text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.ey::before{content:'';width:18px;height:1px;background:var(--m);}
+h2{font-family:var(--serif);font-size:2.05rem;font-weight:700;color:var(--ink);margin-bottom:4px;line-height:1.15;}
+h2 em{color:var(--m);font-style:italic;}
 
-/* Grain */
-.bg-grain {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: .45;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='.06'/%3E%3C/svg%3E");
-  background-size: 200px;
-}
+/* BADGE */
+.badge{display:inline-flex;align-items:center;gap:7px;background:var(--m);color:#fff;padding:5px 12px;border-radius:6px;font-family:var(--mono);font-size:.57rem;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px;box-shadow:0 4px 16px rgba(128,0,0,.28);}
+.badge::before{content:'';width:5px;height:5px;background:rgba(255,255,255,.65);border-radius:50%;animation:pip 1.8s infinite;}
+.bdn{background:#1e3a5f;box-shadow:0 4px 16px rgba(30,58,95,.3);}
+.bdn::before{display:none;}
 
-/* =============================================
-   FLOATING ORBS (CSS-only)
-============================================= */
-.orb {
-  position: fixed;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 0;
-  animation: orb-drift ease-in-out infinite alternate;
-  filter: blur(0px);
-}
-.orb::after {
-  content:'';
-  position:absolute;
-  inset:4px;
-  border-radius:50%;
-  background: rgba(255,255,255,0.15);
-}
-.orb-1 {
-  width:180px; height:180px;
-  background: radial-gradient(circle at 35% 35%, rgba(200,50,50,0.22), rgba(128,0,0,0.08));
-  border: 1px solid rgba(128,0,0,0.18);
-  top:12%; left:5%;
-  animation-duration: 9s;
-  box-shadow: 0 0 60px rgba(128,0,0,0.08), inset 0 0 40px rgba(200,60,60,0.06);
-}
-.orb-2 {
-  width:120px; height:120px;
-  background: radial-gradient(circle at 40% 30%, rgba(180,30,30,0.20), rgba(100,0,0,0.06));
-  border: 1px solid rgba(128,0,0,0.14);
-  top:55%; right:6%;
-  animation-duration: 12s;
-  animation-delay:-4s;
-  box-shadow: 0 0 40px rgba(128,0,0,0.07), inset 0 0 30px rgba(180,40,40,0.05);
-}
-.orb-3 {
-  width:80px; height:80px;
-  background: radial-gradient(circle at 50% 30%, rgba(220,60,60,0.18), rgba(128,0,0,0.05));
-  border: 1px solid rgba(128,0,0,0.12);
-  bottom:20%; left:10%;
-  animation-duration: 7s;
-  animation-delay:-2s;
-}
-.orb-4 {
-  width:240px; height:240px;
-  background: radial-gradient(circle at 30% 40%, rgba(160,0,0,0.09), transparent 70%);
-  top: 35%; left:40%;
-  animation-duration: 15s;
-  animation-delay:-7s;
-  filter: blur(2px);
-}
+/* SPEC TABLE */
+.req-table{width:100%;border-collapse:collapse;margin:20px 0;}
+.req-table tr{transition:background .2s;}
+.req-table tr:hover{background:var(--glow);}
+.req-table td{padding:13px 4px;border-bottom:1px solid var(--border);font-size:.87rem;}
+.rl{color:var(--mute);}
+.rv2{text-align:right;font-family:var(--mono);font-size:.8rem;color:var(--ink);}
 
-@keyframes orb-drift {
-  0%   { transform: translateY(0) translateX(0) scale(1); }
-  50%  { transform: translateY(-30px) translateX(15px) scale(1.04); }
-  100% { transform: translateY(10px) translateX(-10px) scale(0.97); }
-}
+/* CHIPS / PILLS */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;background:var(--glow2);border:1px solid var(--border);border-radius:40px;font-size:.73rem;font-weight:700;color:var(--ink);transition:all .22s;}
+.chip:hover{background:var(--m);color:#fff;border-color:var(--m);transform:translateY(-2px);}
 
-/* =============================================
-   NAV
-============================================= */
-nav {
-  position: fixed;
-  top: 0; width:100%;
-  z-index: 1000;
-  height: 70px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 64px;
-  backdrop-filter: blur(24px) saturate(200%);
-  -webkit-backdrop-filter: blur(24px) saturate(200%);
-  background: rgba(255,255,255,0.78);
-  border-bottom: 1px solid var(--border);
-  transition: background .4s var(--ease), border-color .4s;
-}
-[data-theme="dark"] nav {
-  background: rgba(9,2,2,0.85);
-}
+/* BUTTONS */
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:17px 24px;background:var(--m);color:#fff;text-decoration:none;font-weight:700;font-size:.87rem;border-radius:14px;border:none;cursor:none;transition:all .3s var(--ease);margin-top:22px;position:relative;overflow:hidden;font-family:var(--sans);box-shadow:0 6px 26px rgba(128,0,0,.24);}
+.btn::before{content:'';position:absolute;top:0;left:-75%;width:50%;height:100%;background:linear-gradient(120deg,transparent,rgba(255,255,255,.18),transparent);animation:shine 3.5s infinite 1.5s;}
+@keyframes shine{0%{left:-75%;}100%{left:150%;}}
+.btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.18) 0%,transparent 55%);opacity:0;transition:opacity .3s;}
+.btn:hover{background:var(--m3);box-shadow:0 14px 40px rgba(128,0,0,.36);transform:translateY(-3px);}
+.btn:hover::after{opacity:1;}
+.btn-dark{background:var(--ink);box-shadow:0 6px 26px rgba(0,0,0,.22);}
+.btn-dark:hover{background:#3a0808;box-shadow:0 14px 40px rgba(0,0,0,.32);}
 
-.nav-brand {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.nav-icon {
-  width:36px; height:36px;
-  border-radius:10px;
-  background: var(--m);
-  display: flex;
-  align-items:center;
-  justify-content:center;
-  color: white;
-  font-family: var(--serif);
-  font-size: 1.1rem;
-  font-weight:700;
-  font-style: italic;
-  box-shadow: 0 4px 16px rgba(128,0,0,0.3);
-  position: relative;
-}
-.nav-icon::after {
-  content:'';
-  position:absolute;
-  inset:0;
-  border-radius:10px;
-  border: 1px solid rgba(255,255,255,0.25);
-}
-.nav-logo {
-  font-family: var(--serif);
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: var(--m);
-  letter-spacing: .3px;
-}
-.nav-logo span { font-style: italic; opacity:.6; font-size:1rem; }
+/* PERM TABLE */
+.ptab{width:100%;border-collapse:collapse;font-size:.84rem;}
+.ptab th{text-align:left;color:var(--m);font-family:var(--mono);font-size:.57rem;letter-spacing:2px;text-transform:uppercase;padding:12px 10px;border-bottom:2px solid var(--m);}
+.ptab td{padding:13px 10px;border-bottom:1px solid var(--border);transition:background .2s;}
+.ptab tr:hover td{background:var(--glow);}
+.ck{color:#16a34a;font-weight:800;text-align:center;font-size:1.05rem;}
+.cx{color:#dc2626;font-weight:800;text-align:center;font-size:1.05rem;}
+.sh{color:var(--m);font-weight:700;text-align:center;font-family:var(--mono);font-size:.62rem;letter-spacing:1px;}
 
-.nav-center {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--glow);
-  border: 1px solid var(--border);
-  border-radius: 40px;
-  padding: 6px 16px;
-}
-.nav-pill {
-  font-family: var(--mono);
-  font-size: .58rem;
-  letter-spacing: 1.5px;
-  color: var(--muted);
-  text-transform: uppercase;
-}
-.live-dot {
-  width:6px; height:6px;
-  background: #16a34a;
-  border-radius:50%;
-  animation: blink 2s infinite;
-  box-shadow: 0 0 6px #16a34a;
-}
-@keyframes blink {
-  0%,100%{opacity:1; transform:scale(1);}
-  50%{opacity:.4; transform:scale(.8);}
-}
+/* VIDEO */
+.vw{border-radius:18px;overflow:hidden;position:relative;padding-bottom:56.25%;height:0;background:#050000;border:1px solid var(--border);margin-top:18px;box-shadow:0 12px 44px rgba(0,0,0,.18);}
+.vw iframe{position:absolute;inset:0;width:100%;height:100%;}
 
-.nav-right { display:flex; align-items:center; gap:12px; }
+/* SECURITY GRID */
+.secgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:26px;}
+.seci{background:var(--glow);border:1px solid var(--border);border-radius:18px;padding:22px;transition:all .25s;}
+.seci:hover{background:var(--glow2);border-color:var(--bhi);transform:translateY(-3px);box-shadow:0 8px 28px rgba(128,0,0,.1);}
+.seci-ico{font-size:1.5rem;margin-bottom:10px;}
+.seci-t{font-weight:700;font-size:.9rem;margin-bottom:5px;}
+.seci-d{font-size:.78rem;color:var(--mute);line-height:1.65;}
+@media(max-width:640px){.secgrid{grid-template-columns:1fr;}}
 
-.theme-toggle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 18px;
-  background: none;
-  border: 1px solid var(--bstrong);
-  border-radius: 40px;
-  color: var(--text);
-  font-family: var(--sans);
-  font-size: .72rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all .25s;
-  letter-spacing: .3px;
-}
-.theme-toggle:hover {
-  background: var(--m);
-  color: white;
-  border-color: var(--m);
-  box-shadow: 0 4px 20px rgba(128,0,0,0.25);
-}
+/* FAQ */
+.fi{border-bottom:1px solid var(--border);}
+.fq{display:flex;justify-content:space-between;align-items:center;cursor:none;font-weight:700;font-size:.9rem;padding:18px 0;gap:20px;transition:color .2s;}
+.fq:hover{color:var(--m);}
+.fic{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--bhi);display:flex;align-items:center;justify-content:center;font-size:.6rem;flex-shrink:0;transition:all .3s;color:var(--m);}
+.fi.op .fic{background:var(--m);color:#fff;border-color:var(--m);transform:rotate(180deg);}
+.fa{max-height:0;overflow:hidden;transition:max-height .38s ease-out,padding .3s;color:var(--mute);font-size:.88rem;line-height:1.75;}
+.fi.op .fa{max-height:300px;padding-bottom:20px;}
 
-/* =============================================
-   HERO
-============================================= */
-header {
-  position:relative;
-  z-index:1;
-  padding: 165px 24px 120px;
-  text-align: center;
-  max-width:1000px;
-  margin:0 auto;
-}
+/* DOCS */
+.tabs2{display:flex;gap:4px;overflow-x:auto;}
+.tab{background:transparent;border:1px solid var(--border);padding:10px 20px;border-radius:10px 10px 0 0;cursor:none;font-family:var(--mono);font-size:.58rem;color:var(--mute);transition:all .2s;text-transform:uppercase;letter-spacing:1.5px;white-space:nowrap;}
+.tab.on{background:var(--glass);backdrop-filter:blur(12px);color:var(--m);border-bottom-color:transparent;border-top:2px solid var(--m);}
+.tab:not(.on):hover{background:var(--glow);color:var(--ink);}
+.dv2{background:var(--glass);backdrop-filter:blur(18px);padding:36px;border-radius:0 14px 22px 22px;max-height:540px;overflow-y:auto;border:1px solid var(--border);border-top:none;font-size:.88rem;line-height:1.85;}
+.dv2::-webkit-scrollbar{width:3px;}
+.dv2::-webkit-scrollbar-thumb{background:var(--bhi);border-radius:3px;}
+.dv2 h1,.dv2 h2,.dv2 h3{font-family:var(--serif);color:var(--m);margin:22px 0 10px;}
+.dv2 p{margin-bottom:12px;color:var(--mute);}
+.dv2 code{background:var(--glow2);padding:2px 7px;border-radius:4px;font-family:var(--mono);font-size:.78rem;}
+.dv2 pre{background:var(--glow);padding:16px;border-radius:10px;overflow-x:auto;margin:12px 0;}
+.dv2 a{color:var(--m);text-decoration:none;}
+.dv2 a:hover{text-decoration:underline;}
 
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--glass);
-  backdrop-filter: blur(10px);
-  padding: 8px 20px;
-  border-radius: 40px;
-  border: 1px solid var(--bstrong);
-  color: var(--m);
-  font-size: .62rem;
-  font-weight: 700;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  margin-bottom: 32px;
-  box-shadow: var(--shadow);
-  animation: heroFadeUp .8s var(--ease) both;
-}
-.hero-badge-dot {
-  width:6px; height:6px;
-  background: var(--m);
-  border-radius:50%;
-  animation: blink 1.5s infinite;
-}
+/* CHANGELOG */
+.li{display:flex;align-items:flex-start;gap:18px;padding:15px 0;border-bottom:1px solid var(--border);transition:padding .2s,background .2s;border-radius:6px;}
+.li:hover{padding-left:8px;background:var(--glow);}
+.lt{min-width:80px;padding:4px 10px;border-radius:5px;font-family:var(--mono);font-size:.54rem;text-transform:uppercase;text-align:center;letter-spacing:1.2px;flex-shrink:0;}
+.ta{background:rgba(20,83,45,.1);color:var(--tadd);}
+.ti2{background:rgba(30,58,95,.1);color:var(--timp);}
+.tf{background:rgba(124,45,18,.1);color:var(--tfix);}
+.td2{background:var(--glow2);color:var(--mute);}
+.ltxt{font-size:.9rem;color:var(--ink);line-height:1.6;}
 
-h1 {
-  font-family: var(--serif);
-  font-size: clamp(3rem,8.5vw,5.8rem);
-  font-weight: 700;
-  line-height: 1.05;
-  color: var(--text);
-  margin-bottom: 12px;
-  animation: heroFadeUp .9s .08s var(--ease) both;
-}
-h1 em { color:var(--m); font-style:italic; }
-h1 .line2 {
-  display:block;
-  -webkit-text-stroke: 1px var(--m);
-  color: transparent;
-}
+/* UPTIME */
+.upb{font-family:var(--mono);font-size:clamp(1.8rem,5.5vw,3.6rem);font-weight:300;letter-spacing:.08em;color:var(--m);text-align:center;padding:54px;border-radius:22px;background:var(--glow);border:1px solid var(--bhi);margin-top:24px;position:relative;overflow:hidden;}
+.upb::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(128,0,0,.018) 3px,rgba(128,0,0,.018) 4px);pointer-events:none;}
+.upb::after{content:'● LIVE';position:absolute;top:16px;right:20px;font-size:.54rem;letter-spacing:3px;color:#22c55e;text-shadow:0 0 14px #22c55e;animation:pip 2s infinite;}
+.ups{text-align:center;margin-top:18px;font-family:var(--mono);font-size:.57rem;letter-spacing:3.5px;text-transform:uppercase;color:var(--mute);}
 
-.hero-sub {
-  font-size:1.05rem;
-  color: var(--muted);
-  max-width:560px;
-  margin:28px auto 0;
-  font-weight:400;
-  line-height:1.75;
-  animation: heroFadeUp 1s .18s var(--ease) both;
-}
+/* API STATUS */
+.apib{display:inline-flex;align-items:center;gap:7px;margin-top:18px;font-family:var(--mono);font-size:.57rem;color:var(--mute);letter-spacing:1.2px;text-transform:uppercase;background:var(--glow);border:1px solid var(--border);padding:6px 12px;border-radius:40px;}
+.apib::before{content:'';width:5px;height:5px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px #22c55e;animation:pip 2s infinite;}
 
-.hero-divider {
-  width:64px; height:3px;
-  background: linear-gradient(90deg, var(--m), var(--m4));
-  margin:32px auto;
-  border-radius:2px;
-  animation: heroFadeUp .9s .12s var(--ease) both;
-}
+/* CTA */
+.cta{text-align:center;border:2px solid var(--bhi);background:linear-gradient(135deg,rgba(128,0,0,.06) 0%,rgba(128,0,0,.02) 100%);}
+.ctawm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:clamp(5rem,16vw,12rem);font-weight:700;color:rgba(128,0,0,.04);letter-spacing:-.04em;pointer-events:none;white-space:nowrap;user-select:none;}
+.ctai{position:relative;}
+.ctat{font-family:var(--serif);font-size:2.8rem;font-weight:700;color:var(--ink);margin-bottom:10px;line-height:1.1;}
+.ctat em{color:var(--m);}
+.ctad{color:var(--mute);font-size:.92rem;margin:0 auto 34px;max-width:500px;}
+.ctabs{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.ctabs .btn{max-width:240px;margin:0;}
+.ctal{margin-top:36px;padding-top:28px;border-top:1px solid var(--border);display:flex;justify-content:center;gap:56px;flex-wrap:wrap;}
+.lg .ll{font-family:var(--mono);font-size:.54rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--mute);margin-bottom:8px;}
+.lg a{display:inline-block;font-size:.82rem;color:var(--m);font-weight:700;text-decoration:none;margin:0 8px;transition:opacity .2s;}
+.lg a:hover{opacity:.65;}
 
-.hero-stats {
-  display:flex;
-  justify-content:center;
-  gap:0;
-  margin-top:48px;
-  animation: heroFadeUp 1s .28s var(--ease) both;
-  background: var(--glass);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: var(--shadow);
-  max-width:680px;
-  margin-left:auto;
-  margin-right:auto;
-}
-.stat-item {
-  flex:1;
-  padding: 24px 20px;
-  position:relative;
-  text-align:center;
-  transition: background .2s;
-}
-.stat-item:not(:last-child)::after {
-  content:'';
-  position:absolute;
-  right:0; top:20%; bottom:20%;
-  width:1px;
-  background: var(--border);
-}
-.stat-item:hover { background: var(--glow2); }
-.stat-val {
-  font-family:var(--serif);
-  font-size:2.2rem;
-  font-weight:700;
-  color:var(--m);
-  line-height:1;
-}
-.stat-label {
-  font-size:.58rem;
-  letter-spacing:2px;
-  text-transform:uppercase;
-  color:var(--muted);
-  font-weight:600;
-  margin-top:6px;
-}
+/* FOOTER */
+footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:60px 24px 44px;text-align:center;}
+.flo{font-family:var(--serif);font-size:3.2rem;font-weight:700;color:var(--m);opacity:.1;display:block;letter-spacing:-.03em;margin-bottom:16px;}
+.fco{font-family:var(--mono);font-size:.57rem;letter-spacing:3px;text-transform:uppercase;color:var(--mute);}
 
-@keyframes heroFadeUp {
-  from{opacity:0;transform:translateY(28px);}
-  to{opacity:1;transform:translateY(0);}
-}
+/* REVEAL ANIMATIONS */
+.rv{opacity:0;transform:translateY(34px);transition:opacity .7s var(--ease),transform .7s var(--ease);}
+.rvl{opacity:0;transform:translateX(-26px);transition:opacity .7s var(--ease),transform .7s var(--ease);}
+.rvr{opacity:0;transform:translateX(26px);transition:opacity .7s var(--ease),transform .7s var(--ease);}
+.rv.in,.rvl.in,.rvr.in{opacity:1;transform:none;}
 
-/* =============================================
-   SECTION LABEL
-============================================= */
-.section-label {
-  grid-column:1/-1;
-  display:flex;
-  align-items:center;
-  gap:16px;
-  padding:8px 0;
-}
-.section-label span {
-  font-size:.6rem;
-  font-weight:700;
-  letter-spacing:3.5px;
-  text-transform:uppercase;
-  color:var(--muted);
-  white-space:nowrap;
-}
-.section-label::before {
-  content:'';
-  width:24px; height:2px;
-  background: var(--m);
-  border-radius:1px;
-  flex-shrink:0;
-}
-.section-label::after {
-  content:'';
-  flex:1; height:1px;
-  background: linear-gradient(90deg, var(--border), transparent);
-}
-
-/* =============================================
-   LAYOUT
-============================================= */
-.container {
-  max-width:1160px;
-  margin:0 auto;
-  padding:0 24px;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:22px;
-  position:relative;
-  z-index:1;
-}
-.span-full{grid-column:1/-1;}
-
-/* =============================================
-   CARDS — GLASSMORPHISM
-============================================= */
-.card {
-  background: var(--glass);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid var(--border);
-  border-radius:28px;
-  padding:42px;
-  position:relative;
-  overflow:hidden;
-  transition:
-    transform .45s var(--spring),
-    box-shadow .4s var(--ease),
-    border-color .3s;
-  box-shadow: var(--shadow);
-  will-change: transform;
-}
-
-/* Animated shimmer on hover */
-.card::before {
-  content:'';
-  position:absolute;
-  inset:0;
-  background: linear-gradient(
-    125deg,
-    transparent 0%,
-    rgba(255,255,255,.12) 40%,
-    transparent 80%
-  );
-  transform: translateX(-100%) skewX(-15deg);
-  transition: transform .6s var(--ease);
-  pointer-events:none;
-  z-index:0;
-}
-.card:hover::before { transform: translateX(200%) skewX(-15deg); }
-
-/* Top border gradient */
-.card::after {
-  content:'';
-  position:absolute;
-  top:0; left:20px; right:20px;
-  height:1px;
-  background: linear-gradient(90deg, transparent, rgba(128,0,0,.35), transparent);
-  pointer-events:none;
-}
-
-.card:hover {
-  transform: translateY(-8px) scale(1.01);
-  box-shadow: var(--shadow2);
-  border-color: var(--bstrong);
-}
-
-/* Maroon corner accent */
-.card-corner {
-  position:absolute;
-  top:0; right:0;
-  width:100px; height:100px;
-  background: radial-gradient(circle at 100% 0%, rgba(128,0,0,0.12), transparent 70%);
-  border-radius:0 28px 0 0;
-  pointer-events:none;
-}
-
-/* Inner z positioning for card contents */
-.card > * { position:relative; z-index:1; }
-
-/* Download card accent stripe */
-.card-stripe {
-  position:absolute;
-  left:0; top:30px; bottom:30px;
-  width:4px;
-  border-radius:0 4px 4px 0;
-  background: linear-gradient(180deg, var(--m), var(--m4));
-  box-shadow: 2px 0 12px rgba(128,0,0,0.2);
-}
-
-/* =============================================
-   CARD INTERNALS
-============================================= */
-.card-eyebrow {
-  font-size:.58rem;
-  font-weight:700;
-  letter-spacing:3px;
-  text-transform:uppercase;
-  color:var(--muted);
-  margin-bottom:14px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-.card-eyebrow::before {
-  content:'';
-  width:18px; height:1px;
-  background: var(--m);
-}
-
-h2 {
-  font-family:var(--serif);
-  font-size:2.1rem;
-  font-weight:700;
-  line-height:1.12;
-  margin-bottom:8px;
-}
-h2 em { color:var(--m); font-style:italic; }
-
-.card-desc {
-  color:var(--muted);
-  font-size:.88rem;
-  margin-bottom:0;
-  line-height:1.7;
-}
-
-/* =============================================
-   BADGE
-============================================= */
-.badge {
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  padding:5px 13px;
-  border-radius:7px;
-  font-size:.6rem;
-  font-weight:800;
-  letter-spacing:1.5px;
-  text-transform:uppercase;
-  margin-bottom:20px;
-}
-.badge-maroon { background:var(--m); color:#fff; box-shadow:0 3px 12px rgba(128,0,0,0.25); }
-.badge-navy   { background:#1e3a5f; color:#fff; box-shadow:0 3px 12px rgba(30,58,95,0.25); }
-.badge::before { content:''; width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,.6); animation:blink 1.5s infinite; }
-
-/* =============================================
-   SPEC TABLE
-============================================= */
-.spec-table { width:100%; border-collapse:collapse; margin:20px 0; }
-.spec-table tr { border-radius:8px; transition:background .18s; }
-.spec-table tr:hover td { background:var(--glow2); }
-.spec-table td {
-  padding:12px 8px;
-  border-bottom:1px solid var(--border);
-  font-size:.87rem;
-}
-.spec-label { color:var(--muted); font-weight:500; }
-.spec-val {
-  color:var(--text);
-  font-weight:700;
-  text-align:right;
-  font-family:var(--mono);
-  font-size:.78rem;
-  letter-spacing:.5px;
-}
-
-/* =============================================
-   PILLS
-============================================= */
-.pills { display:flex; flex-wrap:wrap; gap:8px; margin:20px 0 24px; }
-.pill {
-  display:inline-flex;
-  align-items:center;
-  gap:7px;
-  padding:7px 14px;
-  background:var(--glow);
-  border:1px solid var(--border);
-  border-radius:40px;
-  font-size:.73rem;
-  font-weight:600;
-  color:var(--text);
-  transition:all .22s;
-}
-.pill:hover { background:var(--m); color:#fff; border-color:var(--m); transform:translateY(-2px); box-shadow:0 6px 20px rgba(128,0,0,0.2); }
-.pill-ico { font-size:.9rem; }
-
-/* =============================================
-   DOWNLOAD BUTTON
-============================================= */
-.dl-btn {
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  width:100%;
-  padding:17px 24px;
-  background: linear-gradient(135deg, var(--m) 0%, var(--m2) 100%);
-  color:#fff;
-  text-decoration:none;
-  font-weight:700;
-  font-size:.88rem;
-  border-radius:16px;
-  border:none;
-  cursor:pointer;
-  position:relative;
-  overflow:hidden;
-  transition:all .3s var(--ease);
-  box-shadow:0 6px 24px rgba(128,0,0,0.25);
-  letter-spacing:.3px;
-}
-.dl-btn::before {
-  content:'';
-  position:absolute;
-  top:0; left:-75%;
-  width:50%; height:100%;
-  background:linear-gradient(120deg, transparent, rgba(255,255,255,.2), transparent);
-  animation:btn-shine 3s infinite 1s;
-}
-@keyframes btn-shine {
-  0%{left:-75%;}
-  100%{left:150%;}
-}
-.dl-btn:hover {
-  background:linear-gradient(135deg, var(--m3) 0%, var(--m) 100%);
-  transform:translateY(-3px);
-  box-shadow:0 16px 40px rgba(128,0,0,0.35);
-}
-.dl-btn.secondary {
-  background:linear-gradient(135deg, #1a2a4a 0%, #1e3a5f 100%);
-  box-shadow:0 6px 24px rgba(30,58,95,0.25);
-}
-.dl-btn.secondary:hover {
-  background:linear-gradient(135deg, #0f1a2e 0%, #1a2a4a 100%);
-  box-shadow:0 16px 40px rgba(30,58,95,0.35);
-}
-.dl-btn-dark {
-  background:linear-gradient(135deg, #180606 0%, #2d0a0a 100%);
-  box-shadow:0 6px 24px rgba(0,0,0,0.2);
-}
-
-.api-status-bar {
-  display:flex;
-  align-items:center;
-  gap:7px;
-  justify-content:center;
-  margin-top:16px;
-  font-family:var(--mono);
-  font-size:.58rem;
-  color:var(--muted);
-  letter-spacing:1px;
-  text-transform:uppercase;
-}
-.api-status-bar .live-dot { width:5px; height:5px; }
-
-/* =============================================
-   PERMISSIONS TABLE
-============================================= */
-.perm-wrap { overflow-x:auto; margin-top:24px; border-radius:16px; border:1px solid var(--border); }
-.perm-table {
-  width:100%;
-  border-collapse:collapse;
-  font-size:.84rem;
-}
-.perm-table thead tr {
-  background:linear-gradient(90deg, rgba(128,0,0,.07), rgba(128,0,0,.03));
-}
-.perm-table th {
-  text-align:left;
-  color:var(--m);
-  text-transform:uppercase;
-  font-size:.58rem;
-  letter-spacing:1.8px;
-  padding:16px 14px;
-  font-weight:700;
-  border-bottom:2px solid rgba(128,0,0,.18);
-  white-space:nowrap;
-}
-.perm-table td {
-  padding:14px 14px;
-  border-bottom:1px solid var(--border);
-  transition:background .18s;
-}
-.perm-table tr:last-child td { border-bottom:none; }
-.perm-table tbody tr:hover td { background:var(--glow2); }
-.check  { color:#16a34a; font-weight:800; text-align:center; font-size:1.1rem; }
-.cross  { color:#dc2626; font-weight:800; text-align:center; font-size:1.1rem; }
-.shield {
-  color:var(--m); font-weight:800; text-align:center;
-  font-size:.62rem; letter-spacing:1.5px;
-  font-family:var(--mono);
-}
-
-/* =============================================
-   VIDEO
-============================================= */
-.video-wrapper {
-  border-radius:18px;
-  overflow:hidden;
-  position:relative;
-  padding-bottom:56.25%;
-  height:0;
-  background:#0a0202;
-  border:1px solid var(--border);
-  margin-top:18px;
-  box-shadow:0 12px 40px rgba(0,0,0,0.15);
-}
-.video-wrapper iframe { position:absolute; inset:0; width:100%; height:100%; }
-
-/* =============================================
-   FAQ
-============================================= */
-.faq-item { border-bottom:1px solid var(--border); }
-.faq-question {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  cursor:pointer;
-  font-weight:600;
-  font-size:.92rem;
-  padding:20px 0;
-  gap:24px;
-  transition:color .2s;
-  user-select:none;
-}
-.faq-question:hover { color:var(--m); }
-.faq-chevron {
-  width:28px; height:28px;
-  border-radius:50%;
-  border:1.5px solid var(--bstrong);
-  display:flex; align-items:center; justify-content:center;
-  font-size:.65rem;
-  flex-shrink:0;
-  color:var(--m);
-  transition:all .3s;
-  background:var(--glow2);
-}
-.faq-item.active .faq-chevron {
-  background:var(--m); color:#fff; border-color:var(--m);
-  transform:rotate(180deg);
-  box-shadow:0 4px 16px rgba(128,0,0,0.2);
-}
-.faq-answer {
-  max-height:0; overflow:hidden;
-  transition:max-height .4s ease-out, padding .3s;
-  color:var(--muted); font-size:.88rem; line-height:1.75;
-}
-.faq-item.active .faq-answer { max-height:300px; padding-bottom:20px; }
-
-/* =============================================
-   DOCS
-============================================= */
-.tab-row { display:flex; gap:4px; overflow-x:auto; padding-bottom:1px; }
-.tab-btn {
-  padding:10px 20px;
-  border-radius:12px 12px 0 0;
-  border:1px solid var(--border);
-  border-bottom:none;
-  background:transparent;
-  font-family:var(--sans);
-  font-size:.62rem;
-  font-weight:700;
-  color:var(--muted);
-  cursor:pointer;
-  text-transform:uppercase;
-  letter-spacing:1px;
-  white-space:nowrap;
-  transition:all .2s;
-}
-.tab-btn.active {
-  background:var(--glass);
-  color:var(--m);
-  border-top:2px solid var(--m);
-  backdrop-filter:blur(12px);
-}
-.tab-btn:not(.active):hover { background:var(--glow2); color:var(--text); }
-
-.doc-viewer {
-  background:var(--glass);
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
-  border:1px solid var(--border);
-  border-top:none;
-  border-radius:0 16px 20px 20px;
-  padding:36px;
-  max-height:540px;
-  overflow-y:auto;
-  font-size:.88rem;
-  line-height:1.82;
-}
-.doc-viewer::-webkit-scrollbar { width:3px; }
-.doc-viewer::-webkit-scrollbar-thumb { background:var(--bstrong); border-radius:3px; }
-.doc-viewer h1,.doc-viewer h2,.doc-viewer h3 { font-family:var(--serif); color:var(--m); margin:20px 0 10px; }
-.doc-viewer p { margin-bottom:12px; color:var(--muted); }
-.doc-viewer code { background:var(--glow); padding:2px 6px; border-radius:4px; font-family:var(--mono); font-size:.78rem; }
-.doc-viewer pre { background:var(--glow); padding:16px; border-radius:10px; overflow-x:auto; margin:12px 0; }
-.doc-viewer a { color:var(--m); text-decoration:none; }
-.doc-viewer a:hover { text-decoration:underline; }
-
-/* =============================================
-   CHANGELOG
-============================================= */
-.log-item {
-  display:flex;
-  align-items:flex-start;
-  gap:16px;
-  padding:16px 0;
-  border-bottom:1px solid var(--border);
-  transition:all .2s;
-}
-.log-item:hover { padding-left:10px; background:var(--glow2); border-radius:10px; }
-.log-tag {
-  min-width:88px; padding:4px 10px; border-radius:7px;
-  font-size:.58rem; font-weight:800; text-transform:uppercase; letter-spacing:1px;
-  text-align:center; flex-shrink:0;
-}
-.tag-added    { background:rgba(21,128,61,.12);  color:var(--tag-added); }
-.tag-improved { background:rgba(29,78,216,.12);  color:var(--tag-improv); }
-.tag-fixed    { background:rgba(180,83,9,.12);   color:var(--tag-fixed); }
-.tag-default  { background:var(--glow); color:var(--muted); }
-.log-text { font-size:.9rem; font-weight:500; color:var(--text); line-height:1.6; }
-
-/* =============================================
-   UPTIME
-============================================= */
-.uptime-block {
-  position:relative;
-  border-radius:20px;
-  overflow:hidden;
-  margin-top:24px;
-  border:1px solid var(--bstrong);
-  background:var(--glow2);
-}
-.uptime-inner {
-  font-family:var(--mono);
-  font-size:clamp(1.7rem,5vw,3.4rem);
-  font-weight:500;
-  color:var(--m);
-  text-align:center;
-  padding:52px 30px;
-  letter-spacing:.08em;
-  position:relative;
-  z-index:1;
-}
-.uptime-scanlines {
-  position:absolute; inset:0;
-  background:repeating-linear-gradient(
-    0deg, transparent, transparent 3px,
-    rgba(128,0,0,.018) 3px, rgba(128,0,0,.018) 4px
-  );
-  pointer-events:none;
-}
-.uptime-label {
-  text-align:center;
-  color:var(--muted);
-  font-size:.58rem;
-  letter-spacing:4px;
-  font-weight:700;
-  text-transform:uppercase;
-  margin-top:20px;
-}
-
-/* =============================================
-   SECURITY HIGHLIGHT CARD
-============================================= */
-.security-grid {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
-  margin-top:24px;
-}
-.sec-item {
-  background:var(--glow2);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:20px;
-  transition:all .25s;
-}
-.sec-item:hover {
-  background:var(--glow);
-  border-color:var(--bstrong);
-  transform:translateY(-3px);
-  box-shadow:0 8px 24px rgba(128,0,0,0.1);
-}
-.sec-icon {
-  font-size:1.5rem;
-  margin-bottom:10px;
-}
-.sec-title {
-  font-weight:700;
-  font-size:.88rem;
-  margin-bottom:5px;
-  color:var(--text);
-}
-.sec-desc {
-  font-size:.78rem;
-  color:var(--muted);
-  line-height:1.6;
-}
-
-/* =============================================
-   CTA CARD
-============================================= */
-.cta-card {
-  text-align:center;
-  background: linear-gradient(135deg,
-    rgba(128,0,0,0.06) 0%,
-    rgba(128,0,0,0.02) 100%
-  );
-  border:2px solid var(--m);
-  position:relative;
-  overflow:hidden;
-}
-.cta-watermark {
-  position:absolute;
-  font-family:var(--serif);
-  font-size:20rem;
-  font-weight:700;
-  color:rgba(128,0,0,.025);
-  top:50%; left:50%;
-  transform:translate(-50%,-50%);
-  pointer-events:none;
-  white-space:nowrap;
-  letter-spacing:-8px;
-  font-style:italic;
-  user-select:none;
-}
-.cta-title {
-  font-family:var(--serif);
-  font-size:2.8rem;
-  font-weight:700;
-  margin-bottom:12px;
-  line-height:1.1;
-}
-.cta-title em { color:var(--m); }
-.cta-sub { color:var(--muted); font-size:.92rem; margin-bottom:36px; line-height:1.7; }
-.cta-row {
-  display:flex;
-  gap:14px;
-  justify-content:center;
-  flex-wrap:wrap;
-}
-.cta-row .dl-btn { max-width:240px; margin:0; }
-.cta-links {
-  margin-top:36px;
-  padding-top:28px;
-  border-top:1px solid var(--border);
-  display:flex;
-  justify-content:center;
-  gap:50px;
-  flex-wrap:wrap;
-}
-.cta-link-group { text-align:center; }
-.cta-link-label {
-  font-size:.56rem; letter-spacing:2.5px; text-transform:uppercase;
-  color:var(--muted); font-weight:700; margin-bottom:10px;
-}
-.cta-link-group a {
-  display:inline-block;
-  font-size:.82rem;
-  color:var(--m); font-weight:700;
-  text-decoration:none;
-  margin:0 8px;
-  transition:opacity .2s;
-}
-.cta-link-group a:hover { opacity:.65; }
-
-/* =============================================
-   SCROLL REVEAL
-============================================= */
-.reveal {
-  opacity:0;
-  transform:translateY(32px);
-  transition:opacity .7s var(--ease), transform .7s var(--ease);
-}
-.reveal.visible { opacity:1; transform:translateY(0); }
-
-/* =============================================
-   FOOTER
-============================================= */
-footer {
-  position:relative; z-index:1;
-  text-align:center;
-  padding:80px 24px 40px;
-}
-.footer-brand {
-  font-family:var(--serif);
-  font-size:3.5rem;
-  font-weight:700;
-  font-style:italic;
-  color:var(--m);
-  opacity:.12;
-  letter-spacing:-1px;
-  line-height:1;
-  margin-bottom:16px;
-}
-.footer-text {
-  font-size:.6rem;
-  font-weight:700;
-  letter-spacing:4px;
-  text-transform:uppercase;
-  color:var(--muted);
-}
-
-/* =============================================
-   RESPONSIVE
-============================================= */
-@media(max-width:880px){
-  .container{grid-template-columns:1fr;}
+@media(max-width:860px){
+  .wrap{grid-template-columns:1fr;}
   nav{padding:0 20px;}
-  .nav-center{display:none;}
-  .hero-stats{border-radius:16px;}
-  .stat-item{padding:18px 12px;}
-  .security-grid{grid-template-columns:1fr;}
-  .cta-title{font-size:2rem;}
-  .log-item{flex-direction:column; gap:8px;}
-  .orb{display:none;}
+  .nm{display:none;}
+  header{padding:150px 20px 80px;}
+  .hstats{flex-wrap:wrap;}
+  .st{min-width:140px;}
+  h1{font-size:clamp(2.4rem,10vw,3.8rem);}
+  .ctat{font-size:2rem;}
+  .li{flex-direction:column;gap:8px;}
 }
 </style>
 </head>
 <body>
 
-<!-- Cursor -->
-<div id="c-dot"></div>
-<div id="c-ring"></div>
-<div id="c-trail"></div>
+<div id="cd"></div>
+<div id="cr"></div>
 
-<!-- Layered Background -->
-<div class="bg-mesh"></div>
-<div class="bg-aurora">
-  <div class="aurora-stripe"></div>
-  <div class="aurora-stripe"></div>
-  <div class="aurora-stripe"></div>
-  <div class="aurora-stripe"></div>
+<!-- Layered animated background -->
+<div id="bgw">
+  <canvas id="ca"></canvas><!-- aurora -->
+  <canvas id="cq"></canvas><!-- qr grid -->
+  <canvas id="cp"></canvas><!-- particles -->
 </div>
-<div class="bg-grid"></div>
-<div class="bg-grain"></div>
 
-<!-- Floating Orbs -->
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-<div class="orb orb-3"></div>
-<div class="orb orb-4"></div>
+<!-- Scrolling maroon ticker -->
+<div class="tkw"><div class="tkt" id="tkt"></div></div>
 
-<!-- Particle Canvas -->
-<canvas id="bg-canvas"></canvas>
-
-<!-- =============================================
-     NAVIGATION
-============================================= -->
+<!-- ═══ NAV ═══ -->
 <nav>
-  <div class="nav-brand">
-    <div class="nav-icon">Q</div>
-    <div class="nav-logo">PROJECT <span>QrSys</span></div>
+  <div class="nl">
+    <!-- FIX: logo now uses 123.png with fallback hide if missing -->
+    <img src="123.png" alt="QrSys" class="nl-img" onerror="this.style.display='none'">
+    <div class="np"></div>
+    PROJECT QRSYS
   </div>
-
-  <div class="nav-center">
-    <div class="live-dot"></div>
-    <span class="nav-pill">Infrastructure Portal · Online</span>
-  </div>
-
-  <div class="nav-right">
-    <button class="theme-toggle" id="theme-switcher">
-      <span id="theme-icon">🌙</span> Dark Mode
-    </button>
+  <div class="nm">System Online &middot; Encrypted Cloud Active</div>
+  <div class="nr">
+    <a href="https://github.com/AstroNutws/Attendance-QRSYS" target="_blank" class="ngh">&#8287; GitHub</a>
+    <button class="tt" id="ts"><span>&#127769;</span> Dark Mode</button>
   </div>
 </nav>
 
-<!-- =============================================
-     HERO
-============================================= -->
+<!-- ═══ HERO ═══ -->
 <header>
-  <div class="hero-badge">
-    <div class="hero-badge-dot"></div>
-    Secured PostgreSQL Cloud Infrastructure
+  <div class="hk"><div class="hkd"></div>Secured PostgreSQL &middot; Cloud-Integrated &middot; RBAC</div>
+  <h1>Infrastructure for<br><em>Modern Attendance</em><br>Logging.</h1>
+  <div class="hrr">
+    <span class="hrl"></span>
+    <span class="hrt">Academic Ecosystem &middot; QR-Powered</span>
+    <span class="hrl"></span>
   </div>
-
-  <h1>
-    Infrastructure for
-    <em> Modern Attendance.</em>
-    <span class="line2">Built Different.</span>
-  </h1>
-
-  <div class="hero-divider"></div>
-
-  <p class="hero-sub">
-    A secure, cloud-integrated QR ecosystem engineered for academic institutions — real-time sync, multi-tier access control, and zero-compromise security.
-  </p>
-
-  <div class="hero-stats">
-    <div class="stat-item">
-      <div class="stat-val">2</div>
-      <div class="stat-label">Platforms</div>
+  <p class="sub">A zero-compromise cloud-integrated QR attendance platform &mdash; built for schools, designed for security, engineered for scale.</p>
+  <div class="hstats">
+    <div class="st">
+      <span class="sn" data-t="2">0</span>
+      <span class="sl">Platforms</span>
     </div>
-    <div class="stat-item">
-      <div class="stat-val">3</div>
-      <div class="stat-label">Access Tiers</div>
+    <div class="st">
+      <span class="sn" data-t="3">0</span>
+      <span class="sl">Access Tiers</span>
     </div>
-    <div class="stat-item">
-      <div class="stat-val">∞</div>
-      <div class="stat-label">QR Scans</div>
+    <div class="st">
+      <span class="sn" data-t="100" data-s="%">0</span>
+      <span class="sl">Cloud Sync</span>
     </div>
-    <div class="stat-item">
-      <div class="stat-val">E2E</div>
-      <div class="stat-label">Encrypted</div>
+    <!-- FIX: was "E2E Encrypted" / "256-bit" — changed to "Secure & Encrypted" -->
+    <div class="st">
+      <span class="sn-sm">Secure &amp;<br>Encrypted</span>
+      <span class="sl">Data Protection</span>
     </div>
   </div>
 </header>
 
-<!-- =============================================
-     MAIN CONTENT
-============================================= -->
-<div class="container">
+<!-- ═══ MAIN CONTENT ═══ -->
+<div class="wrap">
 
-  <!-- DOWNLOADS -->
-  <div class="section-label reveal"><span>Download Clients</span></div>
-
-  <!-- Desktop Card -->
-  <div class="card reveal">
-    <div class="card-corner"></div>
-    <div class="card-stripe"></div>
-    <div id="desktop-badge-container">
-      <span class="badge badge-maroon">Syncing version…</span>
-    </div>
-    <div class="card-eyebrow">Windows Client</div>
+  <!-- Desktop Download -->
+  <div class="card rvl">
+    <div id="db"><span class="badge">&#9679; Syncing&hellip;</span></div>
+    <div class="ey">Windows Client</div>
     <h2>Desktop <em>Edition</em></h2>
-    <p class="card-desc">Full-featured attendance management with webcam-based QR scanning and cloud sync.</p>
-    <table class="spec-table">
-      <tr><td class="spec-label">Platform</td>    <td class="spec-val">Windows 7 – 11</td></tr>
-      <tr><td class="spec-label">Input</td>        <td class="spec-val">Webcam Interface</td></tr>
-      <tr><td class="spec-label">Architecture</td> <td class="spec-val">VB.NET / Npgsql</td></tr>
-      <tr><td class="spec-label">Security</td>     <td class="spec-val">Visual Masking</td></tr>
+    <table class="req-table">
+      <tr><td class="rl">Platform</td>    <td class="rv2">Windows 7 &ndash; 11</td></tr>
+      <tr><td class="rl">Input</td>        <td class="rv2">Webcam Interface</td></tr>
+      <tr><td class="rl">Architecture</td> <td class="rv2">VB.NET / Npgsql</td></tr>
+      <tr><td class="rl">Security</td>     <td class="rv2">Visual Masking</td></tr>
     </table>
-    <div class="pills">
-      <span class="pill"><span class="pill-ico">📷</span> QR Scanner</span>
-      <span class="pill"><span class="pill-ico">☁️</span> Cloud Sync</span>
-      <span class="pill"><span class="pill-ico">🔒</span> RBAC</span>
+    <div class="chips">
+      <span class="chip">&#128247; QR Scanner</span>
+      <span class="chip">&#9729;&#65039; Cloud Sync</span>
+      <span class="chip">&#128274; RBAC Auth</span>
+      <span class="chip">&#128202; Audit Logs</span>
     </div>
-    <a href="#" id="win-btn" class="dl-btn">⬇ Fetching Release…</a>
-    <div class="api-status-bar">
-      <div class="live-dot"></div>
-      <span id="api-info">Registry: Syncing…</span>
-    </div>
+    <a href="#" id="win-btn" class="btn">&#8635; Fetching Release&hellip;</a>
+    <div class="apib" id="api-info">Registry: Syncing&hellip;</div>
   </div>
 
-  <!-- Mobile Card -->
-  <div class="card reveal">
-    <div class="card-corner"></div>
-    <div class="card-stripe" style="background:linear-gradient(180deg,#1e3a5f,#2563eb);box-shadow:2px 0 12px rgba(30,58,95,0.2);"></div>
-    <div id="mobile-badge-container">
-      <span class="badge badge-navy">Syncing version…</span>
-    </div>
-    <div class="card-eyebrow">Android Client</div>
+  <!-- Mobile Download -->
+  <div class="card rvr">
+    <div id="mb"><span class="badge bdn">&#9679; Syncing&hellip;</span></div>
+    <div class="ey">Android Client</div>
     <h2>Mobile <em>Client</em></h2>
-    <p class="card-desc">Lightweight Android companion app with real-time cloud synchronization and offline support.</p>
-    <table class="spec-table">
-      <tr><td class="spec-label">OS</td>         <td class="spec-val">Android 8.0+</td></tr>
-      <tr><td class="spec-label">Framework</td>  <td class="spec-val">.NET MAUI</td></tr>
-      <tr><td class="spec-label">Sync</td>        <td class="spec-val">Real-time</td></tr>
-      <tr><td class="spec-label">Storage</td>     <td class="spec-val">~60 MB</td></tr>
+    <table class="req-table">
+      <tr><td class="rl">OS</td>         <td class="rv2">Android 8.0+</td></tr>
+      <tr><td class="rl">Framework</td>  <td class="rv2">.NET MAUI</td></tr>
+      <tr><td class="rl">Sync</td>        <td class="rv2">Real-time Sync</td></tr>
+      <tr><td class="rl">Storage</td>     <td class="rv2">~60 MB</td></tr>
     </table>
-    <div class="pills">
-      <span class="pill"><span class="pill-ico">📱</span> Native MAUI</span>
-      <span class="pill"><span class="pill-ico">⚡</span> Real-time</span>
-      <span class="pill"><span class="pill-ico">🌐</span> Offline Ready</span>
+    <div class="chips">
+      <span class="chip">&#128241; Native MAUI</span>
+      <span class="chip">&#9889; Real-time</span>
+      <span class="chip">&#128276; Notifications</span>
+      <!-- FIX: removed "Offline Mode" — app is online only, changed to "Online Sync" -->
+      <span class="chip">&#127760; Online Sync</span>
     </div>
-    <a href="#" id="mobile-btn" class="dl-btn secondary">⬇ Fetching Release…</a>
+    <a href="#" id="mob-btn" class="btn">&#8635; Fetching Release&hellip;</a>
   </div>
 
-  <!-- PERMISSIONS -->
-  <div class="section-label reveal"><span>Access Control · RBAC</span></div>
+  <!-- RBAC -->
+  <div class="dv rv"><span>Administrative Hierarchy &middot; RBAC</span></div>
 
-  <div class="card span-full reveal">
-    <div class="card-corner"></div>
-    <div class="card-eyebrow">Administrative Hierarchy</div>
+  <div class="card s2 rv">
+    <div class="ey">Access Control</div>
     <h2>Role-Based <em>Permissions</em></h2>
-    <p class="card-desc" style="margin-bottom:0;">Granular access tiers ensure complete data isolation at every operational level.</p>
-    <div class="perm-wrap">
-      <table class="perm-table">
-        <thead>
-          <tr>
-            <th>Privilege</th>
-            <th style="text-align:center">Standard Admin</th>
-            <th style="text-align:center">Super Admin</th>
-            <th style="text-align:center">Client (School / Org)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Create New Admin Peers</td>
-            <td class="cross">✕</td><td class="check">✓</td><td class="check">✓</td>
-          </tr>
-          <tr>
-            <td>Update Peer Details (Username / Email / Password)</td>
-            <td class="cross">✕</td><td class="check">✓</td><td class="check">✓</td>
-          </tr>
-          <tr>
-            <td>Manage Sections, Students &amp; Admin Panel</td>
-            <td class="check">✓</td><td class="check">✓</td><td class="check">✓</td>
-          </tr>
-          <tr>
-            <td>View Attendance Logs &amp; Announcements</td>
-            <td class="check">✓</td><td class="check">✓</td><td class="check">✓</td>
-          </tr>
-          <tr>
-            <td>Access Super Admin Panel</td>
-            <td class="cross">✕</td><td class="check">✓</td><td class="check">✓</td>
-          </tr>
-          <tr>
-            <td>Direct Database (PostgreSQL) Access</td>
-            <td class="cross">✕</td><td class="cross">✕</td><td class="shield">⚔ SHIELDED</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <p style="color:var(--mute);font-size:.88rem;margin:6px 0 28px;">Granular separation between operational access and system ownership &mdash; zero privilege leakage by design.</p>
+    <table class="ptab">
+      <thead>
+        <tr>
+          <th>Privilege</th>
+          <th style="text-align:center">Standard Admin</th>
+          <th style="text-align:center">Super Admin</th>
+          <th style="text-align:center">Client (School/Org)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Create New Admin Peers</td>                           <td class="cx">&#10005;</td><td class="ck">&#10003;</td><td class="ck">&#10003;</td></tr>
+        <tr><td>Update Peer Details (Username / Email / Pass)</td>    <td class="cx">&#10005;</td><td class="ck">&#10003;</td><td class="ck">&#10003;</td></tr>
+        <tr><td>Manage Sections, Students &amp; Admin Panel</td>      <td class="ck">&#10003;</td><td class="ck">&#10003;</td><td class="ck">&#10003;</td></tr>
+        <tr><td>View Attendance Logs &amp; Announcements</td>         <td class="ck">&#10003;</td><td class="ck">&#10003;</td><td class="ck">&#10003;</td></tr>
+        <tr><td>Access Super Admin Panel</td>                         <td class="cx">&#10005;</td><td class="ck">&#10003;</td><td class="ck">&#10003;</td></tr>
+        <tr><td>Direct Database (PostgreSQL) Access</td>              <td class="cx">&#10005;</td><td class="cx">&#10005;</td><td class="sh">&#9876; SHIELDED</td></tr>
+      </tbody>
+    </table>
   </div>
 
-  <!-- SECURITY FEATURES -->
-  <div class="section-label reveal"><span>Security Architecture</span></div>
+  <!-- Security Framework -->
+  <div class="dv rv"><span>Security Architecture</span></div>
 
-  <div class="card span-full reveal">
-    <div class="card-corner"></div>
-    <div class="card-eyebrow">Zero-Trust Design</div>
+  <div class="card s2 rv">
+    <div class="ey">Zero-Trust Design</div>
     <h2>Security <em>Framework</em></h2>
-    <p class="card-desc">Every layer of QrSys is designed with data isolation and access control as first principles.</p>
-    <div class="security-grid">
-      <div class="sec-item">
-        <div class="sec-icon">🛡️</div>
-        <div class="sec-title">Data Isolation</div>
-        <div class="sec-desc">QrSys acts as a middleware layer. The dev team holds zero direct ownership of the database at any point.</div>
-      </div>
-      <div class="sec-item">
-        <div class="sec-icon">🔑</div>
-        <div class="sec-title">Client Control</div>
-        <div class="sec-desc">The organization retains full ownership of the Supabase project — SQL, master keys, and dashboard access.</div>
-      </div>
-      <div class="sec-item">
-        <div class="sec-icon">👁️</div>
-        <div class="sec-title">Credential Integrity</div>
-        <div class="sec-desc">Credentials are masked at UI level. Upcoming iterations will incorporate one-way cryptographic hashing.</div>
-      </div>
-      <div class="sec-item">
-        <div class="sec-icon">⚙️</div>
-        <div class="sec-title">RBAC Enforcement</div>
-        <div class="sec-desc">Strict role-based scoping. Standard admins handle operations; only Super Admins manage account creation.</div>
-      </div>
+    <p style="color:var(--mute);font-size:.88rem;margin:6px 0 0;">Every layer of QrSys is engineered with data isolation and access scoping as first principles.</p>
+    <div class="secgrid">
+      <div class="seci"><div class="seci-ico">&#128737;&#65039;</div><div class="seci-t">Data Isolation</div><div class="seci-d">QrSys is middleware only. The development team holds zero direct ownership of your database at any point.</div></div>
+      <div class="seci"><div class="seci-ico">&#128273;</div><div class="seci-t">Client Control</div><div class="seci-d">Your organization retains full Supabase ownership &mdash; SQL execution and master keys stay exclusively with you.</div></div>
+      <div class="seci"><div class="seci-ico">&#128065;&#65039;</div><div class="seci-t">Credential Integrity</div><div class="seci-d">Credentials are masked at UI level. Upcoming releases introduce one-way cryptographic hashing for all stored data.</div></div>
+      <div class="seci"><div class="seci-ico">&#9881;&#65039;</div><div class="seci-t">RBAC Enforcement</div><div class="seci-d">Strict role scoping throughout. Standard Admins handle operations; only Super Admins manage account creation.</div></div>
     </div>
   </div>
 
-  <!-- PREVIEWS -->
-  <div class="section-label reveal"><span>Live Demonstrations</span></div>
+  <!-- Live Previews -->
+  <div class="dv rv"><span>Live Previews</span></div>
 
-  <div class="card reveal">
-    <div class="card-corner"></div>
-    <div class="card-eyebrow">Demo</div>
+  <div class="card rvl">
+    <div class="ey">Demo</div>
     <h2>Desktop <em>Preview</em></h2>
-    <div class="video-wrapper">
-      <iframe src="https://www.youtube.com/embed/ZcIJaQYzTzw" title="QrSys Desktop Preview" frameborder="0" allowfullscreen></iframe>
-    </div>
+    <div class="vw"><iframe src="https://www.youtube.com/embed/ZcIJaQYzTzw" title="QrSys Desktop Preview" frameborder="0" allowfullscreen></iframe></div>
   </div>
 
-  <div class="card reveal">
-    <div class="card-corner"></div>
-    <div class="card-eyebrow">Demo</div>
+  <div class="card rvr">
+    <div class="ey">Demo</div>
     <h2>Mobile <em>Preview</em></h2>
-    <div class="video-wrapper">
-      <iframe src="https://www.youtube.com/embed/hnoCBZ3_GgQ" title="QrSys Mobile Preview" frameborder="0" allowfullscreen></iframe>
-    </div>
+    <div class="vw"><iframe src="https://www.youtube.com/embed/hnoCBZ3_GgQ" title="QrSys Mobile Preview" frameborder="0" allowfullscreen></iframe></div>
   </div>
 
   <!-- FAQ -->
-  <div class="section-label reveal"><span>Frequently Asked</span></div>
+  <div class="dv rv"><span>Frequently Asked Questions</span></div>
 
-  <div class="card span-full reveal">
-    <div class="card-corner"></div>
-    <div class="card-eyebrow">Common Questions</div>
-    <h2>FAQ & <em>Support</em></h2>
+  <div class="card s2 rv">
+    <div class="ey">FAQ</div>
+    <h2>Common <em>Questions</em></h2>
     <div style="margin-top:28px;">
-      <div class="faq-item">
-        <div class="faq-question">
-          What is the difference between Admin types?
-          <span class="faq-chevron">▼</span>
-        </div>
-        <div class="faq-answer">Standard Admins handle daily operations like monitoring and student lookup. Super Admins act as system overseers with exclusive authority to create admin accounts, update credentials, and access the Super Admin management panel.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question">
-          What exclusive powers does the Super Admin have?
-          <span class="faq-chevron">▼</span>
-        </div>
-        <div class="faq-answer">Super Admins access the Super Admin Panel to register new administrators, modify peer details (emails, usernames), reset passwords, and toggle Super Admin status for others to delegate authority effectively.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question">
-          Who has direct access to the database?
-          <span class="faq-chevron">▼</span>
-        </div>
-        <div class="faq-answer">Neither Standard nor Super Admins have direct database access. Ownership is strictly isolated to the Client (Database Owner) via their private Supabase Dashboard — ensuring system management remains separated from data storage for maximum security.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question">
-          How are passwords and credentials protected?
-          <span class="faq-chevron">▼</span>
-        </div>
-        <div class="faq-answer">Passwords are visually masked in the application UI with circular symbols to prevent shoulder-surfing. Future updates will include server-side cryptographic hashing for enhanced backend security and complete one-way protection.</div>
-      </div>
+      <div class="fi"><div class="fq">What is the difference between Admin types?<span class="fic">&#9660;</span></div><div class="fa">Standard Admins handle day-to-day operations like monitoring and student lookup. Super Admins are system overseers with exclusive authority to create accounts, update credentials, and access the Super Admin panel.</div></div>
+      <div class="fi"><div class="fq">What can the Super Admin do?<span class="fic">&#9660;</span></div><div class="fa">Super Admins can register new administrators, modify peer details (emails, usernames), reset passwords, and delegate Super Admin privileges to other accounts via the dedicated Super Admin Panel.</div></div>
+      <div class="fi"><div class="fq">Who has direct access to the database?<span class="fic">&#9660;</span></div><div class="fa">Neither Standard nor Super Admins have direct database access. Ownership is strictly isolated to the Client via their private Supabase Dashboard — system management stays fully separated from data storage.</div></div>
+      <div class="fi"><div class="fq">How are passwords and credentials secured?<span class="fic">&#9660;</span></div><div class="fa">Passwords are visually masked in the UI to prevent shoulder-surfing. Upcoming iterations will introduce server-side cryptographic hashing for enhanced backend security.</div></div>
     </div>
   </div>
 
-  <!-- DOCS -->
-  <div class="section-label reveal"><span>Technical Documentation</span></div>
+  <!-- Technical Documentation -->
+  <div class="dv rv"><span>Technical Documentation</span></div>
 
-  <div class="card span-full reveal" style="background:transparent;border:none;padding:0;box-shadow:none;backdrop-filter:none;">
-    <div class="tab-row">
-      <button class="tab-btn active" onclick="loadRepoFile('README.md',this)">README</button>
-      <button class="tab-btn" onclick="loadRepoFile('LICENSE.md',this)">LICENSE</button>
-      <button class="tab-btn" onclick="loadRepoFile('USER_MANUAL.md',this)">User Manual</button>
-      <button class="tab-btn" onclick="loadSecurityPolicy(this)">Security Policy</button>
+  <div class="card s2 rv" style="background:transparent;border:none;padding:0;box-shadow:none;backdrop-filter:none;">
+    <div class="ey" style="padding-left:2px;">Repository Files</div>
+    <div class="tabs2">
+      <button class="tab on" onclick="loadFile('README.md',this)">README</button>
+      <button class="tab" onclick="loadFile('LICENSE.md',this)">LICENSE</button>
+      <button class="tab" onclick="loadFile('USER_MANUAL.md',this)">User Manual</button>
+      <button class="tab" onclick="loadSec(this)">Security Policy</button>
     </div>
-    <div class="doc-viewer" id="doc-content">
-      <div style="text-align:center;padding:50px;color:var(--muted);font-family:var(--mono);font-size:.7rem;letter-spacing:2px;">
-        ⟳ Syncing repository…
-      </div>
+    <div class="dv2" id="doc-content">
+      <div style="text-align:center;padding:50px;color:var(--mute);font-family:var(--mono);font-size:.68rem;letter-spacing:2px;">&#8635; Fetching repository data&hellip;</div>
     </div>
   </div>
 
-  <!-- UPTIME -->
-  <div class="section-label reveal"><span>System Status</span></div>
+  <!-- System Uptime -->
+  <div class="dv rv"><span>System Uptime</span></div>
 
-  <div class="card span-full reveal">
-    <div class="card-corner"></div>
-    <div class="card-eyebrow">Live Metrics</div>
+  <div class="card s2 rv">
+    <div class="ey">Live Metrics</div>
     <h2>System <em>Uptime</em></h2>
-    <div class="uptime-block">
-      <div class="uptime-scanlines"></div>
-      <div class="uptime-inner" id="uptime-counter">00d 00h 00m 00s</div>
-    </div>
-    <p class="uptime-label">Encrypted Cloud Connection: Active</p>
+    <div class="upb" id="uptime">00d 00h 00m 00s</div>
+    <p class="ups">Encrypted Cloud Connection &middot; Active</p>
   </div>
 
-  <!-- CHANGELOG -->
-  <div class="section-label reveal"><span>Deployment Logs</span></div>
+  <!-- Update Registry -->
+  <div class="dv rv"><span>Update Registry</span></div>
 
-  <div class="card span-full reveal">
-    <div class="card-corner"></div>
-    <div class="card-eyebrow">Changelog</div>
-    <h2 id="registry-title">Update <em>Registry</em></h2>
-    <div id="registry-logs" class="log-list" style="margin-top:24px;">
-      <div class="log-item">
-        <span class="log-tag tag-default">Syncing</span>
-        <span class="log-text">Pulling latest deployment logs…</span>
-      </div>
+  <div class="card s2 rv">
+    <div class="ey">Deployment Logs</div>
+    <h2 id="regt">Update <em>Registry</em></h2>
+    <div id="regl" style="margin-top:24px;">
+      <div class="li"><span class="lt td2">Syncing</span><span class="ltxt">Pulling latest deployment logs&hellip;</span></div>
     </div>
   </div>
 
   <!-- CTA -->
-  <div class="section-label reveal"><span>Get Started</span></div>
+  <div class="dv rv"><span>Get Started</span></div>
 
-  <div class="card span-full cta-card reveal">
-    <div class="cta-watermark">QrSys</div>
-    <div class="card-eyebrow" style="justify-content:center;">Official Implementation</div>
-    <div class="cta-title">Ready to <em>Deploy?</em></div>
-    <p class="cta-sub">Acquire a license or schedule a full-scale demonstration with our team. Built for schools, designed to scale.</p>
-    <div class="cta-row">
-      <a href="#" class="dl-btn dl-btn-dark" style="max-width:260px;margin:0;">Request Admin Account</a>
-      <a href="#" class="dl-btn" style="max-width:260px;margin:0;">Schedule a System Demo</a>
-    </div>
-    <div class="cta-links">
-      <div class="cta-link-group">
-        <p class="cta-link-label">Support Channels</p>
-        <a href="https://discord.gg/BRTWwm2k" target="_blank">Discord →</a>
-        <a href="#" target="_blank">Email Support →</a>
+  <div class="card s2 cta rv">
+    <div class="ctawm">QRSYS</div>
+    <div class="ctai">
+      <div class="ey" style="justify-content:center;">Implementation</div>
+      <div class="ctat">Official <em>Implementation</em></div>
+      <p class="ctad">Acquire a license or schedule a full-scale demonstration of the QrSys platform for your institution.</p>
+      <div class="ctabs">
+        <a href="#" class="btn btn-dark">Request Admin Account</a>
+        <a href="#" class="btn">Schedule a System Demo</a>
       </div>
-      <div class="cta-link-group">
-        <p class="cta-link-label">Source Registry</p>
-        <a href="https://github.com/AstroNutws/Attendance-QRSYS" target="_blank">GitHub Repository →</a>
+      <div class="ctal">
+        <div class="lg">
+          <p class="ll">Support</p>
+          <a href="https://discord.gg/BRTWwm2k" target="_blank">Discord &rarr;</a>
+          <a href="#" target="_blank">Email &rarr;</a>
+        </div>
+        <div class="lg">
+          <p class="ll">Registry</p>
+          <a href="https://github.com/AstroNutws/Attendance-QRSYS" target="_blank">GitHub Source &rarr;</a>
+        </div>
       </div>
     </div>
   </div>
 
-</div><!-- /container -->
+</div><!-- /wrap -->
 
 <footer>
-  <div class="footer-brand">QrSys</div>
-  <div class="footer-text">&copy; 2026 Project QrSys Development Lab — All rights reserved.</div>
+  <span class="flo">QrSys</span>
+  <span class="fco">&copy; 2026 Project QrSys Development Lab &middot; All rights reserved</span>
 </footer>
 
-<!-- =============================================
-     JAVASCRIPT
-============================================= -->
 <script>
-/* ==========================================
-   CURSOR
-========================================== */
-const cDot   = document.getElementById('c-dot');
-const cRing  = document.getElementById('c-ring');
-const cTrail = document.getElementById('c-trail');
-let mx=0,my=0,rx=0,ry=0,tx=0,ty=0;
-
-document.addEventListener('mousemove', e=>{
-  mx=e.clientX; my=e.clientY;
-  cDot.style.left=mx+'px'; cDot.style.top=my+'px';
+/* ── CURSOR ── */
+const cd=document.getElementById('cd'),cr=document.getElementById('cr');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cd.style.left=mx+'px';cd.style.top=my+'px';});
+(function loop(){rx+=(mx-rx)*.11;ry+=(my-ry)*.11;cr.style.left=rx+'px';cr.style.top=ry+'px';requestAnimationFrame(loop);})();
+document.querySelectorAll('a,button,.fq,.tab,.chip,.seci').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('cg'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('cg'));
 });
 
-(function loop(){
-  rx+=(mx-rx)*.1; ry+=(my-ry)*.1;
-  tx+=(mx-tx)*.05; ty+=(my-ty)*.05;
-  cRing.style.left=rx+'px'; cRing.style.top=ry+'px';
-  cTrail.style.left=tx+'px'; cTrail.style.top=ty+'px';
-  requestAnimationFrame(loop);
+/* ── AURORA BLOBS ── */
+(function(){
+  const c=document.getElementById('ca'),x=c.getContext('2d');
+  let W,H,t=0;
+  const bl=[
+    {cx:.12,cy:.2, rx:.6, ry:.38,sp:.0006,ph:0  },
+    {cx:.88,cy:.12,rx:.5, ry:.32,sp:.0009,ph:1.2 },
+    {cx:.5, cy:.7, rx:.72,ry:.42,sp:.0005,ph:2.4 },
+    {cx:.08,cy:.82,rx:.42,ry:.28,sp:.0011,ph:.8  },
+    {cx:.9, cy:.78,rx:.48,ry:.32,sp:.0008,ph:3.1 },
+    {cx:.3, cy:.45,rx:.4, ry:.25,sp:.0013,ph:1.8 }
+  ];
+  function rs(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;}
+  rs();window.addEventListener('resize',rs);
+  function draw(){
+    x.clearRect(0,0,W,H);
+    const dk=document.documentElement.hasAttribute('data-theme');
+    bl.forEach(b=>{
+      const bx=(b.cx+Math.sin(t*b.sp*1.3+b.ph)*.13)*W;
+      const by=(b.cy+Math.cos(t*b.sp+b.ph*.7)*.11)*H;
+      const g=x.createRadialGradient(bx,by,0,bx,by,b.rx*W);
+      const a1=dk?.11:.2, a2=dk?.05:.09;
+      g.addColorStop(0,`rgba(128,0,0,${a1})`);
+      g.addColorStop(.45,`rgba(100,0,0,${a2})`);
+      g.addColorStop(1,'rgba(0,0,0,0)');
+      x.beginPath();
+      x.ellipse(bx,by,b.rx*W,b.ry*H,t*b.sp*.4,0,Math.PI*2);
+      x.fillStyle=g;x.fill();
+    });
+    t++;requestAnimationFrame(draw);
+  }draw();
 })();
 
-document.querySelectorAll('a,button,.faq-question,.tab-btn,.pill,.stat-item,.sec-item').forEach(el=>{
-  el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-active'));
-  el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-active'));
-});
-
-/* ==========================================
-   PARTICLE NETWORK CANVAS — DRAMATIC
-========================================== */
-const canvas=document.getElementById('bg-canvas');
-const ctx=canvas.getContext('2d');
-let nodes=[], animId;
-
-class Node {
-  constructor(){this.init();}
-  init(){
-    this.x=Math.random()*canvas.width;
-    this.y=Math.random()*canvas.height;
-    this.bx=this.x; this.by=this.y;
-    this.vx=(Math.random()-.5)*.6;
-    this.vy=(Math.random()-.5)*.6;
-    this.r=Math.random()*2.5+1;
-    this.pulse=Math.random()*Math.PI*2;
-    this.speed=Math.random()*.015+.005;
-    this.alpha=Math.random()*.7+.3;
-  }
-  update(mx,my){
-    if(mx!==null){
-      const dx=(mx-canvas.width*.5)*.025;
-      const dy=(my-canvas.height*.5)*.025;
-      this.x=this.bx+dx; this.y=this.by+dy;
-    }
-    this.bx+=this.vx; this.by+=this.vy;
-    if(this.bx<0)this.bx=canvas.width;
-    if(this.bx>canvas.width)this.bx=0;
-    if(this.by<0)this.by=canvas.height;
-    if(this.by>canvas.height)this.by=0;
-    this.pulse+=this.speed;
-  }
-  draw(){
-    const isDark=document.documentElement.hasAttribute('data-theme');
-    const r=isDark?'220,60,60':'128,0,0';
-    const a=this.alpha*(0.28+Math.sin(this.pulse)*.12);
-    ctx.beginPath();
-    ctx.arc(this.x,this.y,this.r+Math.sin(this.pulse)*.6,0,Math.PI*2);
-    ctx.fillStyle=`rgba(${r},${a})`;
-    ctx.fill();
-    /* glow ring around some nodes */
-    if(this.r>2){
-      ctx.beginPath();
-      ctx.arc(this.x,this.y,this.r*3,0,Math.PI*2);
-      ctx.fillStyle=`rgba(${r},${a*.15})`;
-      ctx.fill();
-    }
-  }
-}
-
-let mousePos={x:null,y:null};
-window.addEventListener('mousemove',e=>{mousePos.x=e.clientX;mousePos.y=e.clientY;});
-
-function initCanvas(){
-  canvas.width=window.innerWidth;
-  canvas.height=window.innerHeight;
-  nodes=[];
-  const count=Math.floor(canvas.width*canvas.height/9000);
-  for(let i=0;i<count;i++) nodes.push(new Node());
-}
-
-function drawLines(){
-  const isDark=document.documentElement.hasAttribute('data-theme');
-  const rgb=isDark?'220,60,60':'128,0,0';
-  for(let i=0;i<nodes.length;i++){
-    for(let j=i+1;j<nodes.length;j++){
-      const dx=nodes[i].x-nodes[j].x;
-      const dy=nodes[i].y-nodes[j].y;
-      const d=Math.sqrt(dx*dx+dy*dy);
-      if(d<140){
-        const o=(1-d/140)*(isDark?.12:.18);
-        ctx.strokeStyle=`rgba(${rgb},${o})`;
-        ctx.lineWidth=.8;
-        ctx.beginPath();
-        ctx.moveTo(nodes[i].x,nodes[i].y);
-        ctx.lineTo(nodes[j].x,nodes[j].y);
-        ctx.stroke();
+/* ── ANIMATED QR GRID ── */
+(function(){
+  const c=document.getElementById('cq'),x=c.getContext('2d');
+  let W,H,t=0;
+  function rs(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;}
+  rs();window.addEventListener('resize',rs);
+  function draw(){
+    x.clearRect(0,0,W,H);
+    const dk=document.documentElement.hasAttribute('data-theme');
+    const cell=52,cols=Math.ceil(W/cell)+2,rows=Math.ceil(H/cell)+2;
+    const ox=(t*.25)%cell,oy=(t*.12)%cell;
+    for(let r=0;r<rows;r++){
+      for(let cl=0;cl<cols;cl++){
+        const wx=cl*cell-ox,wy=r*cell-oy;
+        const n=Math.sin(cl*.68+t*.016)*Math.cos(r*.52+t*.012);
+        const a=Math.max(0,n)*(dk?.3:.24);
+        if(a<.006)continue;
+        const sz=cell*.4;
+        x.fillStyle=dk?`rgba(190,55,55,${a})`:`rgba(128,0,0,${a})`;
+        x.beginPath();x.roundRect(wx+(cell-sz)/2,wy+(cell-sz)/2,sz,sz,3);x.fill();
       }
     }
-    /* mouse repel lines */
-    if(mousePos.x!==null){
-      const dx=nodes[i].x-mousePos.x;
-      const dy=nodes[i].y-mousePos.y;
-      const d=Math.sqrt(dx*dx+dy*dy);
-      if(d<120){
-        const o=(1-d/120)*.3;
-        ctx.strokeStyle=`rgba(${rgb},${o})`;
-        ctx.lineWidth=.5;
-        ctx.beginPath();
-        ctx.moveTo(nodes[i].x,nodes[i].y);
-        ctx.lineTo(mousePos.x,mousePos.y);
-        ctx.stroke();
+    x.strokeStyle=dk?'rgba(180,40,40,.06)':'rgba(128,0,0,.06)';
+    x.lineWidth=.6;
+    for(let i=-H;i<W+H;i+=88){x.beginPath();x.moveTo(i,0);x.lineTo(i+H,H);x.stroke();}
+    t++;requestAnimationFrame(draw);
+  }draw();
+})();
+
+/* ── PARTICLE NETWORK ── */
+(function(){
+  const c=document.getElementById('cp'),x=c.getContext('2d');
+  let W,H,nd=[],mx2=null,my2=null;
+  function rs(){
+    W=c.width=window.innerWidth;H=c.height=window.innerHeight;nd=[];
+    const n=Math.floor((W*H)/10000);
+    for(let i=0;i<n;i++)nd.push({
+      bx:Math.random()*W,by:Math.random()*H,x:0,y:0,
+      vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,
+      r:Math.random()*1.6+.6,pulse:Math.random()*Math.PI*2
+    });
+  }
+  rs();window.addEventListener('resize',rs);
+  window.addEventListener('mousemove',e=>{mx2=e.clientX;my2=e.clientY;});
+  function draw(){
+    x.clearRect(0,0,W,H);
+    const dk=document.documentElement.hasAttribute('data-theme'),col=dk?'195,60,60':'128,0,0';
+    nd.forEach(n=>{
+      n.bx+=n.vx;n.by+=n.vy;
+      if(n.bx<0)n.bx=W;if(n.bx>W)n.bx=0;
+      if(n.by<0)n.by=H;if(n.by>H)n.by=0;
+      n.pulse+=.008;
+      n.x=n.bx+(mx2?((mx2/W)-.5)*14:0);
+      n.y=n.by+(my2?((my2/H)-.5)*14:0);
+      x.beginPath();x.arc(n.x,n.y,n.r+Math.sin(n.pulse)*.5,0,Math.PI*2);
+      x.fillStyle=`rgba(${col},.32)`;x.fill();
+      if(n.r>1.4){x.beginPath();x.arc(n.x,n.y,n.r*3.5,0,Math.PI*2);x.fillStyle=`rgba(${col},.055)`;x.fill();}
+    });
+    for(let i=0;i<nd.length;i++){
+      for(let j=i+1;j<nd.length;j++){
+        const dx=nd[i].x-nd[j].x,dy=nd[i].y-nd[j].y,d=Math.sqrt(dx*dx+dy*dy);
+        if(d<170){x.strokeStyle=`rgba(${col},${(1-d/170)*(dk?.12:.18)})`;x.lineWidth=.7;x.beginPath();x.moveTo(nd[i].x,nd[i].y);x.lineTo(nd[j].x,nd[j].y);x.stroke();}
+      }
+      if(mx2!==null){
+        const dx=nd[i].x-mx2,dy=nd[i].y-my2,d=Math.sqrt(dx*dx+dy*dy);
+        if(d<130){x.strokeStyle=`rgba(${col},${(1-d/130)*.28})`;x.lineWidth=.5;x.beginPath();x.moveTo(nd[i].x,nd[i].y);x.lineTo(mx2,my2);x.stroke();}
       }
     }
-  }
-}
+    requestAnimationFrame(draw);
+  }draw();
+})();
 
-function animate(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  nodes.forEach(n=>n.update(mousePos.x,mousePos.y));
-  drawLines();
-  nodes.forEach(n=>n.draw());
-  animId=requestAnimationFrame(animate);
-}
+/* ── TICKER ── */
+(function(){
+  const msgs=[
+    '<strong>PROJECT QRSYS</strong> &middot; Secure Academic Attendance',
+    'PostgreSQL &middot; Cloud Integrated &middot; Real-time Sync',
+    '<strong>RBAC Enforced</strong> &middot; Zero Privilege Leakage',
+    'Windows Desktop + Android Mobile &middot; Dual Platform',
+    '<strong>Super Admin</strong> &middot; Standard Admin &middot; Client Owner Tiers',
+    'QR Scan &middot; Webcam Interface &middot; .NET MAUI Framework',
+    '<strong>Uptime Since</strong> January 8, 2026 &middot; Encrypted Connection Active'
+  ];
+  const tr=document.getElementById('tkt');
+  tr.innerHTML=[...msgs,...msgs,...msgs,...msgs].map(m=>`<span>${m}</span>`).join('');
+})();
 
-initCanvas(); animate();
-window.addEventListener('resize',()=>{cancelAnimationFrame(animId);initCanvas();animate();});
-
-/* ==========================================
-   THEME
-========================================== */
-const themeBtn=document.getElementById('theme-switcher');
-
+/* ── THEME ── */
+const ts=document.getElementById('ts');
 function applyTheme(t){
-  if(t==='dark'){
-    document.documentElement.setAttribute('data-theme','dark');
-    themeBtn.innerHTML='<span>☀️</span> Light Mode';
-  } else {
-    document.documentElement.removeAttribute('data-theme');
-    themeBtn.innerHTML='<span>🌙</span> Dark Mode';
-  }
+  if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');ts.innerHTML='<span>&#9728;&#65039;</span> Light Mode';}
+  else{document.documentElement.removeAttribute('data-theme');ts.innerHTML='<span>&#127769;</span> Dark Mode';}
 }
 applyTheme(localStorage.getItem('theme')||'light');
-themeBtn.addEventListener('click',()=>{
-  const isDark=document.documentElement.hasAttribute('data-theme');
-  const n=isDark?'light':'dark';
-  applyTheme(n); localStorage.setItem('theme',n);
+ts.addEventListener('click',()=>{
+  const w=document.documentElement.hasAttribute('data-theme');
+  applyTheme(w?'light':'dark');localStorage.setItem('theme',w?'light':'dark');
 });
 
-/* ==========================================
-   FAQ
-========================================== */
-document.querySelectorAll('.faq-question').forEach(q=>{
+/* ── ANIMATED STAT COUNTERS ── */
+setTimeout(()=>{
+  document.querySelectorAll('.sn[data-t]').forEach(el=>{
+    const t=parseInt(el.dataset.t),s=el.dataset.s||'';
+    let v=0;const step=Math.ceil(t/40);
+    const iv=setInterval(()=>{v=Math.min(v+step,t);el.textContent=v+s;if(v>=t)clearInterval(iv);},28);
+  });
+},700);
+
+/* ── FAQ ACCORDION ── */
+document.querySelectorAll('.fq').forEach(q=>{
   q.addEventListener('click',()=>{
-    const item=q.parentElement;
-    const was=item.classList.contains('active');
-    document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('active'));
-    if(!was) item.classList.add('active');
+    const item=q.parentElement,was=item.classList.contains('op');
+    document.querySelectorAll('.fi').forEach(i=>i.classList.remove('op'));
+    if(!was)item.classList.add('op');
   });
 });
 
-/* ==========================================
-   SCROLL REVEAL
-========================================== */
-const ro=new IntersectionObserver((entries)=>{
-  entries.forEach((e,i)=>{
-    if(e.isIntersecting){
-      setTimeout(()=>e.target.classList.add('visible'),i*55);
-    }
-  });
+/* ── SCROLL REVEAL ── */
+const ro=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('in'),i*60);});
 },{threshold:.07});
-document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+document.querySelectorAll('.rv,.rvl,.rvr').forEach(el=>ro.observe(el));
 
-/* ==========================================
-   GITHUB RELEASE SYNC
-========================================== */
-async function syncUpdateRegistry(){
-  const logs    =document.getElementById('registry-logs');
-  const title   =document.getElementById('registry-title');
-  const winBtn  =document.getElementById('win-btn');
-  const mobBtn  =document.getElementById('mobile-btn');
-  const apiInfo =document.getElementById('api-info');
-  const dBadge  =document.getElementById('desktop-badge-container');
-  const mBadge  =document.getElementById('mobile-badge-container');
-  const cb      =new Date().getTime();
-
-  try {
-    const rResp=await fetch(`https://api.github.com/repos/AstroNutws/Attendance-QRSYS/releases?t=${cb}`);
-    if(rResp.ok){
-      const all=await rResp.json();
-      let exe=null,apk=null;
-      for(const r of all){const a=r.assets.find(a=>a.name.endsWith('.exe'));if(a){exe={url:a.browser_download_url,tag:r.tag_name};break;}}
-      for(const r of all){const a=r.assets.find(a=>a.name.endsWith('.apk'));if(a){apk={url:a.browser_download_url,tag:r.tag_name};break;}}
-
-      if(exe){
-        winBtn.href=exe.url;
-        winBtn.innerHTML=`⬇ Download PC (${exe.tag})`;
-        dBadge.innerHTML=`<span class="badge badge-maroon">${exe.tag} Stable</span>`;
-      } else {
-        winBtn.innerHTML='PC Release Pending';
-        dBadge.innerHTML=`<span class="badge badge-maroon">V2.1.1 Legacy</span>`;
+/* ── GITHUB RELEASE SYNC ── */
+const winBtn=document.getElementById('win-btn'),mobBtn=document.getElementById('mob-btn'),
+      apiInfo=document.getElementById('api-info'),dbEl=document.getElementById('db'),mbEl=document.getElementById('mb');
+async function syncRegistry(){
+  const logs=document.getElementById('regl'),title=document.getElementById('regt'),cb=Date.now();
+  try{
+    const resp=await fetch(`https://api.github.com/repos/AstroNutws/Attendance-QRSYS/releases?t=${cb}`);
+    if(resp.ok){
+      const all=await resp.json();let exe=null,apk=null;
+      for(const r of all){
+        if(!exe){const a=r.assets.find(a=>a.name.endsWith('.exe'));if(a)exe={url:a.browser_download_url,tag:r.tag_name};}
+        if(!apk){const a=r.assets.find(a=>a.name.endsWith('.apk'));if(a)apk={url:a.browser_download_url,tag:r.tag_name};}
+        if(exe&&apk)break;
       }
-      if(apk){
-        mobBtn.href=apk.url;
-        mobBtn.innerHTML=`⬇ Download APK (${apk.tag})`;
-        mBadge.innerHTML=`<span class="badge badge-navy">${apk.tag} Available</span>`;
-      } else {
-        mobBtn.innerHTML='APK Release Pending';
-        mBadge.innerHTML=`<span class="badge badge-navy">Build Pending</span>`;
-      }
-      apiInfo.textContent='Registry: Online (Encrypted)';
+      if(exe){winBtn.href=exe.url;winBtn.innerHTML=`&#8659; Download PC (${exe.tag})`;dbEl.innerHTML=`<span class="badge">&#9679; ${exe.tag} Stable</span>`;}
+      else{winBtn.innerHTML='PC Release Pending';dbEl.innerHTML='<span class="badge">V2.1.1 Legacy</span>';}
+      if(apk){mobBtn.href=apk.url;mobBtn.innerHTML=`&#8659; Download APK (${apk.tag})`;mbEl.innerHTML=`<span class="badge bdn">&#9679; ${apk.tag} Available</span>`;}
+      else{mobBtn.innerHTML='APK Release Pending';mbEl.innerHTML='<span class="badge bdn">Build Pending</span>';}
+      apiInfo.innerHTML='Registry: Online (Encrypted)';
     }
-
-    const mdResp=await fetch(`https://raw.githubusercontent.com/AstroNutws/Attendance-QRSYS/main/CHANGELOG.md?t=${cb}`);
-    if(!mdResp.ok)throw new Error();
-    const text=await mdResp.text();
-    const vm=text.match(/## \[(\d+\.\d+\.\d+)\][\s\S]*?(?=## \[|$)/);
+    const cl=await fetch(`https://raw.githubusercontent.com/AstroNutws/Attendance-QRSYS/main/CHANGELOG.md?t=${cb}`);
+    if(!cl.ok)throw new Error();
+    const txt=await cl.text(),vm=txt.match(/## \[(\d+\.\d+\.\d+)\][\s\S]*?(?=## \[|$)/);
     if(vm){
-      const ver=vm[1];
-      const content=vm[0];
-      title.innerHTML=`Update <em>Registry</em> <span style="font-size:.72rem;color:var(--muted);font-family:var(--mono);font-weight:400;">(v${ver})</span>`;
-      const items=[];
-      let cat='Update';
-      content.split('\n').forEach(line=>{
-        if(line.trim().startsWith('###')) cat=line.replace('###','').trim();
-        else if(line.trim().startsWith('-')){
-          let t=line.trim().replace('-','').trim().replace(/\*\*/g,'').replace(/__/g,'');
-          items.push({tag:cat,text:t});
-        }
+      const ver=vm[1],block=vm[0];
+      title.innerHTML=`Update <em>Registry</em> <span style="font-family:var(--mono);font-size:.72rem;font-weight:300;color:var(--mute);">(v${ver})</span>`;
+      const items=[];let cat='Update';
+      block.split('\n').forEach(ln=>{
+        if(ln.trim().startsWith('###'))cat=ln.replace('###','').trim();
+        else if(ln.trim().startsWith('-')){let t=ln.trim().slice(1).trim().replace(/\*\*/g,'').replace(/__/g,'');items.push({tag:cat,text:t});}
       });
-      if(items.length>0){
-        logs.innerHTML=items.slice(0,8).map(item=>{
-          const tc=item.tag.toLowerCase().includes('added')?'tag-added':
-                   item.tag.toLowerCase().includes('improved')?'tag-improved':
-                   item.tag.toLowerCase().includes('fixed')?'tag-fixed':'tag-default';
-          return `<div class="log-item"><span class="log-tag ${tc}">${item.tag}</span><span class="log-text">${item.text}</span></div>`;
-        }).join('');
-      }
+      if(items.length)logs.innerHTML=items.slice(0,8).map(it=>{
+        const tc=it.tag.toLowerCase().includes('added')?'ta':it.tag.toLowerCase().includes('improved')?'ti2':it.tag.toLowerCase().includes('fixed')?'tf':'td2';
+        return`<div class="li"><span class="lt ${tc}">${it.tag}</span><span class="ltxt">${it.text}</span></div>`;
+      }).join('');
     }
-  } catch(e){
-    apiInfo.textContent='Registry: Connection Error';
-    logs.innerHTML='<div class="log-item"><span class="log-tag tag-fixed">Error</span><span class="log-text">Failed to sync live registry.</span></div>';
+  }catch(e){
+    apiInfo.innerHTML='Registry: Error';
+    logs.innerHTML='<div class="li"><span class="lt tf">Error</span><span class="ltxt">Failed to sync live registry.</span></div>';
   }
 }
-syncUpdateRegistry();
+syncRegistry();
 
-/* ==========================================
-   UPTIME
-========================================== */
-(function uptimeLoop(){
-  const start=new Date('2026-01-08T00:00:00');
-  const el=document.getElementById('uptime-counter');
+/* ── UPTIME ── */
+(function(){
+  const start=new Date('2026-01-08T00:00:00'),el=document.getElementById('uptime');
   setInterval(()=>{
     const diff=Date.now()-start;
-    const d=Math.floor(diff/86400000);
-    const h=Math.floor((diff/3600000)%24);
-    const m=Math.floor((diff/60000)%60);
-    const s=Math.floor((diff/1000)%60);
+    const d=Math.floor(diff/86400000),h=Math.floor((diff/3600000)%24),
+          m=Math.floor((diff/60000)%60),s=Math.floor((diff/1000)%60);
     el.textContent=`${d}d ${String(h).padStart(2,'0')}h ${String(m).padStart(2,'0')}m ${String(s).padStart(2,'0')}s`;
   },1000);
 })();
 
-/* ==========================================
-   DOCS VIEWER
-========================================== */
-async function loadRepoFile(file,btn){
-  const doc=document.getElementById('doc-content');
-  const cb=new Date().getTime();
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  if(btn)btn.classList.add('active');
-  doc.innerHTML=`<div style="text-align:center;padding:50px;color:var(--muted);font-family:var(--mono);font-size:.7rem;letter-spacing:2px;">⟳ Syncing ${file}…</div>`;
+/* ── DOCS VIEWER ── */
+async function loadFile(name,btn){
+  const div=document.getElementById('doc-content');
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
+  if(btn)btn.classList.add('on');
+  div.innerHTML=`<div style="text-align:center;padding:40px;color:var(--mute);font-family:var(--mono);font-size:.68rem;letter-spacing:2px;">&#8635; Syncing ${name}&hellip;</div>`;
   try{
-    const r=await fetch(`https://raw.githubusercontent.com/AstroNutws/Attendance-QRSYS/main/${file}?t=${cb}`);
+    const r=await fetch(`https://raw.githubusercontent.com/AstroNutws/Attendance-QRSYS/main/${name}?t=${Date.now()}`);
     if(!r.ok)throw new Error();
-    doc.innerHTML=marked.parse(await r.text());
+    div.innerHTML=marked.parse(await r.text());
   }catch(e){
-    doc.innerHTML=`<p style="color:var(--m);text-align:center;padding:40px;font-family:var(--mono);font-size:.8rem;">${file} fetch failed. Verify file exists in main branch.</p>`;
+    div.innerHTML=`<p style="color:var(--m);text-align:center;padding:40px;font-family:var(--mono);">${name} fetch failed. Verify the file exists in the main branch.</p>`;
   }
 }
-
-function loadSecurityPolicy(btn){
-  const doc=document.getElementById('doc-content');
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  if(btn)btn.classList.add('active');
-  doc.innerHTML=`
-    <h2>Security &amp; Data Ownership Policy</h2><br>
-    <p><strong>1. Data Isolation:</strong> The QrSys software acts as a middleware layer between the user interface and the cloud. At no point does the development team or system administrators hold direct ownership of the database.</p><br>
-    <p><strong>2. Client Control:</strong> The Client (Organization) retains sole ownership of the Supabase project. Database management, SQL execution, and master key control are exclusively handled by the Client via their private Supabase Dashboard.</p><br>
-    <p><strong>3. Credential Integrity:</strong> All administrative and user credentials are masked at the UI level. Upcoming iterations will incorporate one-way hashing for database-level storage protection.</p><br>
-    <p><strong>4. Access Scoping (RBAC):</strong> Role-Based Access Control is enforced throughout. Standard Admin accounts are restricted to operational data. Account creation and credential management is reserved exclusively for Super Admin accounts and above.</p>
-  `;
+function loadSec(btn){
+  const div=document.getElementById('doc-content');
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
+  if(btn)btn.classList.add('on');
+  div.innerHTML=`<h2>Security &amp; Data Ownership Policy</h2><br>
+    <p><strong>1. Data Isolation:</strong> QrSys acts as middleware — the dev team holds zero database ownership at any point.</p><br>
+    <p><strong>2. Client Control:</strong> The Client (Organization) is the sole Supabase project owner. SQL execution and master key control remain exclusively with the Client.</p><br>
+    <p><strong>3. Credential Integrity:</strong> Admin credentials are masked at UI level. Upcoming iterations will introduce one-way cryptographic hashing for all stored credentials.</p><br>
+    <p><strong>4. Access Scoping (RBAC):</strong> Standard Admins are limited to operational data. Account creation and management are reserved for Super Admins and above.</p>`;
 }
-
-loadRepoFile('README.md', document.querySelector('.tab-btn'));
+loadFile('README.md',document.querySelector('.tab.on'));
 </script>
 </body>
 </html>
