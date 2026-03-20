@@ -130,25 +130,50 @@ img{display:block;max-width:100%;}
   opacity:.5;
 }
 
-/* CURSOR */
-#cur-ring{
+/* CURSOR — crosshair */
+#cur-cross{
   position:fixed;pointer-events:none;z-index:9999;
-  width:32px;height:32px;border:1.5px solid var(--red);border-radius:50%;
-  transform:translate(-50%,-50%);will-change:left,top,width,height;
-  transition:width .25s var(--snap),height .25s var(--snap),border-color .2s,opacity .2s,border-width .2s;
-  opacity:.6;mix-blend-mode:multiply;
+  width:28px;height:28px;
+  transform:translate(-50%,-50%);
+  will-change:left,top;
+  transition:transform .22s cubic-bezier(.34,1.56,.64,1), opacity .2s;
+  opacity:.75;
 }
-[data-dark] #cur-ring{mix-blend-mode:screen;}
+/* Horizontal arm */
+#cur-cross::before{
+  content:'';position:absolute;
+  top:50%;left:0;right:0;height:1px;
+  background:var(--red);
+  transform:translateY(-50%);
+  /* gap in centre */
+  -webkit-mask:linear-gradient(90deg,#fff 38%,transparent 38%,transparent 62%,#fff 62%);
+  mask:linear-gradient(90deg,#fff 38%,transparent 38%,transparent 62%,#fff 62%);
+}
+/* Vertical arm */
+#cur-cross::after{
+  content:'';position:absolute;
+  left:50%;top:0;bottom:0;width:1px;
+  background:var(--red);
+  transform:translateX(-50%);
+  -webkit-mask:linear-gradient(180deg,#fff 38%,transparent 38%,transparent 62%,#fff 62%);
+  mask:linear-gradient(180deg,#fff 38%,transparent 38%,transparent 62%,#fff 62%);
+}
+/* Centre dot */
 #cur-dot{
   position:fixed;pointer-events:none;z-index:9999;
-  width:4px;height:4px;background:var(--red);border-radius:50%;
-  transform:translate(-50%,-50%);will-change:left,top;
-  transition:transform .08s,opacity .15s,width .15s,height .15s;
+  width:3px;height:3px;
+  background:var(--red);border-radius:50%;
+  transform:translate(-50%,-50%);
+  will-change:left,top;
+  transition:transform .08s, opacity .15s, width .12s, height .12s;
+  opacity:.9;
 }
-body.c-hover #cur-ring{width:44px;height:44px;opacity:1;border-width:1px;}
-body.c-hover #cur-dot{width:3px;height:3px;opacity:.4;}
-body.c-down #cur-ring{width:22px;height:22px;opacity:1;border-width:2px;}
-body.c-down #cur-dot{transform:translate(-50%,-50%) scale(1.5);}
+/* hover — crosshair grows slightly */
+body.c-hover #cur-cross{ transform:translate(-50%,-50%) scale(1.35); opacity:1; }
+body.c-hover #cur-dot  { width:2px;height:2px;opacity:.5; }
+/* click — snap small */
+body.c-down #cur-cross { transform:translate(-50%,-50%) scale(.72); opacity:1; }
+body.c-down #cur-dot   { transform:translate(-50%,-50%) scale(2); }
 
 /* TICKER */
 .ticker{
@@ -400,7 +425,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
   h2{font-size:1.6rem;}
   .qr-deco{display:none;}
   .cta-btns{flex-direction:column;align-items:stretch;}
-  #cur-ring,#cur-dot{display:none;}
+  #cur-cross,#cur-dot{display:none;}
   body{cursor:auto;}a{cursor:pointer;}button{cursor:pointer;}
 }
 @media(max-width:460px){
@@ -429,7 +454,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
 <div class="bg-mesh" aria-hidden="true"></div>
 <div class="bg-grid" aria-hidden="true"></div>
 
-<div id="cur-ring"></div>
+<div id="cur-cross"></div>
 <div id="cur-dot"></div>
 
 <div class="ticker" aria-hidden="true">
@@ -785,14 +810,20 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
 })();
 
 /* ── CURSOR ── */
-const ring=document.getElementById('cur-ring');
+const cross=document.getElementById('cur-cross');
 const cdot=document.getElementById('cur-dot');
-let mx=0,my=0,rx=0,ry=0;
+let mx=0,my=0,cx=0,cy=0;
 document.addEventListener('mousemove',e=>{
   mx=e.clientX;my=e.clientY;
+  /* dot snaps instantly */
   cdot.style.left=mx+'px';cdot.style.top=my+'px';
 },{passive:true});
-(function tr(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(tr);})();
+/* crosshair follows with very slight lag for elegance */
+(function tr(){
+  cx+=(mx-cx)*.18;cy+=(my-cy)*.18;
+  cross.style.left=cx+'px';cross.style.top=cy+'px';
+  requestAnimationFrame(tr);
+})();
 document.querySelectorAll('a,button,.faq-q,.tab,.chip,.sec-item,.role-tile,.dl-btn,.stat,.card').forEach(el=>{
   el.addEventListener('mouseenter',()=>document.body.classList.add('c-hover'),{passive:true});
   el.addEventListener('mouseleave',()=>document.body.classList.remove('c-hover'),{passive:true});
