@@ -1110,14 +1110,14 @@ footer { position:relative; z-index:1; border-top:1px solid var(--line); padding
       <div class="cta-title">Ready to Deploy <em>Project QrSys?</em></div>
       <p class="cta-sub">Whether you're a school, a company, a corporate team, or any group that tracks attendance — request a test account or schedule a live demo. We'll walk you through everything.</p>
       <div class="cta-btns">
-        <a href="#" class="btn btn-dark">Request Admin Account</a>
-        <a href="#" class="btn">Schedule a Demo</a>
+        <a href="mailto:samongud@gmail.com?subject=Project%20QrSys%20%E2%80%94%20Admin%20Account%20Request&body=Hi%20there%2C%0A%0AI%20would%20like%20to%20request%20a%20test%20admin%20account%20for%20Project%20QrSys.%0A%0AOrganization%20Name%3A%20%5BYour%20Organization%5D%0AOrganization%20Type%3A%20%5BSchool%20%2F%20Company%20%2F%20Corporate%20Team%20%2F%20Other%5D%0ANumber%20of%20Users%3A%20%5BApproximate%20count%5D%0AContact%20Person%3A%20%5BYour%20Name%5D%0AContact%20Email%3A%20%5BYour%20Email%5D%0A%0AAdditional%20Notes%3A%0A%5BAny%20specific%20requirements%20or%20questions%5D%0A%0ALooking%20forward%20to%20hearing%20from%20you.%0A%0AThank%20you!" class="btn btn-dark">Request Admin Account</a>
+        <a href="mailto:samongud@gmail.com?subject=Project%20QrSys%20%E2%80%94%20Demo%20Request&body=Hi%20there%2C%0A%0AI%20would%20like%20to%20schedule%20a%20live%20demonstration%20of%20Project%20QrSys.%0A%0AOrganization%20Name%3A%20%5BYour%20Organization%5D%0AOrganization%20Type%3A%20%5BSchool%20%2F%20Company%20%2F%20Corporate%20Team%20%2F%20Other%5D%0APreferred%20Date%20%26%20Time%3A%20%5BYour%20preferred%20schedule%5D%0AContact%20Person%3A%20%5BYour%20Name%5D%0AContact%20Email%3A%20%5BYour%20Email%5D%0A%0AWhat%20are%20you%20most%20interested%20in%3A%0A%5B%20%5D%20Desktop%20Client%20Demo%0A%5B%20%5D%20Mobile%20Client%20Demo%0A%5B%20%5D%20Both%0A%0AAdditional%20Questions%3A%0A%5BAny%20specific%20features%20you%20want%20to%20see%5D%0A%0AThank%20you!" class="btn">Schedule a Demo</a>
       </div>
       <div class="cta-links">
         <div class="link-group">
           <p class="link-label">Support Channels</p>
           <a href="https://discord.gg/BRTWwm2k" target="_blank">Discord →</a>
-          <a href="#" target="_blank">Email Support →</a>
+          <a href="mailto:samongud@gmail.com?subject=Project%20QrSys%20%E2%80%94%20Support%20Request&body=Hi%20there%2C%0A%0AI%20need%20support%20with%20Project%20QrSys.%0A%0AIssue%20Type%3A%20%5BBug%20%2F%20Question%20%2F%20Feature%20Request%20%2F%20Other%5D%0AOrganization%3A%20%5BYour%20Organization%5D%0AVersion%20%28PC%20%2F%20APK%29%3A%20%5BVersion%20number%5D%0A%0ADescription%20of%20Issue%3A%0A%5BPlease%20describe%20your%20issue%20or%20question%20in%20detail%5D%0A%0ASteps%20to%20Reproduce%20%28if%20bug%29%3A%0A1.%20%0A2.%20%0A3.%20%0A%0AThank%20you!">Email Support →</a>
         </div>
         <div class="link-group">
           <p class="link-label">Source Code</p>
@@ -1266,6 +1266,19 @@ setTimeout(() => {
     const iv = setInterval(() => { v=Math.min(v+step,t); el.textContent=v+s; if(v>=t)clearInterval(iv); }, 26);
   });
 }, 600);
+
+/* ── RIPPLE ON DOWNLOAD BUTTONS ── */
+document.querySelectorAll('.dl-btn').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    const r = document.createElement('span');
+    r.className = 'ripple';
+    const rect = btn.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    r.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px`;
+    btn.appendChild(r);
+    setTimeout(() => r.remove(), 600);
+  }, {passive:true});
+});
 
 /* ── FAQ ── */
 document.querySelectorAll('.faq-q').forEach(q => {
