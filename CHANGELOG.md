@@ -1,46 +1,60 @@
-# Changelog
+# 🛡️ QrSys: Attendance & Management System
+**Modern QR-based attendance tracking for Windows and Android.**
 
-All notable changes to the QRSYS project are documented here.
-
-## [2.1.6] - The "Peace of Mind" Update - 2026-03-17
-### Added
-- **Automatic Security Shield:** The app now automatically checks for and installs the latest updates to ensure your account stays protected with the newest security features without you having to check manually.
-- **Easy Password Recovery:** Forget your password? You can now request a password reset directly from the mobile app login screen, making it easier to get back into your account.
-- **Admin Help on the Go:** Admin staff can now use their phones to quickly approve student requests, like updating notifying emails, grade/parent organization, School Section/Organization Group
-- **Improved Login Stability:** We’ve overhauled the login system for both User and Admins to ensure it is much more reliable and less likely to "hiccup" or crash.
-
-### Fixed
-- **Login "Disposed Object" Error:** Fixed a pesky technical bug that caused the app to close unexpectedly during the login process. Both User and Admin logins are now stable.
-- **Faster Connection Loading:** Optimized how the app talks to the school database, meaning you'll spend less time looking at loading screens and more time using the app.
-- **Enhanced Email Delivery:** Fixed a small issue where some notification emails weren't reaching notifying emails. Alerts should now arrive in inboxes instantly and reliably.
-- **Theme Polish:** Cleaned up some small visual glitches to ensure the UI colors look perfect on every screen.
+QrSys is a high-performance system designed for organizations to manage attendance, student records, and real-time notifications. Version 2.1.7 marks the transition to a premium "Glassmorphism" aesthetic, aligning both the mobile and desktop experiences with modern design standards.
 
 ---
 
-## [2.1.5] - School Spirit & Better Tracking - 2026-03-15
-### Added
-- **Smart Attendance Labels:** The system now automatically recognizes different exit types: **(O)** for standard out, **(E)** for leaving early, and **(L)** for staying late.
-- **Full Day Overview:** Dashboards now show both "Time In" and "Time Out" at the same time so you can see the full school day at a glance.
-- **Parent Welcome Emails:** Parents will now receive a "Registration Successful" email the moment a student account is linked.
-- **Official Maroon Theme:** Replaced the old purple colors with the official school Maroon and White branding across the entire app.
+## 🚀 Changelog
 
-### Improved
-- **Profile Updates:** Admins can now update just one part of a profile (like an email) without having to re-type everything.
-- **Unified Login:** The login process is now identical and seamless whether you are using a PC or a phone.
+### [2.1.7] - The "Seamless Aesthetics" Update - 2026-03-21
+
+#### **PC (Windows) Desktop Enhancements**
+- **Global Announcement Hub:** Overhauled the dashboard bulletin from a single "Latest" view to a full-access "Global Announcement" feed.
+- **Infinite Scroll Bulletin:** Implemented an `AutoScroll` enabled announcement panel allowing users to view the entire history of updates.
+- **Visual Block Separation:** Redesigned the announcement feed with high-contrast separators (`━━━━━━━━`) and emoji-coded headers for better scannability.
+- **Unified Brand Identity:** Updated the Taskbar and Form icons to match the new `Qrsys Circle` branding, ensuring a native and professional feel on Windows.
+- **Live Clock Optimization:** Improved `Timer1` tick logic for lag-free real-time tracking on the main dashboard.
+
+#### **Mobile (Android) UI & Branding Overhaul**
+- **Branded Splash Screen:** Replaced default assets with the official Maroon (#800000) splash branding.
+- **Custom Adaptive Icon:** Implemented `Qrsys Circle.svg` as the official app icon for a consistent Android home screen presence.
+- **Transparent Status Bar:** Modernized the interface by removing the legacy status bar, allowing Maroon headers and "Glass" cards to flow seamlessly to the top of the display.
+- **Glassmorphism UI:** Introduced semi-transparent card layouts with soft-glow maroon shadows for depth and hierarchy.
+- **Floating Navigation:** Updated bottom navigation bar with rounded top corners and subtle shadows to mimic a floating dock.
+
+---
+
+### [2.1.6] - The "Peace of Mind" Update - 2026-03-17
+#### Added
+- **Automatic Security Shield:** The app now automatically checks for and installs security updates.
+- **Easy Password Recovery:** Request a password reset directly from the login screen.
+- **Admin Help on the Go:** Admins can approve requests and update details via mobile.
+
+#### Fixed
+- **Login "Disposed Object" Error:** Fixed the bug causing unexpected app closures during authentication.
+- **Faster Connection Loading:** Optimized database handshakes for quicker screen transitions.
 
 ---
 
-## [2.1.1] - PC & Mobile Launch - 2026-03-14
-### Added
-- **Secure Usernames:** Moved away from using Full Names for login to keep your identity more secure.
-- **School Announcements:** A new dashboard for school-wide news and updates.
-- **Attendance Graphs:** Admins can now see attendance trends through easy-to-read visual charts.
-- **Instant Scans:** Enhanced the mobile scanner to be faster and more accurate on different phone models.
-
-### Fixed
-- **Camera Focus:** Fixed issues with blurry QR code scanning on certain mobile devices.
-- **Session Stability:** Improved the app so it stays logged in even after periods of inactivity.
+### [2.1.5] - Better Tracking & Branding - 2026-03-15
+- **Smart Attendance Labels:** Implemented **(O)** for out, **(E)** for early exit, and **(L)** for late.
+- **Official Maroon Theme:** Migrated all UI elements from purple to the official Maroon and White colorway.
 
 ---
-**Developer:** Joshua Gabriel De Leon (AstroNutws)  
-**Contact:** samongud@gmail.com
+
+## 🛠️ Technical Stack
+- **Frontend:** .NET MAUI (Android), VB.NET (Windows Desktop)
+- **Backend:** Npgsql (PostgreSQL), SQL Server
+- **Tools:** Adobe Photoshop (UI/UX Design), ZXing.Net (QR Processing)
+- **Features:** Glassmorphism, Real-time SMTP Notifications, Adaptive Security Updates
+
+---
+
+## 👨‍💻 Developer
+**Gabriel** (AstroNutws)  
+**Specialization:** TVL - ICT Student | Full-Stack Developer  
+**Contact:** [samongud@gmail.com](mailto:samongud@gmail.com)
+
+---
+*Developed with dedication for modern attendance management.*
