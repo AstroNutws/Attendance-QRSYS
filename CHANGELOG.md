@@ -1,12 +1,12 @@
 # 🛡️ QrSys: Attendance & Management System
 **Modern QR-based attendance tracking for Windows and Android.**
-QrSys is a high-performance system designed for organizations to manage attendance, student records, and real-time notifications. Version 2.1.7 marks the transition to a premium "Glassmorphism" aesthetic, aligning both the mobile and desktop experiences with modern design standards.
+QrSys is a high-performance system designed for organizations to manage attendance, member records, and real-time notifications. Version 2.1.7 continues the "Seamless Aesthetics" standard with critical under-the-hood hardening across both platforms.
 
 ---
 
 ## 🚀 Changelog
 
-### [2.1.7] - The "Seamless Aesthetics" Update - 2026-03-21
+### [2.1.7] - The "Fortified Aesthetics" Update - 2026-03-23
 
 #### **PC (Windows) Desktop Enhancements**
 - **Global Announcement Hub:** Overhauled the dashboard bulletin from a single "Latest" view to a full-access "Global Announcement" feed.
@@ -22,14 +22,13 @@ QrSys is a high-performance system designed for organizations to manage attendan
 - **Glassmorphism UI:** Introduced semi-transparent card layouts with soft-glow maroon shadows for depth and hierarchy.
 - **Floating Navigation:** Updated bottom navigation bar with rounded top corners and subtle shadows to mimic a floating dock.
 
-#### **Security Patch — BCrypt Password Hashing (PC & Mobile)**
-- **Industry-Standard Hashing:** All passwords are now hashed using `BCrypt.Net-Next` (work factor 11) before being stored in the database. Plain-text password storage has been fully eliminated across all account types.
-- **Secure User Registration (PC & Mobile):** Both `register.vb` (Windows) and `RegisterPage.xaml.cs` (Android) now hash passwords with `BCrypt.Net.BCrypt.HashPassword()` before inserting into the `users` table.
-- **Secure Admin Registration:** `cregister.vb` now hashes admin passwords with BCrypt before inserting into `admin_accounts`, ensuring no plain-text credentials are ever written to the database.
-- **Secure Login Verification (PC & Mobile):** All login flows — user, admin, and super admin — now fetch the stored hash by username only and verify using `BCrypt.Net.BCrypt.Verify()` in application code. Password comparisons have been removed from SQL queries entirely.
-- **Developer Account Removed from Login:** Removed the hardcoded developer master account check from `Form1.vb` and `LoginPage.xaml.cs` to eliminate a privileged backdoor from production builds.
-- **Database Column Widened:** The `password` column in both `users` and `admin_accounts` tables has been altered from `VARCHAR(50)` to `VARCHAR(72)` to accommodate the 60-character BCrypt hash format.
-- **Registration Email Overhaul (Mobile):** Replaced the misused attendance email template for registration with a dedicated `EnqueueRegistrationEmail()` method in `EmailService.cs`, matching the QrSys maroon card template with a green `✓ Registered` badge, Day, Date Registered, Time Registered, and a parent-facing note about QR code generation.
+#### **Security & Stability Patch (PC & Mobile)**
+- **Credential Protection Overhaul:** Strengthened how credentials are stored and verified across all account types on both platforms.
+- **Login Flow Hardening:** Reworked all login flows — user, admin, and super admin — to follow secure verification best practices.
+- **Admin Account Management:** Improved the admin registration system to enforce secure credential policies from the point of creation.
+- **Production Build Cleanup:** Removed internal development access points from production builds on both PC and mobile.
+- **Database Schema Update:** Updated credential-related columns to support the new secure storage format.
+- **Registration Email Overhaul (Mobile):** Replaced the generic notification template for registration with a dedicated branded confirmation email, matching the QrSys maroon card design with registration-specific details and a parent-facing QR note.
 
 ---
 
@@ -56,7 +55,7 @@ QrSys is a high-performance system designed for organizations to manage attendan
 - **Frontend:** .NET MAUI (Android), VB.NET (Windows Desktop)
 - **Backend:** Npgsql (PostgreSQL), SQL Server
 - **Tools:** Adobe Photoshop (UI/UX Design), ZXing.Net (QR Processing)
-- **Features:** Glassmorphism, Real-time SMTP Notifications, Adaptive Security Updates, BCrypt Password Hashing
+- **Features:** Glassmorphism, Real-time SMTP Notifications, Adaptive Security Updates, Secure Credential Management
 
 ---
 
