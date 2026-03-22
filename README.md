@@ -7,42 +7,46 @@
 QRSYS is a professional-grade attendance logging system designed specifically for educational institutions. It provides a synchronized infrastructure across desktop and mobile platforms, utilizing QR code scanning to efficiently manage and track attendance.
 
 ## Features
-* **Dual Platform Integration:** Windows Desktop & Android Mobile.
-* **Real-time Synchronization:** Powered by Supabase Cloud.
-* **Email Notifier:** Automated alerts to parents/guardians.
-* **Admin Dashboard:** Announcement management and student filtering.
-* **Rapid Scanning:** Optimized autofocus for webcam and mobile cameras.
-* **Smart Reporting:** Instant CSV exports and daily attendance analytics.
+- **Dual Platform Integration:** Windows Desktop & Android Mobile.
+- **Real-time Synchronization:** Powered by Supabase Cloud.
+- **Email Notifier:** Automated alerts to parents/guardians including dedicated registration confirmation emails.
+- **Admin Dashboard:** Announcement management and student filtering.
+- **Rapid Scanning:** Optimized autofocus for webcam and mobile cameras.
+- **Smart Reporting:** Instant CSV exports and daily attendance analytics.
 
 ## 🔒 Security & Data Privacy
 In compliance with the **Data Privacy Act of 2012 (RA 10173)**, QRSYS is built with a "Security First" approach:
-* **Encrypted Transit:** All data sent between the clients (PC/Mobile) and the cloud is encrypted via SSL/TLS.
-* **Minimal Data Footprint:** No biometric data (fingerprints/face scans) is stored. The system only tracks the necessary QR Identifier linked to student profiles.
-* **Authorized Access:** Management features are locked behind secure admin credentials to prevent unauthorized data exposure.
+
+- **BCrypt Password Hashing:** All user, admin, and super admin passwords are hashed using industry-standard BCrypt (`BCrypt.Net-Next`, work factor 11) before storage. Plain-text passwords are never written to the database.
+- **SQL Injection Prevention:** Password verification is performed entirely in application code using `BCrypt.Verify()`. No raw password values are passed through SQL queries.
+- **Encrypted Transit:** All data sent between the clients (PC/Mobile) and the cloud is encrypted via SSL/TLS.
+- **Minimal Data Footprint:** No biometric data (fingerprints/face scans) is stored. The system only tracks the necessary QR Identifier linked to student profiles.
+- **Authorized Access:** Management features are locked behind secure admin credentials to prevent unauthorized data exposure.
+- **Role-Based Access Control:** Super Admin privileges are enforced at both the application and database level, restricting sensitive operations to authorized accounts only.
 
 ## System Requirements
 
 ### Desktop Client
-* **OS:** Windows 10/11 (x64/x86)
-* **Imaging:** USB Webcam (720p+ recommended for speed)
-* **Storage:** 400MB Required
-* **Network:** Stable Wi-Fi/LAN for Cloud Sync
+- **OS:** Windows 10/11 (x64/x86)
+- **Imaging:** USB Webcam (720p+ recommended for speed)
+- **Storage:** 400MB Required
+- **Network:** Stable Wi-Fi/LAN for Cloud Sync
 
 ### Mobile Client
-* **OS:** Android 8.0 (Oreo) or higher
-* **Hardware:** Camera with Autofocus capability
-* **Memory:** 2GB RAM Minimum
-* **Capacity:** 50MB Available
+- **OS:** Android 8.0 (Oreo) or higher
+- **Hardware:** Camera with Autofocus capability
+- **Memory:** 2GB RAM Minimum
+- **Capacity:** 50MB Available
 
 ## Installation
 Download the latest stable builds directly from the GitHub releases page.
 
-* [Desktop PC/Laptop Download](https://github.com/AstroNutws/Attendance-QRSYS/releases/latest)
-* [Mobile APK Download](https://github.com/AstroNutws/Attendance-QRSYS/releases/latest)
+- [Desktop PC/Laptop Download](https://github.com/AstroNutws/Attendance-QRSYS/releases/latest)
+- [Mobile APK Download](https://github.com/AstroNutws/Attendance-QRSYS/releases/latest)
 
 ## Video Walkthroughs
-* **Desktop System:** [Watch on YouTube](https://youtu.be/ZcIJaQYzTzw)
-* **Mobile App:** [Watch on Streamable](https://streamable.com/a4n7ic)
+- **Desktop System:** [Watch on YouTube](https://youtu.be/ZcIJaQYzTzw)
+- **Mobile App:** [Watch on Streamable](https://streamable.com/a4n7ic)
 
 <br>
 
