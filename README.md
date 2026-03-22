@@ -26,7 +26,7 @@ QRSYS is built with a "Security First" approach to protect all organizational da
 ## System Requirements
 
 ### Desktop Client
-- **OS:** Windows 10/11 (x64/x86)
+- **OS:** Windows 7 - 11 (x64/x86)
 - **Imaging:** USB Webcam (720p+ recommended for speed)
 - **Storage:** 400MB Required
 - **Network:** Stable Wi-Fi/LAN for Cloud Sync
